@@ -1,0 +1,381 @@
+---
+title: "Các câu hỏi thường gặp (FAQs)"
+description: "Tài liệu hướng dẫn OpenAPI tổng hợp duy nhất, bao gồm các nội dung về tích hợp hệ thống, hướng dẫn sử dụng, quy trình làm việc, hạn mức và các câu hỏi thường gặp."
+---
+
+## 1. OpenAPI là gì?
+
+### Mục đích
+
+OpenAPI là cách an toàn để khách hàng, đối tác và ứng dụng kết nối với nền tảng chứng khoán thông qua các API đã được phê duyệt.
+
+### Tổng quan
+
+OpenAPI giúp người dùng xem thông tin thị trường, kiểm tra tài khoản, theo dõi danh mục và đặt lệnh mà không cần thực hiện thủ công trên web cho từng thao tác.
+
+### Khi nào nên dùng
+
+Sử dụng OpenAPI khi bạn muốn xây dựng ứng dụng giao dịch, cổng khách hàng, dashboard nội bộ, công cụ báo cáo hoặc quy trình tự động hóa.
+
+### Hướng dẫn từng bước
+
+<Steps>
+  <Step title="Đăng ký tài khoản">
+    [Đăng ký](https://flashapi.phs.vn/docs/don-dang-ky) tài khoản với công ty chứng khoán.
+  </Step>
+  <Step title="Đăng ký dịch vụ OpenAPI">
+    Đăng ký sử dụng dịch vụ OpenAPI nếu được yêu cầu.
+  </Step>
+  <Step title="Nhận thông tin truy cập">
+    Nhận thông tin truy cập cho môi trường sandbox hoặc production.
+  </Step>
+  <Step title="Xác thực ứng dụng">
+    Xác thực ứng dụng của bạn.
+  </Step>
+  <Step title="Gọi API">
+    Gọi các API cần cho market data, portfolio hoặc trading.
+  </Step>
+  <Step title="Xử lý phản hồi">
+    Xử lý phản hồi, lỗi và kiểm tra quyền cẩn thận.
+  </Step>
+</Steps>
+
+<Note>
+  **Ví dụ minh họa:** Một nhà đầu tư cá nhân sử dụng ứng dụng giao dịch hiển thị giá theo thời gian thực, giá trị danh mục và các lệnh hiện tại. Ứng dụng dùng OpenAPI để lấy dữ liệu và gửi lệnh.
+</Note>
+
+---
+
+## 2. Bắt đầu với OpenAPI
+
+### Đăng ký tài khoản
+
+Đăng ký với công ty chứng khoán bằng quy trình onboarding đã được phê duyệt và cung cấp các thông tin doanh nghiệp hoặc cá nhân theo yêu cầu.
+
+### Quy trình đăng ký sử dụng API
+
+Sau khi đăng ký, vui lòng chờ cấp quyền OpenAPI và hoàn tất các bước phê duyệt do công ty chứng khoán quy định.
+
+### Môi trường Sandbox và Production
+
+Dùng sandbox cho mục đích kiểm thử và phát triển. Chỉ dùng production cho hoạt động thực tế sau khi thông tin đăng nhập và quyền truy cập đã được phê duyệt.
+
+### Hướng dẫn từng bước
+
+<Steps>
+  <Step title="Xác nhận tài khoản">
+    Tạo hoặc xác nhận tài khoản chứng khoán của bạn.
+  </Step>
+  <Step title="Gửi yêu cầu truy cập">
+    Gửi yêu cầu truy cập OpenAPI.
+  </Step>
+  <Step title="Chờ phê duyệt">
+    Chờ phê duyệt và nhận hướng dẫn thiết lập.
+  </Step>
+  <Step title="Kiểm thử trên Sandbox">
+    Dùng thông tin sandbox để kiểm thử.
+  </Step>
+  <Step title="Chuyển sang Production">
+    Chuyển sang production chỉ khi đã xác thực hoàn tất.
+  </Step>
+</Steps>
+
+<Note>
+  **Ví dụ minh họa:** Một nhóm phát triển kiểm thử đăng nhập, market data và đặt lệnh trong sandbox trước khi kích hoạt cùng quy trình đó cho người dùng thật ở production.
+</Note>
+
+---
+
+## 3. OpenAPI hoạt động như thế nào?
+
+### Luồng xác thực
+
+Ứng dụng của bạn gửi thông tin xác thực qua quy trình xác thực đã được phê duyệt. Sau khi xác minh, hệ thống trả về access token.
+
+### Khái niệm Access Token
+
+Access token là một khóa số tạm thời chứng minh ứng dụng của bạn được phép gửi yêu cầu.
+
+### Luồng Request → Response
+
+- Ứng dụng gửi request đến một API endpoint.
+- Request bao gồm access token.
+- Nền tảng kiểm tra token, quyền truy cập và môi trường.
+- Nền tảng trả về dữ liệu, thông báo thành công hoặc lỗi.
+
+### Quy trình API điển hình
+
+<Steps>
+  <Step title="Xác thực">
+    Xác thực ứng dụng của bạn.
+  </Step>
+  <Step title="Lấy access token">
+    Lấy access token.
+  </Step>
+  <Step title="Gọi API">
+    Gọi API cần thiết.
+  </Step>
+  <Step title="Đọc phản hồi">
+    Đọc phản hồi.
+  </Step>
+  <Step title="Xử lý lỗi">
+    Xử lý lỗi hoặc thử lại khi phù hợp.
+  </Step>
+</Steps>
+
+<Note>
+  **Ví dụ minh họa:** Một ứng dụng portfolio đăng nhập, nhận access token, yêu cầu thông tin tài khoản, sau đó hiển thị số dư tiền mặt và vị thế trên màn hình.
+</Note>
+
+---
+
+## 4. API dữ liệu thị trường
+
+### Dữ liệu thị trường có sẵn
+
+Tùy theo quyền truy cập và cấu hình sản phẩm, market data có thể bao gồm giá khớp gần nhất, thông tin giá mua và bán, giá cao nhất và thấp nhất, khối lượng, giá trị giao dịch, thông tin tham chiếu mã và trạng thái thị trường.
+
+### Trường hợp sử dụng phổ biến
+
+- Hiển thị giá realtime
+- Báo giá cho ticket đặt lệnh
+- Theo dõi danh sách quan tâm
+- Biểu đồ và tổng hợp thị trường
+- Dashboard báo cáo cho khách hàng
+
+### Tình huống thực tế
+
+Một ứng dụng quản lý tài sản hiển thị giá cổ phiếu để người dùng quyết định thời điểm mua. Một công cụ nghiên cứu hiển thị snapshot thị trường cho chuyên viên phân tích. Một nhân viên hỗ trợ chi nhánh kiểm tra báo giá khi đang trao đổi với khách hàng.
+
+### Hướng dẫn từng bước
+
+<Steps>
+  <Step title="Xác thực">
+    Xác thực ứng dụng của bạn.
+  </Step>
+  <Step title="Chọn endpoint">
+    Chọn endpoint market data phù hợp.
+  </Step>
+  <Step title="Gửi request">
+    Gửi request với token hợp lệ.
+  </Step>
+  <Step title="Hiển thị phản hồi">
+    Hiển thị phản hồi theo cách dễ hiểu.
+  </Step>
+  <Step title="Làm mới dữ liệu">
+    Làm mới dữ liệu theo nhu cầu ứng dụng và giới hạn rate limit.
+  </Step>
+</Steps>
+
+<Note>
+  **Ví dụ minh họa:** Người dùng mở trang chi tiết một mã cổ phiếu. Ứng dụng gọi Market Data APIs, lấy giá mới nhất và chênh lệch giá, rồi hiển thị tóm tắt kèm biểu đồ và chỉ báo biến động.
+</Note>
+
+---
+
+## 5. API tài khoản và danh mục
+
+### Thông tin tài khoản
+
+Thông tin tài khoản có thể bao gồm số tài khoản, loại tài khoản, loại tiền, số dư tiền mặt, sức mua và trạng thái tài khoản.
+
+### Thông tin tài sản
+
+Thông tin tài sản có thể bao gồm mã chứng khoán, symbol, tên, sàn giao dịch và các chi tiết định giá hiện tại.
+
+### Thông tin vị thế
+
+Thông tin vị thế thường hiển thị số lượng, giá vốn trung bình, giá trị thị trường, lãi/lỗ chưa thực hiện và số lượng khả dụng.
+
+### Theo dõi danh mục
+
+Theo dõi danh mục giúp người dùng theo dõi mức độ phân bổ, tập trung tỷ trọng, hiệu suất và các thay đổi theo thời gian.
+
+### Hướng dẫn từng bước
+
+<Steps>
+  <Step title="Xác thực phiên">
+    Xác thực phiên của người dùng.
+  </Step>
+  <Step title="Gọi endpoint tài khoản">
+    Gọi endpoint thông tin tài khoản.
+  </Step>
+  <Step title="Lấy dữ liệu tài sản">
+    Lấy dữ liệu tài sản và vị thế.
+  </Step>
+  <Step title="Tóm tắt trong portfolio">
+    Tóm tắt thông tin trong màn hình portfolio.
+  </Step>
+  <Step title="Làm mới định kỳ">
+    Làm mới dữ liệu thường xuyên để đảm bảo theo dõi chính xác.
+  </Step>
+</Steps>
+
+<Note>
+  **Ví dụ minh họa:** Một nhà đầu tư mở ứng dụng và thấy bản tóm tắt danh mục. Hệ thống lấy chi tiết tài khoản, danh mục đang nắm giữ và giá trị vị thế để nhà đầu tư có thể xem nhanh khoản đầu tư của mình.
+</Note>
+
+---
+
+## 6. API giao dịch
+
+### Đặt lệnh
+
+Một request đặt lệnh sẽ bắt đầu một giao dịch mới. Ứng dụng nên kiểm tra mã chứng khoán, số lượng, chiều lệnh và loại sản phẩm trước khi gửi.
+
+### Sửa lệnh
+
+Một request sửa lệnh sẽ cập nhật lệnh hiện có, chẳng hạn thay đổi giá hoặc số lượng, nếu lệnh đó vẫn còn đủ điều kiện sửa.
+
+### Hủy lệnh
+
+Một request hủy lệnh sẽ xóa một lệnh đang mở nếu lệnh đó chưa được khớp hoàn toàn.
+
+### Theo dõi trạng thái lệnh
+
+Theo dõi trạng thái lệnh giúp người dùng xem tiến trình của lệnh qua các trạng thái như pending, accepted, partially filled, filled, canceled hoặc rejected.
+
+### Hướng dẫn từng bước
+
+<Steps>
+  <Step title="Xác nhận quyền giao dịch">
+    Xác thực và xác nhận quyền giao dịch.
+  </Step>
+  <Step title="Tạo request lệnh">
+    Tạo request lệnh với mã, số lượng và loại giá phù hợp.
+  </Step>
+  <Step title="Gửi lệnh">
+    Gửi lệnh.
+  </Step>
+  <Step title="Lưu mã tham chiếu">
+    Lưu phản hồi hoặc mã tham chiếu của lệnh.
+  </Step>
+  <Step title="Kiểm tra trạng thái">
+    Kiểm tra trạng thái cho đến khi lệnh được khớp, bị từ chối, bị hủy hoặc hết hạn.
+  </Step>
+</Steps>
+
+<Note>
+  **Ví dụ minh họa:** Một khách hàng muốn mua cổ phiếu của một công ty. Ứng dụng gửi request đặt lệnh, hiển thị phản hồi, rồi cập nhật màn hình lệnh cho đến khi lệnh hoàn tất.
+</Note>
+
+---
+
+## 7. Ví dụ quy trình API phổ biến
+
+### Đăng nhập → Lấy dữ liệu thị trường → Đặt lệnh
+
+<Steps>
+  <Step title="Xác thực người dùng">
+  </Step>
+  <Step title="Lấy giá thị trường mới nhất">
+  </Step>
+  <Step title="Hiển thị báo giá trong ticket đặt lệnh">
+  </Step>
+  <Step title="Gửi lệnh mua hoặc bán">
+  </Step>
+  <Step title="Theo dõi phản hồi và trạng thái lệnh">
+  </Step>
+</Steps>
+
+### Đăng nhập → Lấy danh mục → Theo dõi vị thế
+
+<Steps>
+  <Step title="Xác thực người dùng">
+  </Step>
+  <Step title="Lấy chi tiết tài khoản">
+  </Step>
+  <Step title="Tải danh mục hiện tại và giá trị tài sản">
+  </Step>
+  <Step title="Hiển thị portfolio dashboard">
+  </Step>
+  <Step title="Làm mới dữ liệu để theo dõi thay đổi theo thời gian">
+  </Step>
+</Steps>
+
+<Note>
+  **Ví dụ minh họa:** Một ứng dụng giao dịch trên mobile sử dụng quy trình đầu tiên cho giao dịch chủ động và quy trình thứ hai cho việc xem danh mục hằng ngày.
+</Note>
+
+---
+
+## 8. Giới hạn API và thực hành tốt nhất
+
+### Giới hạn số lượng request
+
+Rate limits kiểm soát số lượng request mà ứng dụng của bạn có thể gửi trong một khoảng thời gian nhất định. Chúng giúp bảo vệ hệ thống và duy trì sự ổn định của dịch vụ.
+
+### Khuyến nghị bảo mật
+
+- Giữ bí mật thông tin xác thực
+- Dùng đúng môi trường
+- Lưu access token an toàn
+- Loại bỏ quyền không cần thiết
+- Ghi log lỗi nhưng không để lộ dữ liệu nhạy cảm
+
+### Hướng dẫn xử lý lỗi
+
+Kiểm tra thông báo lỗi, xác nhận token, rà soát quyền truy cập và chỉ thử lại khi lỗi là tạm thời và an toàn để retry.
+
+### Hướng dẫn từng bước
+
+<Steps>
+  <Step title="Theo dõi tần suất request">
+  </Step>
+  <Step title="Dùng đúng quy trình xác thực">
+  </Step>
+  <Step title="Chỉ retry khi lỗi là tạm thời">
+  </Step>
+  <Step title="Tránh để lộ bí mật trong log hoặc trên màn hình">
+  </Step>
+  <Step title="Xác thực dữ liệu giao dịch trước khi gửi request">
+  </Step>
+</Steps>
+
+<Note>
+  **Ví dụ minh họa:** Một ứng dụng gửi quá nhiều request báo giá và chạm giới hạn. Hệ thống giảm tốc độ request và dùng cache để người dùng vẫn có thể tiếp tục làm việc mượt mà.
+</Note>
+
+---
+
+## 9. Câu hỏi thường gặp
+
+### Nhóm vấn đề chung
+
+<AccordionGroup>
+  <Accordion title="Vấn đề đăng ký">
+    Kiểm tra xem thông tin doanh nghiệp, thông tin liên hệ và các tài liệu phê duyệt đã được gửi đúng chưa.
+  </Accordion>
+
+  <Accordion title="Vấn đề xác thực">
+    Xác nhận thông tin đăng nhập chính xác, token còn hiệu lực và ứng dụng đang gọi đúng môi trường.
+  </Accordion>
+
+  <Accordion title="Quyền giao dịch">
+    Hãy chắc chắn rằng quyền giao dịch đã được phê duyệt cho tài khoản bạn đang dùng.
+  </Accordion>
+
+  <Accordion title="Truy cập môi trường">
+    Kiểm tra rằng bạn đang dùng sandbox credentials trong sandbox và production credentials trong production.
+  </Accordion>
+</AccordionGroup>
+
+### Câu hỏi cụ thể
+
+<AccordionGroup>
+  <Accordion title="Tôi không thể đăng ký. Tôi nên kiểm tra gì đầu tiên?">
+    Xác minh thông tin tài khoản, thông tin công ty và các tài liệu phê duyệt bắt buộc.
+  </Accordion>
+
+  <Accordion title="Vì sao tôi gặp lỗi xác thực?">
+    Nguyên nhân phổ biến là token hết hạn, thông tin đăng nhập sai hoặc đang dùng sai môi trường.
+  </Accordion>
+
+  <Accordion title="Vì sao tôi xem được dữ liệu nhưng không đặt lệnh được?">
+    Bạn có thể chỉ đang có quyền xem market data hoặc account. Có thể chưa được cấp quyền giao dịch.
+  </Accordion>
+
+  <Accordion title="Vì sao sandbox chạy được nhưng production lại lỗi?">
+    Production thường có các kiểm soát nghiêm ngặt hơn về quyền, thông tin đăng nhập và tuân thủ.
+  </Accordion>
+</AccordionGroup>

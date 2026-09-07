@@ -1,0 +1,32 @@
+---
+title: "Xác thực tài khoản cơ sở"
+---
+
+Mọi endpoint thuộc nhóm Trading và Account/Portfolio/Balance đều yêu cầu trước tiên phải có token từ nhóm này. Có hai endpoint đăng nhập độc lập — một cho tài khoản cổ phiếu (sản phẩm cơ sở) và một cho tài khoản phái sinh — vì PHS xem hai sản phẩm này là hai quyền giao dịch riêng biệt.
+
+**Xác thực:** Nhóm này tạo ra các thông tin xác thực mà mọi request đã xác thực khác đều cần.
+
+## B1. Xác thực — Tài khoản cơ sở
+
+Đăng nhập bằng tài khoản giao dịch cổ phiếu (sản phẩm cơ sở) và trả về `access_token`, `refresh_token`, và `otp_token`.
+
+**POST /auth/gen-secret-key/underlying**
+
+### Sandbox URL
+
+[https://flashapi.phs.vn/sandbox/oapi/auth/gen-secret-key/underlying](https://flashapi.phs.vn/sandbox/oapi/auth/gen-secret-key/underlying)
+
+### Tham số
+
+| **Vị trí** | **Tên** | **Bắt buộc** | **Mô tả** |
+| :-- | :-- | :-- | :-- |
+| body | username | Có | Tên đăng nhập tài khoản. Ví dụ: 022C099995 |
+| body | password | Có | Mật khẩu tài khoản. Ví dụ: 123456aA@ |
+
+### Ví dụ request (cURL cho Sandbox)
+
+```bash
+curl -X POST "https://flashapi.phs.vn/sandbox/oapi/auth/gen-secret-key/underlying" \
+  -H "Content-Type: application/json" \
+  -d '{ "username": "<sandbox_username>", "password": "<sandbox_password>" }'
+```

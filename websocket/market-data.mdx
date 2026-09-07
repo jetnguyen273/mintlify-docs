@@ -1,0 +1,127 @@
+---
+title: "Market Data WebSocket"
+description: "How to connect a socket to receive realtime market data (quotes, bid/offer) from FlashOAPI."
+---
+
+## Overview
+
+Priceboard Realtime streams live market data (matched quotes, bid/offer) over **Socket.IO**. It is a completely separate channel from Order & Account data — see [Connecting to Order & Account](https://flashapi.phs.vn/docs/websocket/trading-data) for that.
+
+<Info>
+  This channel does **not require an access token** — you only need to connect and subscribe to the correct symbol.
+</Info>
+
+## Connection details
+
+| Setting | Value |
+| --- | --- |
+| **Host (Production)** | `https://flashapi.phs.vn` |
+| **Socket.IO path** | `/ws/socket.io` |
+| **Transport** | `websocket` (required — do not fall back to `polling`) |
+| **Client library** | `socket.io-client` |
+
+<Warning>
+  The `path` must be exact. Using the wrong path (e.g. missing `/ws`) causes the server to return a **301 redirect** to its documentation site instead of completing the Socket.IO handshake, which surfaces as a generic connection error on the client.
+</Warning>
+
+## Connection steps
+
+<Steps>
+  <Step title="Initialize the client">
+    Connect to the host \+ path above, forcing the `websocket` transport.
+  </Step>
+  <Step title="Subscribe to symbols">
+    After the `connect` event, send each topic via the `subscribe` event (a plain string, not an object).
+  </Step>
+  <Step title="Listen for data">
+    The server pushes updates through the `publish` event whenever a quote or bid/offer changes.
+  </Step>
+</Steps>
+
+## Example code (Node.js / JavaScript)
+
+```javascript
+const io = require("socket.io-client");
+
+const socket = io("https://flashapi.phs.vn", {
+  path: "/ws/socket.io",
+  transports: ["websocket"],
+});
+
+socket.on("connect", () => {
+  console.log("Connected:", socket.id);
+
+  // Subscribe per symbol — repeat for each symbol you want to track
+  socket.emit("subscribe", "market.quoteKrx.ACB");
+  socket.emit("subscribe", "market.bidofferKrx.ACB");
+});
+
+socket.on("publish", (data) => {
+  console.log("Received:", data);
+});
+
+socket.on("connect_error", (err) => {
+  console.error("Connection error:", err.message);
+});
+
+socket.on("disconnect", (reason) => {
+  console.log("Disconnected:", reason);
+});
+```
+
+## Subscribe topic mapping
+
+| Subscribe topic | Symbol (`<symbol>`) | Meaning |
+| --- | --- | --- |
+| `market.quoteKrx.<symbol>` | e.g. `ACB` | Realtime matched quote |
+| `market.bidofferKrx.<symbol>` | e.g. `ACB` | Bid/offer depth (3 price levels) |
+
+## Field mapping for `publish`
+
+Real sample response:
+
+```json
+{
+  "type": "publish",
+  "data": {
+    "s": "ACB", "rc": "ACB", "m": "HOSE",
+    "n1": "Ngân hàng Thương mại Cổ phần Á Châu",
+    "marketId": "STO", "ti": 1787642809879,
+    "vo": 6489300, "va": 145709955000,
+    "bb": [{"p":22300,"v":67700},{"p":22250,"v":167500},{"p":22200,"v":152500}],
+    "bo": [{"p":22350,"v":5500},{"p":22400,"v":68300},{"p":22450,"v":144600}],
+    "tbo": 0, "too": 0
+  }
+}
+```
+
+| Field | Type | Meaning |
+| --- | --- | --- |
+| `s` | string | Symbol |
+| `rc` | string | Root code — usually the same as `s` |
+| `m` | string | Exchange (Market) — e.g. `HOSE`, `HNX`, `UPCOM` |
+| `n1` | string | Full listed company name |
+| `marketId` | string | Market segment code (`STO` = underlying/stock) |
+| `ti` | number | Update timestamp — Unix epoch in **milliseconds** |
+| `vo` | number | Cumulative matched volume for the session |
+| `va` | number | Cumulative matched value for the session, in VND |
+| `bb` | array `{p, v}` | **Best Bid** book — up to 3 price levels; `p` = price (VND), `v` = order volume |
+| `bo` | array `{p, v}` | **Best Offer** book — up to 3 price levels; `p` = price (VND), `v` = order volume |
+| `tbo` | number | total bid order volume |
+| `too` | number | total offer order volume |
+
+<Note>
+  This payload combines quote and bid/offer data in a single `publish` event — there is no field indicating whether it originated from the `quoteKrx` or `bidofferKrx` topic. If subscribing to both for the same symbol, use `s` to identify the symbol and check for the presence/change of `bb`/`bo` to detect bid/offer updates.
+</Note>
+
+## Troubleshooting
+
+| Symptom | Likely cause | How to check |
+| --- | --- | --- |
+| Connects but no `publish` events arrive | Wrong subscribe format (sent an object instead of a string), or wrong symbol | Log the exact topic string sent and compare against the format above |
+| `connect_error` immediately on connect | Wrong `path`, wrong host, or client allows `polling` before `websocket` | Confirm `path: "/ws/socket.io"` and `transports: ["websocket"]` |
+| Receives HTML / 301 instead of a Socket.IO handshake | Connected to the wrong path (e.g. the Order & Account path) | Confirm Priceboard uses `/ws/socket.io`, distinct from `/realtime/eqt(or fno)/socket.io` used by Order & Account |
+
+## Next step
+
+For realtime order, buying power, and portfolio data, see [Connecting to Order & Account (EQT/FNO)](/connect-order-account).

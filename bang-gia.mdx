@@ -1,0 +1,32 @@
+---
+title: "Bảng giá"
+---
+
+Các endpoint dữ liệu thị trường công khai. Không cần đăng nhập — chỉ cần gọi trực tiếp bằng HTTP GET. Đây là nhóm dễ bắt đầu nhất vì không cần xây dựng luồng token trước.
+
+**Xác thực:** Không yêu cầu xác thực.
+
+## A1. Lấy dữ liệu mới nhất của mã chứng khoán
+
+Trả về dữ liệu thị trường mới nhất hiện có (giá, khối lượng, sổ lệnh, giao dịch ngoại, v.v.) cho một hoặc nhiều mã chứng khoán.
+
+**GET /priceboard/symbol-latest-data**
+
+### Sandbox URL
+
+[https://flashapi.phs.vn/sandbox/oapi/priceboard/symbol-latest-data](https://flashapi.phs.vn/sandbox/oapi/priceboard/symbol-latest-data)
+
+### Tham số
+
+| **Vị trí** | **Tên** | **Bắt buộc** | **Mô tả** |
+| :-- | :-- | :-- | :-- |
+| query | symbolList | Có | Danh sách mã chứng khoán, phân tách bằng dấu phẩy. Ví dụ: ACB,FPT,VIC |
+| query | fields | Có | Danh sách các trường response cần trả về, phân tách bằng dấu phẩy. Ví dụ: marketId,o,h,l,c,vo |
+
+### Ví dụ request (cURL cho Sandbox)
+
+```bash
+curl -G "https://flashapi.phs.vn/sandbox/oapi/priceboard/symbol-latest-data" \
+  --data-urlencode "symbolList=ACB,FPT,VIC" \
+  --data-urlencode "fields=marketId,o,h,l,c,vo"
+```

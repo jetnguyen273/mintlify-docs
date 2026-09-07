@@ -1,0 +1,58 @@
+---
+title: "Order Status"
+---
+
+# Order Derivatives Status
+
+| Status | Description |
+| --- | --- |
+| **BB** | Sending Order |
+| **DD** | Cancelled |
+| **DE** | Cancel Request Sent Successfully |
+| **DN** | Cancel Request Failed |
+| **DR** | Cancel Request Rejected by Exchange |
+| **DS** | Cancelled Successfully |
+| **EE** | Amend Request Sent Successfully |
+| **EN** | Amend Request Failed |
+| **ES** | Amended Successfully |
+| **FF** | Order Released |
+| **GG** | Order Released Successfully |
+| **MM** | Insufficient Core Banking Balance |
+| **NN** | Pending Submission |
+| **PP** | Order Expired |
+| **RR** | Rejected by Buyer |
+| **SD** | Cancelling |
+| **SE** | Pending Amendment |
+| **SR** | Rejected by Exchange |
+| **SS** | Submitted |
+| **TP** | Partially Filled |
+| **TS** | Fully Filled |
+| **U1** | Original Order Pending Cancellation |
+| **U5** | Pending Cancel/Amend Result |
+
+# Order Underlying Status
+
+| Field | Type | Value | Description |
+| --- | --- | --- | --- |
+| `order_status` | `String` | `0` | Rejected by Exchange |
+| `order_status` | `String` | `1` | Open |
+| `order_status` | `String` | `2` | Sent |
+| `order_status` | `String` | `3` | Cancelled |
+| `order_status` | `String` | `4` | Matched |
+| `order_status` | `String` | `5` | Expired |
+| `order_status` | `String` | `6` | Rejected |
+| `order_status` | `String` | `7` | Completed |
+| `order_status` | `String` | `8` | Pending Send |
+| `order_status` | `String` | `9` | Pending Approval |
+| `order_status` | `String` | `10` | Amended |
+| `order_status` | `String` | `11` | Sending |
+| `order_status` | `String` | `12` | Fully Matched |
+| `order_status` | `String` | `13` | Pending Confirmation |
+| `order_status` | `String` | `14` | Processing |
+| `order_status` | `String` | `15` | Processed |
+| `order_status` | `String` | `A` | Amending |
+| `order_status` | `String` | `C` | Cancelling |
+| `order_status` | `String` | `P` | Pending Processing |
+| `order_status` | `String` | `E` | Expired |
+| `order_status` | `String` | `R` | Cancelled |
+| `order_status` | `String` | `W` | Pending Bank Margin Deposit |

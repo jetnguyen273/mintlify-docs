@@ -1,0 +1,115 @@
+---
+title: "Portfolio"
+description: "Retrieve underlying portfolio data for an account."
+---
+
+## Endpoint
+
+```text
+GET /oapi/accounts/:accountId/underlying/portfolio
+```
+
+Returns the underlying securities portfolio for an account.
+
+### Required path parameters
+
+- `accountId` — Trading account ID.
+
+### Response fields
+
+- `s` (`string`) — Request status. Always returns `ok`.
+- `d` (`array`) — Portfolio rows.
+
+## Portfolio fields
+
+- `accountId` (`string`) — Account number.
+- `custodycd` (`string`) — Custody code.
+- `symbol` (`string`) — Security symbol.
+- `total` (`number`) — Total quantity.
+- `trade` (`number`) — Tradable quantity.
+- `blocked` (`number`) — Blocked quantity.
+- `vsdMortgage` (`number`) — VSD mortgage quantity.
+- `receivingRight` (`number`) — Pending rights quantity.
+- `receivingT0` (`number`) — Pending receiving quantity on `T0`.
+- `receivingT1` (`number`) — Pending receiving quantity on `T1`.
+- `receivingT2` (`number`) — Pending receiving quantity on `T2`.
+- `costPrice` (`number`) — Average cost price.
+- `costPriceAmt` (`number`) — Holding value at cost price.
+- `basicprice` (`number`) — Last matched price or reference price.
+- `basicpriceamt` (`number`) — Holding value at `basicprice`.
+- `pnlAmt` (`number`) — Estimated profit or loss amount.
+- `pnlRate` (`number`) — Estimated profit or loss rate.
+- `sendingT0` (`number`) — Selling quantity on `T0`.
+- `sendingT1` (`number`) — Selling quantity on `T1`.
+- `sendingT2` (`number`) — Selling quantity on `T2`.
+- `RESTRICTQTTY` (`number`) — Restricted quantity.
+- `DFTRADING` (`number`) — Mortgaged quantity allowed for selling.
+- `dfblocktrading` (`number`) — Mortgaged quantity not allowed for selling.
+- `rtBasicPrice` (`number`) — Lending valuation price.
+- `rtBasicPriceAmt` (`number`) — Lending asset value.
+- `remainqtty` (`number`) — Remaining quantity.
+- `buyqtty` (`number`) — Buy order quantity.
+- `execbuyqtty` (`number`) — Executed buy quantity.
+- `sellqtty` (`number`) — Sell order quantity.
+- `execsellqtty` (`number`) — Executed sell quantity.
+- `tradeplace` (`string`) — Trading venue.
+- `issuername` (`string`) — Issuer name.
+- `avlwithdraw` (`number`) — Withdrawable quantity.
+- `withDraw` (`number`) — Withdrawal quantity.
+
+> `basicprice` uses the last matched price or reference price from DataFeed. `basicpriceamt` is calculated client-side as `basicprice * total`.
+
+## cURL
+
+```bash
+curl "$BASE_URL/oapi/accounts/$ACCOUNT_ID/underlying/portfolio" \
+  -H "Authorization: Bearer $ACCESS_TOKEN"
+```
+
+## Example response
+
+```json
+{
+  "s": "ok",
+  "d": [
+    {
+      "custodycd": "022C099995",
+      "symbol": "ACV",
+      "total": 3551,
+      "remainqtty": 0,
+      "trade": 3551,
+      "blocked": 0,
+      "basicprice": 49000,
+      "basicpriceamt": 173999000,
+      "dfblocktrading": 0,
+      "buyqtty": 0,
+      "execbuyqtty": 0,
+      "sellqtty": 0,
+      "execsellqtty": 0,
+      "tradeplace": "UPCOM",
+      "issuername": "Tổng Công ty Cảng hàng không Việt Nam - CTCP",
+      "avlwithdraw": 3551,
+      "accountID": "0301001425",
+      "receivingRight": 0,
+      "receivingT0": 0,
+      "receivingT1": 0,
+      "receivingT2": 0,
+      "costPrice": 61193,
+      "withDraw": 0,
+      "sendingT0": 0,
+      "sendingT1": 0,
+      "sendingT2": 0,
+      "costPriceAmt": 217296343,
+      "pnlRate": -19.93,
+      "vsdMortgage": 0,
+      "pnlAmt": -43297343,
+      "RESTRICTQTTY": 0,
+      "DFTRADING": 0,
+      "rtBasicPrice": 44900,
+      "rtBasicPriceAmt": 159439900
+    }
+  ]
+}
+```
+
+> Replace `BASE_URL`, `ACCOUNT_ID`, and `ACCESS_TOKEN` with your values.

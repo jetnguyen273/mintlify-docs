@@ -1,0 +1,86 @@
+---
+title: "Phái sinh"
+---
+
+Tạo access token, refresh token và OTP token cho tài khoản phái sinh.
+
+### Endpoint
+
+```text
+POST /oapi/auth/gen-secret-key/derivative
+```
+
+### Các trường bắt buộc
+
+- `username` — Tên đăng nhập của tài khoản. Ví dụ: `022C099995`
+- `password` — Mật khẩu của tài khoản. Ví dụ: `123456aA@`
+
+### Trường phản hồi
+
+- `access_token` (`string`) — Access token dùng cho các yêu cầu đã xác thực.
+- `refresh_token` (`string`) — Refresh token dùng để gia hạn phiên đăng nhập.
+- `expires_in` (`number`) — Thời gian tồn tại của access token, tính bằng giây.
+- `otp_token` (`string`) — OTP token trả về từ luồng xác thực.
+- `token_type` (`string`) — Loại token. Ví dụ: `Bearer`
+
+### cURL
+
+```bash
+curl -X POST "$BASE_URL/oapi/auth/gen-secret-key/derivative" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "username": "022C099995",
+    "password": "123456aA@"
+  }'
+```
+
+### Python
+
+```python
+import requests
+
+BASE_URL = "https://api.example.com"
+
+payload = {
+    "username": "022C099995",
+    "password": "123456aA@",
+}
+
+response = requests.post(
+    f"{BASE_URL}/oapi/auth/gen-secret-key/derivative",
+    json=payload,
+)
+response.raise_for_status()
+
+print(response.json())
+```
+
+### Ví dụ phản hồi
+
+```json
+{
+    "access_token": "022C099995||KRYRTHUYUI||D5yF4ZPShG5lPNmS1hmO2JqZvj33Ht4qDDuhkhl1usufCEuYQC61BBCAb8iGNg6iGjCSzQInG7iHGPqYv505cgFuf0QcfZt4NPzgqGM1BRyCwvrvKI04gfOghRFFPZslfVaOf1ebwp408NVK9jlVJwa7ocUnmreHt6VHGHl6N3Lna6iwaM4YvXkDnPDbtMSLgmmiIGiOj6pZwyBw85KkrFRXf6jzONK3mK3P0n0r00OlSxZeRgh8L6Xd9jUt7WY",
+    "refresh_token": "022C099995||KRYRTHUYUI||qe4rGLdBcb1b2ywraANFDbXSNNF8L8v0WPuAeGPd83u14CKCv57brGyZ9tvXGFACCjinBGuyQClOPTlkdzMIcBZR4PRE3ZOhceU3kywZ6VoqPC5aDrs38DqCUmPWALHP7iJIHV8pDinC0UQvAMGAZb1O2YHt0qT3tZH2vBkowzv1MAsWfO54xY6IUnQCgy3od5rF4A90AwwdscfWYhOVSKqIr4hoO6vEWQihxlDiCEhBIciuZ52Y7i2mEiq2IdU0",
+    "expires_in": 28800,
+    "otp_token": "2c897da51e69cd6f3a0701884ed706ac",
+    "token_type": "Bearer"
+}
+```
+
+### Error response
+
+```json
+{
+    "code": "OAPI_FNO_500",
+    "messageParams": {
+        "error": "server_error",
+        "error_description": "-107 Tên đăng nhập hoặc mật khẩu không đúng",
+        "s": 500
+    },
+    "params": null,
+    "source": "oapi-bridge-fno",
+    "message": null
+}
+```
+
+> Thay `BASE_URL` bằng host API của bạn. Thông báo lỗi từ hệ thống phía sau có thể được trả về bằng tiếng Việt.

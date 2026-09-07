@@ -1,0 +1,220 @@
+---
+title: "Cơ sở"
+description: "Đặt, cập nhật và hủy lệnh cơ sở."
+---
+
+## Xác thực bắt buộc
+
+Tất cả các route dưới `/oapi/accounts/:accountId/orders/underlying` yêu cầu `Authorization: Bearer <access_token>`.
+
+Sử dụng `access_token` và `otp_token` được trả về từ [`POST /oapi/auth/gen-secret-key/underlying`](/phs-openapi-documents/authentication/underlying.md).
+
+Các request `GET` chỉ cần Bearer token.
+
+Các request `POST`, `PUT`, và `DELETE` cũng cần các header sau:
+
+- `x-otp-token: <otp_token>`
+
+Trong sandbox, dùng đúng OTP token mẫu: `552066a35eb30a9815afc952b14287a8`.
+
+## Đặt lệnh
+
+```text
+POST /oapi/accounts/:accountId/orders/underlying
+```
+
+Đặt một lệnh underlying mới cho tài khoản.
+
+### Tham số đầu vào bắt buộc
+
+- `accountId` — Mã tài khoản giao dịch.
+
+### Tham số body bắt buộc
+
+- `instrument` — Mã sản phẩm. Ví dụ: `ACB`
+- `qty` — Số lượng lệnh. Ví dụ: `1`
+- `side` — Chiều lệnh. Ví dụ: `buy`
+- `type` — Loại lệnh. Ví dụ: `LO`
+- `limitPrice` — Giá giới hạn. Ví dụ: `23000`
+- timetype — Kiểu hiệu lực thời gian. Ví dụ: `T`
+
+### Response fields
+
+- `s` (`string`) — Trạng thái request. Ví dụ: `ok`
+- `d.orderid` (`string`) — Mã lệnh được tạo.
+
+### cURL
+
+```bash
+curl -X POST "$BASE_URL/oapi/accounts/$ACCOUNT_ID/orders/underlying" \
+  -H "Authorization: Bearer $ACCESS_TOKEN" \
+  -H "Content-Type: application/json" \
+  -H "x-lang: vi" \
+  -H "x-via: K" \
+  -H "x-otp-token: $OTP_TOKEN" \
+  -d '{
+    "instrument": "ACB",
+    "qty": 1,
+    "side": "buy",
+    "type": "LO",
+    "limitPrice": 23000,
+    "timetype": "T"
+  }'
+```
+
+### Ví dụ phản hồi
+
+```json
+{
+    "s": "ok",
+    "d": {
+        "orderid": "8000180326000219"
+    }
+}
+```
+
+## Cập nhật lệnh
+
+```text
+PUT /oapi/accounts/:accountId/orders/underlying/:orderId
+```
+
+Cập nhật số lượng và giá giới hạn cho một lệnh underlying đã tồn tại.
+
+### Các tham số đường dẫn bắt buộc
+
+- `accountId` — Mã tài khoản giao dịch.
+- `orderId` — Mã lệnh cần cập nhật.
+
+### Các tham số thân yêu cầu bắt buộc
+
+- `qty` — Số lượng lệnh cập nhật. Ví dụ: `1`
+- `limitPrice` — Giá giới hạn cập nhật. Ví dụ: `23000`
+
+### cURL
+
+```bash
+curl -X PUT "$BASE_URL/oapi/accounts/$ACCOUNT_ID/orders/underlying/$ORDER_ID" \
+  -H "Authorization: Bearer $ACCESS_TOKEN" \
+  -H "Content-Type: application/json" \
+  -H "x-lang: vi" \
+  -H "x-via: K" \
+  -H "x-otp-token: $OTP_TOKEN" \
+  -d '{
+    "qty": 1,
+    "limitPrice": 23000
+  }'
+```
+
+### Ví dụ phản hồi
+
+```json
+{
+    "s": "ok"
+}
+```
+
+## Hủy lệnh
+
+```text
+DELETE /oapi/accounts/:accountId/orders/underlying/:orderId?timeType=T&isbuyin=N
+```
+
+Hủy một lệnh underlying hiện có.
+
+### Tham số đường dẫn bắt buộc
+
+- `accountId` — Mã tài khoản giao dịch.
+- `orderId` — Mã lệnh cần hủy.
+
+### Tham số truy vấn bắt buộc
+
+- `timetype` — Kiểu hiệu lực thời gian. Ví dụ: `T`
+- `isbuyin` — Cờ buy-in. Ví dụ: `N`
+
+### cURL
+
+```bash
+curl -X DELETE "$BASE_URL/oapi/accounts/$ACCOUNT_ID/orders/underlying/$ORDER_ID?timeType=T&isbuyin=N" \
+  -H "Authorization: Bearer $ACCESS_TOKEN" \
+  -H "x-lang: vi" \
+  -H "x-via: K" \
+  -H "x-otp-token: $OTP_TOKEN"
+```
+
+### Ví dụ phản hồi
+
+```json
+{
+    "s": "ok"
+}
+```
+
+## Lấy sức mua chứng khoán cơ sở
+
+```text
+GET /oapi/accounts/:accountId/underlying/buyingPower
+```
+
+Lấy sức mua hiện tại để giao dịch chứng khoán cơ sở.
+
+### Tham số đường dẫn bắt buộc
+
+- `accountId` — Mã tài khoản giao dịch.
+
+### Tham số truy vấn bắt buộc
+
+- `symbol` — Mã chứng khoán. Ví dụ: `VIC`.
+- `quotePrice` — Giá đặt lệnh dùng để tính sức mua. Ví dụ: `222000`.
+
+### cURL
+
+```bash
+curl -X GET "$BASE_URL/oapi/accounts/$ACCOUNT_ID/underlying/buyingPower?symbol=VIC&quotePrice=222000" \
+  -H "Authorization: Bearer $ACCESS_TOKEN" \
+  -H "Accept: */*"
+```
+
+### Ví dụ phản hồi
+
+```json
+{
+  "s": "ok",
+  "d": [
+    {
+      "ppse": 0,
+      "ppseref": 0,
+      "mrratioloan": "---",
+      "mrpriceloan": "---",
+      "exceptional": 0,
+      "maxqty": -1,
+      "trade": 0,
+      "receiving": 0,
+      "ref": 10000,
+      "allowance": 16,
+      "withdraw": 0,
+      "private": 0,
+      "blocked": 0,
+      "mortage": 0
+    }
+  ]
+}
+```
+
+### Response fields
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `ppse` | String | Sức mua tối đa |
+| `receiving` | String | Chứng khoán chờ về |
+| `maxqty` | String | Khối lượng mua tối đa = max(maxqty, 0) |
+| `mrrationloan` | String | Tỷ lệ vay |
+| `trade` | String | Khối lượng bán tối đa |
+| `allbalance` | String | Tiền mặt \+ tiền ngân hàng |
+| `ppseref` | String | Sức mua tối ưu |
+| `rtt` | String | Tỷ lệ thực tế |
+| `mrirate` | String | Tỷ lệ an toàn |
+| `blocked` | String | Chứng khoán phong tỏa |
+| `mortage` | String | Chứng khoán cầm cố |
+
+> Thay `BASE_URL`, `ACCOUNT_ID`, `ACCESS_TOKEN`, `OTP_TOKEN`, và `ORDER_ID` bằng giá trị của bạn.

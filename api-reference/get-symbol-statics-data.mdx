@@ -1,0 +1,86 @@
+---
+title: "Get symbol statics data"
+---
+
+## Endpoint
+
+`GET /oapi/priceboard/symbol-statics-data`
+
+Returns matching statistics by price step for a symbol.
+
+## Required query parameters
+
+- `symbol` — Symbol code. Example: `ACB`
+- `fetchCount` — Number of price steps to return. Example: `10`
+
+## Field descriptions
+
+- `price` (`number`) — Price step (`Bước giá`).
+- `volume` (`number`) — Matched volume at this price step (`Khối lượng khớp ở bước giá này`).
+- `buyVolume` (`number`) — Buy-side matched volume at this price step (`Khối lượng khớp mua ở bước giá này`).
+- `sellVolume` (`number`) — Sell-side matched volume at this price step (`Khối lượng khớp bán ở bước giá này`).
+- `bsVolume` (`number`) — Matched volume with unknown buy or sell side. Common in `ATO` or `ATC` (`Khối lượng khớp mua/bán ở bước giá này`).
+- `buyRate` (`number`) — Buy-side match ratio at this price step (`Tỉ lệ khớp mua ở bước giá này`).
+- `sellRate` (`number`) — Sell-side match ratio at this price step (`Tỉ lệ khớp bán ở bước giá này`).
+- `bsRate` (`number`) — Unknown-side match ratio at this price step (`Tỉ lệ khớp mua/bán ở bước giá này`).
+- `rate` (`number`) — Total matched volume ratio for this price step (`Tổng khối lượng khớp theo bước giá khớp`).
+
+## cURL
+
+```bash
+curl -G "$BASE_URL/oapi/priceboard/symbol-statics-data" \
+  --data-urlencode "symbol=ACB" \
+  --data-urlencode "fetchCount=10"
+```
+
+## Python
+
+```python
+import requests
+
+BASE_URL = "https://api.example.com"
+
+params = {
+    "symbol": "ACB",
+    "fetchCount": 10,
+}
+
+response = requests.get(
+    f"{BASE_URL}/oapi/priceboard/symbol-statics-data",
+    params=params,
+)
+response.raise_for_status()
+
+print(response.json())
+```
+
+## Example response
+
+```json
+[
+    {
+        "price": 23500,
+        "volume": 2400,
+        "buyVolume": 2400,
+        "sellVolume": 0,
+        "bsVolume": 0,
+        "buyRate": 1,
+        "sellRate": 0,
+        "bsRate": 0,
+        "rate": 0.0002
+    },
+    {
+        "price": 23450,
+        "volume": 5000,
+        "buyVolume": 100,
+        "sellVolume": 4900,
+        "bsVolume": 0,
+        "buyRate": 0.02,
+        "sellRate": 0.98,
+        "bsRate": 0,
+        "rate": 0.0004
+    }
+]
+```
+
+> Replace `BASE_URL` with your API host.

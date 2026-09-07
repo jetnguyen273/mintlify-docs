@@ -1,0 +1,90 @@
+---
+title: "Vị thế mở"
+---
+
+## Endpoint
+
+```text
+GET /oapi/accounts/:accountId/derivative/openPositions
+```
+
+Trả về các vị thế phái sinh đang mở của một tài khoản.
+
+### Tham số đường dẫn bắt buộc
+
+- `accountId` — Mã tài khoản giao dịch.
+
+### Trường phản hồi
+
+- `s` (`string`) — Trạng thái request. Luôn trả về `ok`.
+- `d` (`array`) — Danh sách các dòng vị thế mở.
+
+## Trường vị thế mở
+
+- `dtacctno` (`string`) — Tài khoản giao dịch.
+- `codeid` (`string`) — Mã ID của sản phẩm.
+- `symbol` (`string`) — Mã chứng khoán/sản phẩm.
+- `qtty` (`number`) — Số lượng vị thế.
+- `isclose` (`string`) — Cho biết vị thế có thể đóng hay không.
+- `isnet` (`string`) — Cho biết có bật netting hay không.
+- `pendinglqtty` (`number`) — Số lượng long chờ xử lý.
+- `pendingsqtty` (`number`) — Số lượng short chờ xử lý.
+- `rdsp` (`number`) — Giá DSP.
+- `nonrplamt` (`number`) — Lãi/lỗ chưa thực hiện trong ngày.
+- `position` (`string`) — Chiều hoặc loại vị thế.
+- `custodycd` (`string`) — Tài khoản margin.
+- `price_secured` (`number`) — Giá thị trường.
+- `nvalue` (`number`) — Hệ số hợp đồng.
+- `vwap` (`number`) — Giá vốn trung bình.
+- `pecentnonrplamt` (`number`) — Tỷ lệ lãi/lỗ chưa thực hiện.
+- `vrdebtvmamt` (`number`) — Lãi/lỗ đã thực hiện.
+- `totalplamt` (`number`) — Tổng giá trị lãi hoặc lỗ.
+- `last_change` (`string`) — Thời gian cập nhật gần nhất.
+- `vrimamt` (`number`) — Tổng giá trị ký quỹ.
+- `diff` (`number`) — Chênh lệch điểm.
+- `vm` (`number`) — Lỗ VM.
+
+> Ghi chú field của bạn dùng `pricesecured` và `lastchange`. Tuy nhiên response mẫu trả về `price_secured` và `last_change`. Hãy mô tả response theo đúng key thực tế mà API trả về.
+
+## cURL
+
+```bash
+curl "$BASE_URL/oapi/accounts/$ACCOUNT_ID/derivative/openPositions" \
+  -H "Authorization: Bearer $ACCESS_TOKEN"
+```
+
+## Ví dụ
+
+```json
+{
+  "s": "ok",
+  "d": [
+    {
+      "dtacctno": "0104005401",
+      "codeid": "000118",
+      "symbol": "41I1G4000",
+      "qtty": 5,
+      "isclose": "Y",
+      "isnet": "N",
+      "pendinglqtty": 0,
+      "pendingsqtty": 2,
+      "rdsp": 205380000,
+      "nonrplamt": 0,
+      "position": "1",
+      "custodycd": "022C979999",
+      "price_secured": 1802,
+      "nvalue": 100000,
+      "vwap": 1802,
+      "pecentnonrplamt": 0,
+      "vrdebtvmamt": 0,
+      "totalplamt": 0,
+      "last_change": "2026-03-20T14:56:23.191Z",
+      "vrimamt": 153170000,
+      "diff": 0,
+      "vm": 0
+    }
+  ]
+}
+```
+
+> Thay `BASE_URL`, `ACCOUNT_ID`, và `ACCESS_TOKEN` bằng giá trị của bạn.

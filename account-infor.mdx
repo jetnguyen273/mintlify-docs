@@ -1,0 +1,30 @@
+---
+title: "API Tài khoản, Danh mục & Số dư — Cổ phiếu"
+---
+
+Các endpoint chỉ đọc (GET) cho tài khoản cổ phiếu. Tất cả đều yêu cầu `Authorization: Bearer <access_token>` từ B1. Không cần `x-otp-token` vì không có lệnh nào được gửi.
+
+**Xác thực:** Yêu cầu: `Authorization: Bearer <access_token>` từ B1. Chỉ dùng GET.
+
+## E1. Danh mục (Cổ phiếu)
+
+Trả về danh mục cổ phiếu hiện tại của tài khoản (khối lượng, giá vốn trung bình, giá trị thị trường, lãi/lỗ chưa thực hiện, v.v.).
+
+**GET /accounts/:accountId/underlying/portfolio**
+
+### Sandbox URL
+
+[https://flashapi.phs.vn/sandbox/oapi/accounts/:accountId/underlying/portfolio](https://flashapi.phs.vn/sandbox/oapi/accounts/:accountId/underlying/portfolio)
+
+### Tham số
+
+| **Vị trí** | **Tên** | **Bắt buộc** | **Mô tả** |
+| :-- | :-- | :-- | :-- |
+| path | accountId | Có | Mã tài khoản giao dịch. |
+
+### Ví dụ request (cURL cho Sandbox)
+
+```bash
+curl "https://flashapi.phs.vn/sandbox/oapi/accounts/$ACCOUNT_ID/underlying/portfolio" \
+  -H "Authorization: Bearer $ACCESS_TOKEN"
+```

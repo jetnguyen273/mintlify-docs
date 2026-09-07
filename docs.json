@@ -1,0 +1,328 @@
+{
+  "$schema": "https://mintlify.com/docs.json",
+  "theme": "mint",
+  "name": "FlashAPI",
+  "colors": {
+    "primary": "#16A34A",
+    "light": "#07C983",
+    "dark": "#15803D"
+  },
+  "navigation": {
+    "languages": [
+      {
+        "language": "en",
+        "tabs": [
+          {
+            "tab": "API reference",
+            "pages": [
+              {
+                "group": "API documentation",
+                "pages": [
+                  "api-reference/welcome",
+                  {
+                    "group": "Priceboard",
+                    "expanded": true,
+                    "pages": [
+                      "priceboard/get-symbol-latest-data",
+                      "priceboard/get-symbol-statics-data",
+                      "priceboard/get-symbol-matching-data",
+                      "priceboard/get_all_stocks",
+                      "priceboard/Get_candlestick_data"
+                    ]
+                  },
+                  {
+                    "group": "Authentication",
+                    "pages": [
+                      "authentication/underlying",
+                      "authentication/derivate"
+                    ]
+                  },
+                  {
+                    "group": "Placing Order ",
+                    "pages": [
+                      "trading/Underlying",
+                      "trading/Derivative",
+                      "api-reference/error-status"
+                    ]
+                  },
+                  {
+                    "group": "Portfolio",
+                    "pages": [
+                      {
+                        "group": "Underlying",
+                        "pages": [
+                          "inquiry/porfolio"
+                        ]
+                      },
+                      {
+                        "group": "Derivative",
+                        "pages": [
+                          "derivative/open-position",
+                          "derivative/close-positions"
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "group": "Order History",
+                    "pages": [
+                      {
+                        "group": "Underlying",
+                        "pages": [
+                          "trading/Daily-order",
+                          "trading/oderhistory/underlying/order-report"
+                        ]
+                      },
+                      {
+                        "group": "Derivative",
+                        "pages": [
+                          "trading/daily-order",
+                          "trading/order-report"
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "group": "Asset",
+                    "pages": [
+                      "balance/underlying-1",
+                      "balance/derivative"
+                    ]
+                  },
+                  {
+                    "group": "Socket",
+                    "pages": [
+                      "Socket-connection",
+                      "websocket/market-data",
+                      "websocket/trading-data"
+                    ]
+                  },
+                  "api-reference/error-code",
+                  {
+                    "group": "Sandbox",
+                    "pages": [
+                      "Introduction",
+                      "how-sandbox-urls-work",
+                      "authentication-account",
+                      "market",
+                      "authen-account-underlying",
+                      "authen-account-derivative",
+                      "trading-underlying",
+                      "trading-derivative",
+                      "account-portfolio-balance-underlying",
+                      "ref-order-status-codes",
+                      "error-codes",
+                      "appendix"
+                    ]
+                  }
+                ]
+              },
+              {
+                "group": "Endpoint examples",
+                "hidden": true,
+                "pages": [
+                  "api-reference/endpoint/get",
+                  "api-reference/endpoint/create",
+                  "api-reference/endpoint/delete",
+                  "api-reference/endpoint/webhook"
+                ]
+              },
+              "api-reference/faqs",
+              {
+                "group": "Terms and conditions",
+                "pages": [
+                  "registration-guide",
+                  "risk-disclosure",
+                  "service-scope-technical-apendix",
+                  "terms-and-conditions",
+                  "registration-form"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "language": "vi",
+        "tabs": [
+          {
+            "tab": "Tài liệu tham chiếu API",
+            "pages": [
+              {
+                "group": "Tài liệu API",
+                "pages": [
+                  "chao-mung",
+                  {
+                    "group": "Thông tin thị trường",
+                    "pages": [
+                      "lay-du-lieu-moi-nhat-cua-ma-chung-khoan",
+                      "lay-du-lieu-thong-ke-cua-ma-chung-khoan",
+                      "du-lieu-khop-lenh-theo-ma",
+                      "lay-toan-bo-thong-tin-cua-ma-chung-khoan",
+                      "du-lieu-nen-cua-ma-chung-khoan",
+                      "ket-noi-socket.io"
+                    ]
+                  },
+                  {
+                    "group": "Xác thực",
+                    "pages": [
+                      "xac-thuc-co-so",
+                      "xac-thuc-phai-sinh"
+                    ]
+                  },
+                  {
+                    "group": "Đặt lệnh ",
+                    "pages": [
+                      "dat-lenh-co-so",
+                      "dat-lenh-phai-sinh",
+                      "trang-thai-order"
+                    ]
+                  },
+                  {
+                    "group": "Lịch sử giao dịch",
+                    "pages": [
+                      {
+                        "group": "Cơ sở",
+                        "pages": [
+                          "lenh-trong-ngay",
+                          "bao-cao-lenh"
+                        ]
+                      },
+                      {
+                        "group": "Phái sinh",
+                        "pages": [
+                          "lenh-trong-ngay-1",
+                          "bao-cao-lenh-1"
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "group": "Tài sản",
+                    "pages": [
+                      "tai-san-co-so",
+                      "tai-san-phai-sinh"
+                    ]
+                  },
+                  {
+                    "group": "Danh mục đầu tư",
+                    "pages": [
+                      {
+                        "group": "Cơ sở",
+                        "pages": [
+                          "danh-muc-dau-tu"
+                        ]
+                      },
+                      {
+                        "group": "Phái sinh",
+                        "pages": [
+                          "vi-the-mo",
+                          "vi-the-dong"
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "group": "Kết nối WebSocket",
+                    "pages": [
+                      "websocket/du-lieu-thi-truong",
+                      "websocket/du-lieu-giao-dich"
+                    ]
+                  },
+                  {
+                    "group": "Môi trường giả lập",
+                    "pages": [
+                      "gioi-thieu",
+                      "cach-hoat-dong-cua-url-sandbox",
+                      "xac-thuc-tai-khoan",
+                      "bang-gia",
+                      "api-trading-co-so",
+                      "api-trading-phai-sinh",
+                      "xac-thuc-tai-khoan-phai-sinh",
+                      "xac-thuc-tai-khoan-co-so",
+                      "account-infor",
+                      "untitled-page-24",
+                      "untitled-page-25",
+                      "phu-luc-sandbox",
+                      "market-1"
+                    ],
+                    "hidden": true
+                  },
+                  "ma-error",
+                  {
+                    "group": "Sandbox_ Thử nghiệm & mô phỏng API",
+                    "pages": [
+                      "gioi-thieu-sandbox",
+                      "cach-hoat-dong-url-sandbox",
+                      "luong-xac-thuc",
+                      "du_lieu_thi_truong",
+                      "xac-thuc",
+                      "giao-dich-co-so",
+                      "nhom-tai-khoan-danh-muc-so-du-co-so",
+                      "nhom-tai-khoan-danh-muc-so-du-phai-sinh",
+                      "ma-trang-thai-lenh",
+                      "phu-luc"
+                    ]
+                  }
+                ]
+              },
+              "faqs",
+              {
+                "group": "Các điều khoản & thỏa thuận",
+                "pages": [
+                  "dieu-khoan-va-dieu-kien",
+                  "huong-dan-dang-ki",
+                  "cong-bo-rui-ro",
+                  "phu-luc-pham-vi-ki-thuat",
+                  "don-dang-ky"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "logo": {
+    "light": "/images/logo4-2-20nam-01.png",
+    "dark": "/images/logo4-2-20nam-01.png",
+    "href": "https://flashapi.phs.vn/chao-mung"
+  },
+  "navbar": {
+    "links": [
+      {
+        "label": "Support",
+        "href": "https://flashapi.phs.vn/chao-mung"
+      },
+      {
+        "href": "https://flashapi.phs.vn/docs/don-dang-ky",
+        "label": "Register"
+      }
+    ],
+    "primary": {
+      "type": "button",
+      "label": "Dashboard",
+      "href": "https://dashboard.mintlify.com"
+    }
+  },
+  "contextual": {
+    "options": [
+     "copy",
+     "view",
+     "chatgpt",
+     "claude",
+     "perplexity",
+     "mcp",
+     "cursor",
+     "vscode"
+   ]
+  },
+  "description": "Comprehensive API documentation for Flash API, providing secure access to trading, account management, portfolio, balances, market data, and reporting services.",
+  "favicon": {
+    "light": "/images/brandmark-phs.png",
+    "dark": "/images/brandmark-phs.png"
+  },
+  "appearance": {
+    "default": "light"
+  }
+}

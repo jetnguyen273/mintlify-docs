@@ -1,0 +1,115 @@
+---
+title: "Danh mục đầu tư"
+description: "Lấy dữ liệu danh mục chứng khoán cơ sở của một tài khoản."
+---
+
+## Endpoint
+
+```text
+GET /oapi/accounts/:accountId/underlying/portfolio
+```
+
+Trả về danh mục chứng khoán cơ sở của một tài khoản.
+
+### Tham số đường dẫn yêu cầu bắt buộc
+
+- `accountId` — Mã tài khoản giao dịch.
+
+### Trường phản hồi
+
+- `s` (`string`) — Trạng thái request. Luôn trả về `ok`.
+- `d` (`array`) — Các dòng dữ liệu danh mục.
+
+## Trường danh mục
+
+- `accountId` (`string`) — Số tài khoản.
+- `custodycd` (`string`) — Mã lưu ký.
+- `symbol` (`string`) — Mã chứng khoán.
+- `total` (`number`) — Tổng số lượng.
+- `trade` (`number`) — Số lượng có thể giao dịch.
+- `blocked` (`number`) — Số lượng bị phong tỏa.
+- `vsdMortgage` (`number`) — Số lượng thế chấp tại VSD.
+- `receivingRight` (`number`) — Số lượng quyền đang chờ nhận.
+- `receivingT0` (`number`) — Số lượng đang chờ nhận trên `T0`.
+- `receivingT1` (`number`) — Số lượng đang chờ nhận trên `T1`.
+- `receivingT2` (`number`) — Số lượng đang chờ nhận trên `T2`.
+- `costPrice` (`number`) — Giá vốn bình quân.
+- `costPriceAmt` (`number`) — Giá trị nắm giữ theo giá vốn.
+- `basicprice` (`number`) — Giá khớp gần nhất hoặc giá tham chiếu.
+- `basicpriceamt` (`number`) — Giá trị nắm giữ theo `basicprice`.
+- `pnlAmt` (`number`) — Giá trị lãi/lỗ ước tính.
+- `pnlRate` (`number`) — Tỷ lệ lãi/lỗ ước tính.
+- `sendingT0` (`number`) — Số lượng đang bán trên `T0`.
+- `sendingT1` (`number`) — Số lượng đang bán trên `T1`.
+- `sendingT2` (`number`) — Số lượng đang bán trên `T2`.
+- `RESTRICTQTTY` (`number`) — Số lượng bị hạn chế.
+- `DFTRADING` (`number`) — Số lượng thế chấp được phép bán.
+- `dfblocktrading` (`number`) — Số lượng thế chấp không được phép bán.
+- `rtBasicPrice` (`number`) — Giá định giá cho vay.
+- `rtBasicPriceAmt` (`number`) — Giá trị tài sản cho vay.
+- `remainqtty` (`number`) — Số lượng còn lại.
+- `buyqtty` (`number`) — Số lượng lệnh mua.
+- `execbuyqtty` (`number`) — Số lượng mua đã khớp.
+- `sellqtty` (`number`) — Số lượng lệnh bán.
+- `execsellqtty` (`number`) — Số lượng bán đã khớp.
+- `tradeplace` (`string`) — Sàn giao dịch.
+- `issuername` (`string`) — Tên tổ chức phát hành.
+- `avlwithdraw` (`number`) — Số lượng có thể rút.
+- `withDraw` (`number`) — Số lượng rút.
+
+> `basicprice` sử dụng giá khớp gần nhất hoặc giá tham chiếu từ DataFeed. `basicpriceamt` được tính ở phía client theo công thức `basicprice * total`.
+
+## cURL
+
+```bash
+curl "$BASE_URL/oapi/accounts/$ACCOUNT_ID/underlying/portfolio" \
+  -H "Authorization: Bearer $ACCESS_TOKEN"
+```
+
+## Example response
+
+```json
+{
+  "s": "ok",
+  "d": [
+    {
+      "custodycd": "022C099995",
+      "symbol": "ACV",
+      "total": 3551,
+      "remainqtty": 0,
+      "trade": 3551,
+      "blocked": 0,
+      "basicprice": 49000,
+      "basicpriceamt": 173999000,
+      "dfblocktrading": 0,
+      "buyqtty": 0,
+      "execbuyqtty": 0,
+      "sellqtty": 0,
+      "execsellqtty": 0,
+      "tradeplace": "UPCOM",
+      "issuername": "Tổng Công ty Cảng hàng không Việt Nam - CTCP",
+      "avlwithdraw": 3551,
+      "accountID": "0301001425",
+      "receivingRight": 0,
+      "receivingT0": 0,
+      "receivingT1": 0,
+      "receivingT2": 0,
+      "costPrice": 61193,
+      "withDraw": 0,
+      "sendingT0": 0,
+      "sendingT1": 0,
+      "sendingT2": 0,
+      "costPriceAmt": 217296343,
+      "pnlRate": -19.93,
+      "vsdMortgage": 0,
+      "pnlAmt": -43297343,
+      "RESTRICTQTTY": 0,
+      "DFTRADING": 0,
+      "rtBasicPrice": 44900,
+      "rtBasicPriceAmt": 159439900
+    }
+  ]
+}
+```
+
+> Thay `BASE_URL`, `ACCOUNT_ID`, và `ACCESS_TOKEN` bằng giá trị của bạn.

@@ -1,0 +1,98 @@
+---
+title: "Daily Order"
+---
+
+## Endpoint
+
+```text
+GET /oapi/accounts/:accountId/derivative/dailyOrder
+```
+
+Returns the current trading day's derivative orders for an account.
+
+### Required path parameters
+
+- `accountId` — Trading account ID.
+
+### Response fields
+
+- `s` (`string`) — Request status. Example: `ok`.
+- `d` (`array`) — Daily order rows.
+
+## Order fields
+
+- `custodycd` (`string`) — Margin account number.
+- `accountid` (`string`) — Trading account ID.
+- `orderid` (`string`) — Order ID.
+- `symbol` (`string`) — Instrument code.
+- `matchtime` (`string`) — Match time.
+- `side` (`string`) — Order side.
+- `side_code` (`string`) — Order side code.
+- `ordertype` (`string`) — Order type.
+- `ordertype_code` (`string`) — Order type code.
+- `validity` (`string`) — Validity value.
+- `status` (`string`) — Order status.
+- `status_code` (`string`) — Order status code.
+- `orderqtty` (`number`) — Ordered quantity.
+- `orderprice` (`number`) — Order price.
+- `matchprice` (`number`) — Matched price.
+- `matchqtty` (`number`) — Matched quantity.
+- `iscancel` (`string`) — Cancel flag.
+- `isadmend` (`string`) — Amend flag.
+- `exec_amt` (`number`) — Matched value.
+- `remain_qtty` (`number`) — Remaining quantity.
+- `tlname` (`string`) — User who placed the order.
+- `via` (`string`) — Order channel.
+- `norp` (`string`) — Negotiated trade flag.
+- `confirmid` (`string | null`) — Exchange confirmation ID.
+- `ordertime` (`string`) — Order time.
+- `admendqtty` (`number`) — Amended quantity.
+- `cancelqtty` (`number`) — Cancelled quantity.
+
+## cURL
+
+```bash
+curl "$BASE_URL/oapi/accounts/$ACCOUNT_ID/derivative/dailyOrder" \
+  -H "Authorization: Bearer $ACCESS_TOKEN"
+```
+
+## Example response
+
+```json
+{
+    "s": "ok",
+    "d": [
+        {
+            "custodycd": "022C979999",
+            "accountid": "0104005401",
+            "orderid": "0001020326028362",
+            "symbol": "41I1G9000",
+            "matchtime": "14:56:15",
+            "side": "Mua",
+            "side_code": "NB",
+            "ordertype": "LO",
+            "ordertype_code": "LO",
+            "validity": "Y",
+            "status": "TS",
+            "status_code": "TS",
+            "orderqtty": 1,
+            "orderprice": 1795,
+            "matchprice": 1795,
+            "matchqtty": 1,
+            "iscancel": "N",
+            "isadmend": "N",
+            "exec_amt": 179500000,
+            "remain_qtty": 0,
+            "tlname": "USERONLINE",
+            "via": "R",
+            "norp": "N",
+            "confirmid": null,
+            "ordertime": "14:49:52",
+            "admendqtty": 0,
+            "cancelqtty": 0
+        }
+    ]
+}
+```
+
+> Replace `BASE_URL`, `ACCOUNT_ID`, and `ACCESS_TOKEN` with your values.

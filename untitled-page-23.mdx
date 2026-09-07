@@ -1,0 +1,42 @@
+---
+title: "API Giao dịch — Phái sinh (Futures)"
+description: "Giao dịch Phái sinh yêu cầu Bearer; x-lang, x-via, x-otp-token cho POST/PUT/DELETE"
+---
+
+Đặt, sửa và hủy lệnh phái sinh. Mỗi request đều yêu cầu `access_token` từ B2 (Xác thực — Phái sinh). Các request POST, PUT và DELETE additionally yêu cầu các header `x-otp-token`, `x-lang` và `x-via`.
+
+**Xác thực:** Yêu cầu: `Authorization: Bearer <access_token>` từ B2. POST/PUT/DELETE additionally yêu cầu `x-otp-token: 2c897da51e69cd6f3a0701884ed706ac` (giá trị cố định trong Sandbox), `x-lang: vi`, `x-via: K`.
+
+## D1. Đặt lệnh (Phái sinh)
+
+Gửi một lệnh phái sinh mới cho tài khoản giao dịch.
+
+**POST /accounts/:accountId/orders/derivative**
+
+### Sandbox URL
+
+[https://flashapi.phs.vn/sandbox/oapi/accounts/:accountId/orders/derivative](https://flashapi.phs.vn/sandbox/oapi/accounts/:accountId/orders/derivative)
+
+### Tham số
+
+| **Vị trí** | **Tên** | **Bắt buộc** | **Mô tả** |
+| :-- | :-- | :-- | :-- |
+| path | accountId | Có | Mã tài khoản giao dịch. |
+| body | instrument | Có | Mã hợp đồng. Ví dụ: 41BAG4000 |
+| body | qty | Có | Khối lượng đặt lệnh. Ví dụ: 1 |
+| body | side | Có | Bên đặt lệnh. Ví dụ: buy |
+| body | type | Có | Loại lệnh. Ví dụ: LO |
+| body | limitPrice | Có | Giá giới hạn. Ví dụ: 1802 |
+| body | timetype | Có | Thời hạn lệnh. Ví dụ: T |
+
+### Ví dụ request (cURL cho Sandbox)
+
+```bash
+curl -X POST "https://flashapi.phs.vn/sandbox/oapi/accounts/$ACCOUNT_ID/orders/derivative" \
+  -H "Authorization: Bearer $ACCESS_TOKEN" \
+  -H "Content-Type: application/json" \
+  -H "x-lang: vi" -H "x-via: K" \
+  -H "x-otp-token: 2c897da51e69cd6f3a0701884ed706ac" \
+  -d '{ "instrument": "41BAG4000", "qty": 1, "side": "buy", "type": "LO",
+        "limitPrice": 1802, "timetype": "T" }'
+```

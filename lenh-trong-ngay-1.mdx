@@ -1,0 +1,99 @@
+---
+title: "Sổ lệnh trong ngày "
+description: "Trả về các lệnh phái sinh của ngày giao dịch hiện tại cho một tài khoản."
+---
+
+## Endpoint
+
+```text
+GET /oapi/accounts/:accountId/derivative/dailyOrder
+```
+
+Trả về các lệnh phái sinh của ngày giao dịch hiện tại cho một tài khoản.
+
+### Tham số đường dẫn yêu cầu
+
+- `accountId` — Mã tài khoản giao dịch.
+
+### Trường phản hồi
+
+- `s` (`string`) — Trạng thái request. Ví dụ: `ok`.
+- `d` (`array`) — Danh sách các dòng lệnh trong ngày.
+
+## Trường đặt lệnh
+
+- `custodycd` (`string`) — Số tài khoản margin.
+- `accountid` (`string`) — Mã tài khoản giao dịch.
+- `orderid` (`string`) — Mã lệnh.
+- `symbol` (`string`) — Mã sản phẩm.
+- `matchtime` (`string`) — Thời gian khớp.
+- `side` (`string`) — Chiều lệnh.
+- `side_code` (`string`) — Mã chiều lệnh.
+- `ordertype` (`string`) — Loại lệnh.
+- `ordertype_code` (`string`) — Mã loại lệnh.
+- `validity` (`string`) — Giá trị hiệu lực.
+- `status` (`string`) — Trạng thái lệnh.
+- `status_code` (`string`) — Mã trạng thái lệnh.
+- `orderqtty` (`number`) — Số lượng đặt.
+- `orderprice` (`number`) — Giá lệnh.
+- `matchprice` (`number`) — Giá khớp.
+- `matchqtty` (`number`) — Khối lượng khớp.
+- `iscancel` (`string`) — Cờ hủy.
+- `isadmend` (`string`) — Cờ sửa lệnh.
+- `exec_amt` (`number`) — Giá trị đã khớp.
+- `remain_qtty` (`number`) — Khối lượng còn lại.
+- `tlname` (`string`) — Người dùng đã đặt lệnh.
+- `via` (`string`) — Kênh đặt lệnh.
+- `norp` (`string`) — Cờ giao dịch thỏa thuận.
+- `confirmid` (`string | null`) — Mã xác nhận từ sàn.
+- `ordertime` (`string`) — Thời gian đặt lệnh.
+- `admendqtty` (`number`) — Khối lượng đã sửa.
+- `cancelqtty` (`number`) — Khối lượng đã hủy.
+
+## cURL
+
+```bash
+curl "$BASE_URL/oapi/accounts/$ACCOUNT_ID/derivative/dailyOrder" \
+  -H "Authorization: Bearer $ACCESS_TOKEN"
+```
+
+## Ví dụ phản hồi
+
+```json
+{
+    "s": "ok",
+    "d": [
+        {
+            "custodycd": "022C979999",
+            "accountid": "0104005401",
+            "orderid": "0001020326028362",
+            "symbol": "41I1G9000",
+            "matchtime": "14:56:15",
+            "side": "Mua",
+            "side_code": "NB",
+            "ordertype": "LO",
+            "ordertype_code": "LO",
+            "validity": "Y",
+            "status": "TS",
+            "status_code": "TS",
+            "orderqtty": 1,
+            "orderprice": 1795,
+            "matchprice": 1795,
+            "matchqtty": 1,
+            "iscancel": "N",
+            "isadmend": "N",
+            "exec_amt": 179500000,
+            "remain_qtty": 0,
+            "tlname": "USERONLINE",
+            "via": "R",
+            "norp": "N",
+            "confirmid": null,
+            "ordertime": "14:49:52",
+            "admendqtty": 0,
+            "cancelqtty": 0
+        }
+    ]
+}
+```
+
+> Thay `BASE_URL`, `ACCOUNT_ID`, và `ACCESS_TOKEN` bằng giá trị của bạn.

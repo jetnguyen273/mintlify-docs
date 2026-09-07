@@ -1,0 +1,65 @@
+---
+title: "Vị thế đóng"
+description: "Trả về các vị thế phái sinh đã đóng của một tài khoản."
+---
+
+## Endpoint
+
+```text
+GET /oapi/accounts/:accountId/derivative/closedPositions
+```
+
+Trả về các vị thế phái sinh đã đóng của một tài khoản.
+
+### Tham số đường dẫn
+
+- `accountId` — Mã tài khoản giao dịch.
+
+### Trường phản hồi
+
+- `s` (`string`) — Trạng thái request. Luôn trả về `ok`.
+- `d` (`array`) — Danh sách các dòng vị thế đã đóng.
+
+## Trường vị thế đóng
+
+- `numofrow` (`number`) — Số thứ tự dòng.
+- `dmacctno` (`string`) — Tài khoản margin.
+- `dtacctno` (`string`) — Tài khoản giao dịch.
+- `qtty` (`number`) — Số lượng.
+- `symbol` (`string`) — Mã chứng khoán/sản phẩm.
+- `vwap` (`number`) — Giá vốn trung bình của vị thế long.
+- `svwap` (`number`) — Giá vốn trung bình của vị thế short.
+- `diff` (`number`) — Giá trị chênh lệch.
+- `nvalue` (`number`) — Hệ số hợp đồng.
+- `vrdebtvmamt` (`number`) — Lãi/lỗ VM.
+
+## cURL
+
+```bash
+curl "$BASE_URL/oapi/accounts/$ACCOUNT_ID/derivative/closedPositions" \
+  -H "Authorization: Bearer $ACCESS_TOKEN"
+```
+
+## Ví dụ
+
+```json
+{
+  "s": "ok",
+  "d": [
+    {
+      "numofrow": 1,
+      "dmacctno": "022C979999",
+      "dtacctno": "0104005401",
+      "qtty": 1,
+      "symbol": "41I1G6000",
+      "vwap": 1785,
+      "svwap": 1785,
+      "diff": 0,
+      "nvalue": 100000,
+      "vrdebtvmamt": 0
+    }
+  ]
+}
+```
+
+> Thay `BASE_URL`, `ACCOUNT_ID`, và `ACCESS_TOKEN` bằng giá trị của bạn.

@@ -1,0 +1,64 @@
+---
+title: "Tham khảo: Mã trạng thái lệnh"
+---
+
+Đây là các giá trị được trả về trong phản hồi liên quan đến lệnh (Mục C, D, E, F) để bạn ánh xạ mã trạng thái sang trạng thái dễ hiểu hơn trên giao diện người dùng.
+
+## 10.1 Trạng thái lệnh Phái sinh
+
+| **Mã** | **Ý nghĩa** |
+| :-- | :-- |
+| BB | Đang gửi lệnh |
+| DD | Đã hủy |
+| DE | Đã gửi yêu cầu hủy thành công |
+| DN | Yêu cầu hủy thất bại |
+| DR | Yêu cầu hủy bị Sở từ chối |
+| DS | Hủy thành công |
+| EE | Đã gửi yêu cầu sửa thành công |
+| EN | Yêu cầu sửa thất bại |
+| ES | Sửa thành công |
+| FF | Lệnh đã được giải phóng |
+| GG | Giải phóng lệnh thành công |
+| MM | Không đủ số dư Core Banking |
+| NN | Chờ gửi |
+| PP | Lệnh hết hiệu lực |
+| RR | Bị từ chối bởi bên mua |
+| SD | Đang hủy |
+| SE | Chờ sửa |
+| SR | Bị Sở từ chối |
+| SS | Đã gửi |
+| TP | Khớp một phần |
+| TS | Khớp toàn bộ |
+| U1 | Lệnh gốc đang chờ hủy |
+| U5 | Chờ kết quả hủy/sửa |
+
+ 
+
+## 10.2 Trạng thái lệnh Cơ sở (Chứng khoán)
+
+| **Mã** | **Ý nghĩa** |
+| :-- | :-- |
+| 0 | Bị Sở từ chối |
+| 1 | Còn hiệu lực |
+| 2 | Đã gửi |
+| 3 | Đã hủy |
+| 4 | Đã khớp |
+| 5 | Hết hiệu lực |
+| 6 | Bị từ chối |
+| 7 | Hoàn tất |
+| 8 | Chờ gửi |
+| 9 | Chờ duyệt |
+| 10 | Đã sửa |
+| 11 | Đang gửi |
+| 12 | Khớp toàn bộ |
+| 13 | Chờ xác nhận |
+| 14 | Đang xử lý |
+| 15 | Đã xử lý |
+| A | Đang sửa |
+| C | Đang hủy |
+| P | Chờ xử lý |
+| E | Hết hiệu lực |
+| R | Đã hủy |
+| W | Chờ nộp ký quỹ ngân hàng |
+
+ 

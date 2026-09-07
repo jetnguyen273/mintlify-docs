@@ -1,0 +1,152 @@
+---
+title: "Lịch sử đặt lệnh "
+description: "Trả về các dòng báo cáo lệnh cơ sở cho một tài khoản theo khoảng thời gian."
+---
+
+## Endpoint
+
+```text
+GET /oapi/accounts/:accountId/underlying/orderReport
+```
+
+Trả về các dòng báo cáo lệnh underlying cho một tài khoản theo khoảng thời gian.
+
+### Tham số đường dẫn bắt buộc
+
+- `accountId` — Mã tài khoản giao dịch.
+
+### "Các tham số truy vấn được hỗ trợ
+
+- `fromDate` — Ngày bắt đầu theo định dạng `DD/MM/YYYY`. Ví dụ: `16/03/2026`.
+- `toDate` — Ngày kết thúc theo định dạng `DD/MM/YYYY`. Ví dụ: `20/03/2026`.
+- `symbol` — Bộ lọc mã chứng khoán. Ví dụ: `ACB`.
+
+### Trường phản hồi
+
+- `s` (`string`) — Trạng thái request. Ví dụ: `ok`.
+- `d` (`array`) — Danh sách các dòng báo cáo lệnh.
+
+## Trường báo cáo
+
+- `custodycd` (`string`) — Số tài khoản.
+- `fullname` (`string`) — Họ và tên khách hàng.
+- `afacctno` (`string`) — Số tiểu khoản.
+- `orderid` (`string`) — Mã lệnh.
+- `txdate` (`string`) — Ngày giao dịch.
+- `txnum` (`string`) — Số giao dịch.
+- `symbol` (`string`) — Mã chứng khoán.
+- `tradeplace` (`string`) — Sàn giao dịch.
+- `via` (`string`) — Kênh đặt lệnh.
+- `viafo` (`string`) — Mã kênh đặt lệnh.
+- `orderprice` (`number`) — Giá lệnh.
+- `exectype` (`string`) — Chiều lệnh. Ví dụ: `Buy`.
+- `exectypecode` (`string`) — Mã chiều lệnh. Ví dụ: `NB`.
+- `orderqtty` (`number`) — Số lượng lệnh.
+- `quoteprice` (`string`) — Giá báo.
+- `execqtty` (`number`) — Khối lượng đã khớp.
+- `execprice` (`number`) — Giá khớp bình quân.
+- `execamt` (`number`) — Giá trị đã khớp.
+- `orstatus` (`string`) — Trạng thái lệnh.
+- `orstatusvalue` (`string`) — Mã trạng thái lệnh.
+- `matchtype` (`string`) — Loại khớp.
+- `feeacr` (`number`) — Số tiền phí.
+- `cmsfee` (`number | null`) — Giá trị phí bổ sung.
+- `selltaxamt` (`number`) — Thuế bán chứng khoán.
+- `feerate` (`number`) — Tỷ lệ phí theo phần trăm.
+- `quoteqtty` (`number`) — Khối lượng báo giá.
+- `confirmed` (`string`) — Cờ xác nhận.
+- `aright` (`number`) — Thuế cổ tức bằng cổ phiếu.
+- `totalorder` (`number`) — Tổng số lệnh trong tập kết quả.
+- `totalbuy` (`number`) — Tổng số lệnh mua.
+- `totalsell` (`number`) — Tổng số lệnh bán.
+- `totalvolbuy` (`number`) — Tổng khối lượng mua.
+- `totalvalbuy` (`number`) — Tổng giá trị mua.
+- `totalvolsell` (`number`) — Tổng khối lượng bán.
+- `totalvalsell` (`number`) — Tổng giá trị bán.
+- `totalvolselltt` (`number`) — Tổng khối lượng bán đã khớp.
+- `totalvalselltt` (`number`) — Tổng giá trị bán đã khớp.
+- `totalvolbuytt` (`number`) — Tổng khối lượng mua đã khớp.
+- `totalvalbuytt` (`number`) — Tổng giá trị mua đã khớp.
+- `totalcancel` (`number`) — Tổng số lệnh đã hủy.
+- `totalremove` (`number`) — Tổng số lệnh đã xóa.
+
+## cURL
+
+```bash
+curl -G "$BASE_URL/oapi/accounts/$ACCOUNT_ID/underlying/orderReport" \
+  -H "Authorization: Bearer $ACCESS_TOKEN" \
+  --data-urlencode "fromDate=16/03/2026" \
+  --data-urlencode "toDate=20/03/2026" \
+  --data-urlencode "symbol=ACB"
+```
+
+## Ví dụ phản hồi
+
+```json
+{
+    "s": "ok",
+    "d": [
+        {
+            "custodycd": "022C099995",
+            "fullname": "ĐOÀN XUÂN DƯƠNG",
+            "afacctno": "0301001425",
+            "orderid": "8000180326000188",
+            "txdate": "2026-03-18T00:00:00.000Z",
+            "txnum": "8013764654",
+            "symbol": "ACB",
+            "tradeplace": "HOSE",
+            "via": "MTS Trading",
+            "viafo": "R",
+            "orderprice": 22100,
+            "exectype": "Buy",
+            "exectypecode": "NB",
+            "orderqtty": 100,
+            "quoteprice": "22100",
+            "execqtty": 0,
+            "execprice": 0,
+            "execamt": 0,
+            "orstatus": "Chờ gửi",
+            "orstatusvalue": "8",
+            "matchtype": "N",
+            "feeacr": 3315,
+            "cmsfee": null,
+            "selltaxamt": 0,
+            "feerate": 0.15,
+            "quoteqtty": 0,
+            "confirmed": "N",
+            "aright": 0,
+            "totalorder": 1,
+            "totalbuy": 1,
+            "totalsell": 0,
+            "totalvolbuy": 100,
+            "totalvalbuy": 2210000,
+            "totalvolsell": 0,
+            "totalvalsell": 0,
+            "totalvolselltt": 0,
+            "totalvalselltt": 0,
+            "totalvolbuytt": 0,
+            "totalvalbuytt": 0,
+            "totalcancel": 0,
+            "totalremove": 0
+        }
+    ]
+}
+```
+
+> Thay `BASE_URL`, `ACCOUNT_ID`, và `ACCESS_TOKEN` bằng giá trị của bạn.
+
+---
+
+# Hướng dẫn cho Agent: Truy vấn tài liệu này
+
+Nếu bạn cần thêm thông tin không có trực tiếp trong trang này, bạn có thể truy vấn tài liệu động bằng cách đặt câu hỏi.
+
+Thực hiện một request HTTP GET tới URL của trang hiện tại với query parameter `ask`:
+
+```text
+GET https://phs-3.gitbook.io/phs-openapi-documents/trading/order-history/underlying/order-report.md?ask=<câu hỏi>
+```
+
+Câu hỏi nên cụ thể, độc lập ngữ cảnh và viết tự nhiên. Phản hồi sẽ chứa câu trả lời trực tiếp cùng các trích đoạn và nguồn liên quan từ tài liệu.
+
+Hãy dùng cơ chế này khi câu trả lời không có sẵn trên trang này, khi cần làm rõ hoặc bổ sung ngữ cảnh, hoặc khi muốn lấy các phần tài liệu liên quan.

@@ -1,0 +1,183 @@
+---
+title: "WebSocket dữ liệu giao dịch (CS+PS)"
+description: "Hướng dẫn kết nối socket để nhận realtime lệnh, sức mua và danh mục từ FlashOAPI."
+---
+
+## Tổng quan
+
+Kênh này cung cấp dữ liệu realtime liên quan đến **tài khoản giao dịch**: lệnh, sức mua, danh mục — qua Socket.IO. Đây là kênh **khác** với Priceboard (xem [Kết nối Priceboard](https://flashapi.phs.vn/docs/websocket/du-lieu-thi-truong)) và **yêu cầu access token** hợp lệ.
+
+<Info>
+  Có 2 path riêng biệt tuỳ loại sản phẩm — dùng đúng path theo tài khoản bạn đang thao tác:
+
+  - **Cổ phiếu / chứng khoán cơ sở (Underlying):** `eqt`
+  - **Phái sinh (Derivatives):** `fno`
+</Info>
+
+## Thông tin kết nối
+
+| Thông số | Underlying (EQT) | Phái sinh (FNO) |
+| --- | --- | --- |
+| **Host (Production)** | `https://flashapi.phs.vn` | `https://flashapi.phs.vn` |
+| **Socket.IO path** | `/realtime/eqt/socket.io` | `/realtime/fno/socket.io` |
+| **Transport** | `websocket` | `websocket` |
+
+## Điều kiện tiên quyết
+
+Trước khi kết nối, bạn cần có:
+
+1. **`access_token`** — lấy từ API đăng nhập (`auth/gen-secret-key/underlying`). Token phải còn hiệu lực tại thời điểm subscribe.
+2. **`sub_account_id`** (tiểu khoản) — **KHÔNG** phải username đăng nhập / mã custody (ví dụ `022Cxxxxxx`). Đây là số tiểu khoản giao dịch thực tế, dạng ví dụ `0301001425`. Dùng sai giá trị này sẽ gây lỗi `FO20010 - Tiểu khoản truyền vào không hợp lệ` ở các API khác và khiến subscribe realtime không nhận được dữ liệu tài khoản đúng.
+
+<Warning>
+  Nhầm lẫn giữa mã đăng nhập (custody code) và tiểu khoản (`accountId`) là lỗi phổ biến nhất khi tích hợp kênh này. Nếu không chắc, hãy lấy `accountId` chính xác từ ứng dụng giao dịch hoặc bộ phận nghiệp vụ PHS.
+</Warning>
+
+## Các bước kết nối
+
+<Steps>
+  <Step title="Đăng nhập lấy access_token">
+    Gọi API xác thực để lấy token hợp lệ cho phiên làm việc.
+  </Step>
+  <Step title="Khởi tạo client">
+    Kết nối tới host \+ path tương ứng (`eqt` hoặc `fno`), ép transport `websocket`.
+  </Step>
+  <Step title="Gửi subscribe">
+    Sau sự kiện `connect`, gửi sự kiện `get` với payload chứa `sub_account_id` và `access_token`.
+  </Step>
+  <Step title="Lắng nghe theo kênh">
+    Server trả dữ liệu qua các sự kiện riêng theo loại nghiệp vụ — xem bảng mapping bên dưới.
+  </Step>
+</Steps>
+
+## Ví dụ code (Node.js / JavaScript — Underlying/EQT)
+
+```javascript
+const io = require("socket.io-client");
+
+const SUB_ACCOUNT = "0301001425"; // Tiểu khoản — KHÔNG phải username đăng nhập
+const accessToken = "..."; // Lấy từ API đăng nhập, không hardcode
+
+const socket = io("https://flashapi.phs.vn", {
+  path: "/realtime/eqt/socket.io", // đổi thành /realtime/fno/socket.io cho phái sinh
+  transports: ["websocket"],
+});
+
+socket.on("connect", () => {
+  console.log("Đã kết nối:", socket.id);
+
+  socket.emit("get", {
+    data: {
+      args: [`account:${SUB_ACCOUNT}`],
+      op: "subscribe",
+      token: accessToken,
+    },
+    method: "get",
+    url: "/client/send",
+  });
+});
+
+// Các kênh dữ liệu chính
+socket.on("OM", (data) => console.log("Lệnh (Order Management):", data));
+socket.on("CI", (data) => console.log("Sức mua (Cash Info):", data));
+socket.on("SE", (data) => console.log("Danh mục (Securities Equity):", data));
+
+socket.on("connect_error", (err) => {
+  console.error("Lỗi kết nối:", err.message);
+});
+
+socket.on("disconnect", (reason) => {
+  console.log("Mất kết nối:", reason);
+});
+```
+
+## Bảng mapping kênh dữ liệu
+
+| Event nhận | Tên đầy đủ | Ý nghĩa | Dùng để hiển thị |
+| --- | --- | --- | --- |
+| `OM` | Order Management | Cập nhật trạng thái lệnh (khớp, huỷ, sửa...) | Bảng sổ lệnh trong ngày |
+| `CI` | Cash Info | Cập nhật sức mua / tiền mặt | Widget sức mua |
+| `SE` | Securities Equity | Cập nhật danh mục chứng khoán | Bảng danh mục nắm giữ |
+
+<Note>
+  Một số gateway cũ hơn có thể phát các event tên `instrument`, `trade`, `account` thay vì `OM`/`CI`/`SE`. Nên đăng ký lắng nghe cả hai bộ tên để tương thích ngược nếu chưa chắc chắn gateway đang dùng phiên bản nào.
+</Note>
+
+## Cấu trúc dữ liệu trả về
+
+Dữ liệu tài khoản được bọc trong một wrapper chung, `EVENTTYPE` bên trong `DT` mới là giá trị xác định đây là `OM`, `CI` hay `SE` (không phải tên event Socket.IO ở tầng ngoài).
+
+Ví dụ thực tế — sự kiện `CI` (Cash Info / sức mua):
+
+```json
+{
+  "type": "account",
+  "channel": "account",
+  "label": "Account",
+  "data": {
+    "ACC": "0102009737",
+    "DT": {
+      "MSGTYPE": "R",
+      "EVENTTYPE": "CI",
+      "AUTOID": "0102009737",
+      "ACCTNO": "0102009737",
+      "AFACCTNO": "0102009737",
+      "LOGTIME": "20260825-02:08:24",
+      "APPLYTIME": "20260731-12:07:00",
+      "PPREF": "10810",
+      "PP": "10810",
+      "BALANCE": "10858",
+      "BALDEFOVD": "10810.264",
+      "AVLWITHDRAW": "10810",
+      "AVLADVANCE": "0"
+    }
+  }
+}
+```
+
+### Wrapper chung (áp dụng cho mọi `EVENTTYPE`)
+
+| Field | Ý nghĩa |
+| --- | --- |
+| `type` / `channel` | Loại broadcast nội bộ (`account`) |
+| `label` | Nhãn hiển thị (`Account`) |
+| `data.ACC` | Số tiểu khoản (accountId) |
+| `data.DT.MSGTYPE` | Loại message — `R` quan sát được là Response/Realtime update |
+| `data.DT.EVENTTYPE` | **Mã kênh dữ liệu thực tế** — `OM` \| `CI` \| `SE` (dùng field này để rẽ nhánh xử lý, không dùng tên event Socket.IO tầng ngoài) |
+
+### Field riêng của `CI` (Cash Info — Sức mua)
+
+| Field | Ý nghĩa |
+| --- | --- |
+| `AUTOID` | ID nội bộ của bản ghi — quan sát được trùng với tiểu khoản |
+| `ACCTNO` | Số tiểu khoản |
+| `AFACCTNO` | Tiểu khoản liên kết (Affiliated Account) |
+| `LOGTIME` | Thời điểm ghi log, định dạng `YYYYMMDD-HH:MM:SS` |
+| `APPLYTIME` | Thời điểm dữ liệu có hiệu lực, cùng định dạng |
+| `PPREF` | Sức mua tham chiếu (Purchasing Power Reference) — _cần xác nhận thêm ý nghĩa chính xác (đầu ngày/trước giao dịch)_ |
+| `PP` | Sức mua hiện tại (Purchasing Power) |
+| `BALANCE` | Số dư tiền mặt trong tài khoản |
+| `BALDEFOVD` | _(cần xác nhận thêm)_ — khả năng là số dư sau khi trừ nợ/tạm ứng quá hạn |
+| `AVLWITHDRAW` | Số tiền khả dụng để rút (Available Withdraw) |
+| `AVLADVANCE` | Số tiền khả dụng để ứng trước (Available Advance) |
+
+<Warning>
+  Các field `PPREF` và `BALDEFOVD` được suy luận theo tên viết tắt, **chưa được PHS xác nhận chính thức** về ý nghĩa nghiệp vụ. Vui lòng đối chiếu với tài liệu nghiệp vụ nội bộ hoặc hỏi đội vận hành trước khi dùng để tính toán/hiển thị cho khách hàng.
+</Warning>
+
+<Note>
+  Cấu trúc field bên trong `DT` cho `OM` (Order Management) và `SE` (Securities Equity) khác với `CI` và sẽ được bổ sung khi có mẫu dữ liệu thực tế tương ứng.
+</Note>
+
+## Xử lý sự cố thường gặp
+
+| Hiện tượng | Nguyên nhân khả dĩ | Cách kiểm tra |
+| --- | --- | --- |
+| `FO20010 - Tiểu khoản truyền vào không hợp lệ` | Dùng nhầm mã đăng nhập/custody code thay vì `sub_account_id` | Xác nhận lại `accountId` đúng định dạng tiểu khoản (ví dụ `0301001425`) |
+| Kết nối OK nhưng không nhận được `OM`/`CI`/`SE` | Token hết hạn, hoặc subscribe gửi sai `sub_account_id` | Đăng nhập lại lấy token mới; log lại đúng giá trị `sub_account_id` đã gửi |
+| Nhận HTML/301 thay vì bắt tay Socket.IO | Sai path — dùng path Priceboard hoặc gõ nhầm `eqt`/`fno` | Xác nhận path đúng loại tài khoản đang dùng |
+| `connect_error` ngay khi kết nối | Sai host/path, hoặc thiếu `transports: ["websocket"]` | Kiểm tra lại cấu hình client giống ví dụ ở trên |
+
+## Bước tiếp theo
+
+Để nhận dữ liệu bảng giá realtime, xem [Kết nối Priceboard](https://flashapi.phs.vn/docs/websocket/du-lieu-thi-truong).

@@ -1,0 +1,123 @@
+---
+title: "Derivative "
+description: "Returns derivative asset data for an account."
+---
+
+## Endpoint
+
+```text
+GET /oapi/accounts/:accountId/derivative/assets
+```
+
+Returns derivative asset data for an account.
+
+### Required path parameters
+
+- `accountId` — Derivative sub account ID.
+
+### Response fields
+
+- `s` (`string`) — Request status. Always returns `ok`.
+- `d` (`object`) — Derivative balance details.
+
+## Balance fields
+
+- `accountid` (`string`) — Margin account number.
+- `cashonhand` (`number`) — Cash at KBSV.
+- `imcash` (`number`) — Margin cash.
+- `requiredimamt` (`number`) — Initial margin requirement based on KBSV IM.
+- `requiredimamtccp` (`number`) — Initial margin requirement based on CCP IM.
+- `requireddmamt` (`number`) — Delivery margin requirement based on KBSV DM.
+- `requireddmamtccp` (`number`) — Delivery margin requirement based on CCP DM.
+- `requiredmarginamt` (`number`) — Total DTA maintenance margin requirement.
+- `requiredmarginamtccp` (`number`) — Total DMA maintenance margin requirement.
+- `eca` (`number`) — Eligible asset value for DTA.
+- `ecaccp` (`number`) — Eligible asset value for DMA.
+- `prcash` (`number`) — Minimum cash margin ratio for DTA.
+- `prcashccp` (`number`) — Minimum cash margin ratio for DMA.
+- `accountratio` (`number`) — Actual ratio for DTA.
+- `accountratioccp` (`number`) — Actual ratio for DMA.
+- `acccountstatus` (`string`) — Account status for DTA.
+- `acccountstatus_code` (`string`) — Account status code for DTA.
+- `acccountstatusccp` (`string`) — Account status for DMA.
+- `acccountstatusccp_code` (`string`) — Account status code for DMA.
+- `pp` (`number`) — Buying or selling power for DTA.
+- `ppccp` (`number`) — Buying or selling power for DMA.
+- `reqaddsecured` (`number`) — Additional amount required to return DTA to safe ratio.
+- `reqaddsecuredccp` (`number`) — Additional amount required to return DMA to safe ratio.
+- `tradefeeamt` (`number`) — Trading fee at KBSV.
+- `tradefeevsd` (`number`) — Exchange fee.
+- `incometax` (`number`) — Personal income tax.
+- `taxfeeamt` (`number`) — Total fees and taxes.
+- `posfeeamt` (`number`) — Position fee.
+- `ecafeeamt` (`number`) — Collateral asset management fee.
+- `totalfeeamt` (`number`) — Total fee and tax amount.
+- `overdrafamt` (`number`) — Overdraft principal.
+- `overdrafacr` (`number`) — Overdraft interest.
+- `totaloverdrafamt` (`number`) — Total debt, including overdraft and interest.
+- `execpnlamt` (`number`) — Realized VM profit or loss.
+- `nonpnlamt` (`number`) — Expected VM profit or loss.
+- `vmamt` (`number`) — Total intraday VM profit or loss.
+- `vmnetamt` (`number`) — Net VM profit or loss after fees and taxes.
+- `nav` (`number`) — Net asset value.
+- `imnoncashdta` (`number`) — Securities value for DTA.
+- `imnoncashdma` (`number`) — Securities value for DMA.
+
+## cURL
+
+```bash
+curl "$BASE_URL/oapi/accounts/$ACCOUNT_ID/derivative/assets" \
+  -H "Authorization: Bearer $ACCESS_TOKEN"
+```
+
+## Example response
+
+```json
+{
+  "s": "ok",
+  "d": {
+    "accountid": "0104005401",
+    "cashonhand": 958388321,
+    "imcash": 0,
+    "requiredimamt": 275136500,
+    "requiredimamtccp": 0,
+    "requireddmamt": 0,
+    "requireddmamtccp": 0,
+    "requiredmarginamt": 275886500,
+    "requiredmarginamtccp": 0,
+    "eca": 958107696,
+    "ecaccp": 0,
+    "prcash": 100,
+    "prcashccp": 100,
+    "accountratio": 44.684069,
+    "accountratioccp": 0,
+    "acccountstatus": "An toàn",
+    "acccountstatus_code": "0",
+    "acccountstatusccp": "An toàn",
+    "acccountstatusccp_code": "0",
+    "pp": 290459272,
+    "ppccp": 290459272,
+    "reqaddsecured": 0,
+    "reqaddsecuredccp": 0,
+    "tradefeeamt": -28050,
+    "tradefeevsd": 28050,
+    "incometax": 167875,
+    "taxfeeamt": 167875,
+    "posfeeamt": 0,
+    "ecafeeamt": 0,
+    "totalfeeamt": 167875,
+    "overdrafamt": 0,
+    "overdrafacr": 0,
+    "totaloverdrafamt": 0,
+    "execpnlamt": 0,
+    "nonpnlamt": -750000,
+    "vmamt": -750000,
+    "vmnetamt": -917875,
+    "nav": 957638321,
+    "imnoncashdta": 0,
+    "imnoncashdma": 0
+  }
+}
+```
+
+> Replace `BASE_URL`, `ACCOUNT_ID`, and `ACCESS_TOKEN` with your values.

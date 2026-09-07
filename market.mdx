@@ -1,0 +1,286 @@
+---
+title: "Market"
+---
+
+## A2. Get Symbol Statics Data
+
+Returns matching statistics broken down by **price step** for a symbol, including volume and buy/sell ratios at each traded price.
+
+### Endpoint
+
+`GET /priceboard/symbol-statics-data`
+
+### Sandbox URL
+
+```text
+https://flashapi.phs.vn/sandbox/oapi/priceboard/symbol-statics-data
+```
+
+### Parameters
+
+| Location | Name | Required | Description |
+| --- | --- | --- | --- |
+| Query | `symbol` | Yes | Symbol code. Example: `ACB` |
+| Query | `fetchCount` | Yes | Number of price steps to return. Example: `10` |
+
+### Example Request
+
+```bash
+curl -G "https://flashapi.phs.vn/sandbox/oapi/priceboard/symbol-statics-data" \
+  --data-urlencode "symbol=ACB" \
+  --data-urlencode "fetchCount=10"
+```
+
+### Example Response
+
+```json
+[
+  {
+    "price": 23500,
+    "volume": 2400,
+    "buyVolume": 2400,
+    "sellVolume": 0,
+    "buyRate": 1,
+    "sellRate": 0,
+    "rate": 0.0002
+  },
+  {
+    "price": 23450,
+    "volume": 5000,
+    "buyVolume": 100,
+    "sellVolume": 4900,
+    "buyRate": 0.02,
+    "sellRate": 0.98,
+    "rate": 0.0004
+  }
+]
+```
+
+> **Sandbox behavior:** The Sandbox always returns the same realistic example dataset. Request parameters are validated, but changing the symbol or `fetchCount` does not change the fixture data returned.
+
+---
+
+## A3. Get Symbol Matching Data
+
+Returns individual matched trades (**tick data**) for a symbol.
+
+### Endpoint
+
+`GET /priceboard/symbol-matching-data`
+
+### Sandbox URL
+
+```text
+https://flashapi.phs.vn/sandbox/oapi/priceboard/symbol-matching-data
+```
+
+### Parameters
+
+| Location | Name | Required | Description |
+| --- | --- | --- | --- |
+| Query | `symbol` | Yes | Symbol code. Example: `ACB` |
+| Query | `fetchCount` | Yes | Number of matching records to return. Example: `10` |
+
+### Example Request
+
+```bash
+curl -G "https://flashapi.phs.vn/sandbox/oapi/priceboard/symbol-matching-data" \
+  --data-urlencode "symbol=ACB" \
+  --data-urlencode "fetchCount=10"
+```
+
+### Example Response
+
+```json
+{
+  "fromIndex": 13745600,
+  "toIndex": 13775200,
+  "data": [
+    {
+      "ti": 1773992700007,
+      "c": 23000,
+      "ch": -600,
+      "h": 23500,
+      "l": 23000,
+      "mb": "SELL",
+      "mv": 6400,
+      "r": -2.54,
+      "va": 319093870000,
+      "vo": 13775200
+    }
+  ]
+}
+```
+
+> **Sandbox behavior:** The Sandbox always returns the same realistic example dataset. Request parameters are validated, but changing the symbol or `fetchCount` does not change the fixture data returned.
+
+---
+
+## A4. Get All Stocks
+
+Returns basic reference information for market instruments, including:
+
+- Symbol
+- Vietnamese and English names
+- Exchange
+- Instrument type
+- Market ID
+
+The endpoint covers **underlying stocks, derivatives, covered warrants, and indices**.
+
+This endpoint is useful for building a **symbol picker** or **instrument master list**.
+
+### Endpoint
+
+`GET /priceboard/all-stocks`
+
+### Sandbox URL
+
+```text
+https://flashapi.phs.vn/sandbox/oapi/priceboard/all-stocks
+```
+
+### Parameters
+
+This endpoint does not require any parameters.
+
+| Location | Name | Required | Description |
+| --- | --- | --- | --- |
+| — | — | — | No parameters required. |
+
+### Example Request
+
+```bash
+curl "https://flashapi.phs.vn/sandbox/oapi/priceboard/all-stocks"
+```
+
+### Example Response
+
+```json
+[
+  {
+    "s": "ACB",
+    "ti": 1774332196854,
+    "t": "STOCK",
+    "n1": "Ngân hàng TMCP Á Châu",
+    "n2": "Asia Commercial JS Bank",
+    "marketId": "STO",
+    "m": "HOSE"
+  }
+]
+```
+
+> **Sandbox behavior:** The Sandbox always returns the same realistic example dataset. This endpoint does not change its fixture data based on request parameters.
+
+---
+
+## A5. Get Candlestick Data
+
+Returns **OHLCV candlestick data** for charting.
+
+Supported resolutions:
+
+| Resolution | Description |
+| --- | --- |
+| `1` | 1 minute |
+| `5` | 5 minutes |
+| `15` | 15 minutes |
+| `30` | 30 minutes |
+| `60` | 60 minutes |
+| `120` | 120 minutes |
+| `1D` | 1 day |
+| `1W` | 1 week |
+| `1M` | 1 month |
+
+### Endpoint
+
+`GET /priceboard/candlestick-data`
+
+### Sandbox URL
+
+```text
+https://flashapi.phs.vn/sandbox/oapi/priceboard/candlestick-data
+```
+
+### Parameters
+
+| Location | Name | Required | Description |
+| --- | --- | --- | --- |
+| Query | `symbol` | Yes | Symbol code. Example: `ACB` |
+| Query | `resolution` | Yes | Candle resolution. Example: `1D` |
+| Query | `from` | Yes | Start time as a Unix timestamp. Example: `1735257600` |
+| Query | `to` | Yes | End time as a Unix timestamp. Example: `1774051200` |
+
+### Example Request
+
+```bash
+curl -G "https://flashapi.phs.vn/sandbox/oapi/priceboard/candlestick-data" \
+  --data-urlencode "symbol=ACB" \
+  --data-urlencode "resolution=1D" \
+  --data-urlencode "from=1735257600" \
+  --data-urlencode "to=1774051200"
+```
+
+### Example Response
+
+```json
+{
+  "t": [
+    1735278140,
+    1735536640
+  ],
+  "o": [
+    25600,
+    25350
+  ],
+  "h": [
+    25700,
+    25650
+  ],
+  "l": [
+    25500,
+    25350
+  ],
+  "c": [
+    25550,
+    25400
+  ],
+  "v": [
+    7689900,
+    5000400
+  ],
+  "s": "ok",
+  "nextTime": null
+}
+```
+
+### Response Fields
+
+| Field | Description |
+| --- | --- |
+| `t` | Unix timestamps for each candle. |
+| `o` | Opening prices. |
+| `h` | Highest prices. |
+| `l` | Lowest prices. |
+| `c` | Closing prices. |
+| `v` | Trading volumes. |
+| `s` | Response status. |
+| `nextTime` | Next available timestamp, if applicable. |
+
+> **Sandbox behavior:** The Sandbox always returns the same realistic example dataset. It validates the required parameters, but changing the symbol, resolution, or time range does not change the fixture data returned.
+
+---
+
+## Market API Summary
+
+| API | Authentication | Method | Main Purpose |
+| --- | --- | --- | --- |
+| **A1. Symbol Latest Data** | Not required | GET | Latest price, volume, order book, and market information |
+| **A2. Symbol Statics Data** | Not required | GET | Price-step matching statistics |
+| **A3. Symbol Matching Data** | Not required | GET | Individual matched trades / tick data |
+| **A4. All Stocks** | Not required | GET | Instrument master / symbol reference data |
+| **A5. Candlestick Data** | Not required | GET | OHLCV data for charting |
+
+> **Authentication:** All Market APIs in Section A are publicly accessible and do not require authentication.
+
+> **Sandbox:** Use the Sandbox URLs provided in each endpoint to test the APIs without affecting real market data or trading accounts.

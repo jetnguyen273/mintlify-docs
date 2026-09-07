@@ -1,0 +1,246 @@
+---
+title: "Đăng ký OAPI"
+description: "Vui lòng điền đầy đủ thông tin bên dưới để hoàn tất đăng ký sử dụng Open API"
+sidebarTitle: "Đăng ký OAPI"
+hidden: true
+---
+
+export const OapiRegisterForm = () => {
+  const [formData, setFormData] = React.useState({
+    customerName: '',           // Tên Khách Hàng / Tổ chức
+    identityNumber: '',         // Số giấy tờ định danh / ĐKKD
+    accountBasic: '',           // Tài khoản/tiểu khoản chứng khoán cơ sở đăng ký API
+    accountDerivatives: '',     // Tài khoản/tiểu khoản phái sinh đăng ký API (nếu có)
+    marginProfile: '',          // Hồ sơ ký quỹ áp dụng (nếu có)
+    notificationEmail: '',     // Email nhận thông báo API
+    alertPhoneNumber: '',      // Số điện thoại nhận OTP/cảnh báo
+    technicalContactName: '',   // Người phụ trách kỹ thuật / chức vụ
+    technicalContactInfo: ''    // Email/số điện thoại người phụ trách kỹ thuật
+  });
+  
+  const [status, setStatus] = React.useState({ loading: false, success: false, error: '' });
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setStatus({ loading: true, success: false, error: '' });
+
+    try {
+      // URL WEBHOOK
+      const response = await fetch('https://n8n.phs.vn/webhook/oapi-register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
+      });
+
+      const resData = await response.json();
+
+      if (response.ok && resData.success) {
+        setStatus({ loading: false, success: true, error: '' });
+      } else {
+        setStatus({ loading: false, success: false, error: resData.message || 'Có lỗi xảy ra, vui lòng thử lại.' });
+      }
+    } catch (err) {
+      setStatus({ loading: false, success: false, error: 'Không thể kết nối đến máy chủ.' });
+    }
+  };
+
+  if (status.success) {
+    return (
+      <div style={{ padding: '20px', backgroundColor: '#e6fffa', border: '1px solid #319795', borderRadius: '8px', marginTop: '20px' }}>
+        <h3 style={{ color: '#234e52', marginTop: 0 }}>🎉 Đăng ký thành công!</h3>
+        <p style={{ color: '#285e61', marginBottom: 0 }}>Cảm ơn bạn. Team Data/Support sẽ kiểm tra thông tin và liên hệ kích hoạt API trong thời gian sớm nhất.</p>
+      </div>
+    );
+  }
+
+  const inputStyle = {
+    width: '100%',
+    padding: '10px',
+    borderRadius: '6px',
+    border: '1px solid #ccc',
+    boxSizing: 'border-box'
+  };
+
+  const labelStyle = {
+    fontWeight: 'bold',
+    display: 'block',
+    marginBottom: '6px',
+    fontSize: '14px'
+  };
+
+  return (
+    <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginTop: '20px', maxWidth: '600px' }}>
+      
+      {/* 1. Tên Khách Hàng / Tổ chức */}
+      <div>
+        <label style={labelStyle}>Tên Khách Hàng / Tổ chức *</label>
+        <input 
+          type="text" 
+          name="customerName" 
+          required 
+          value={formData.customerName} 
+          onChange={handleChange}
+          placeholder="Nguyễn Văn A hoặc Công ty ABC" 
+          style={inputStyle}
+        />
+      </div>
+
+      {/* 2. Số giấy tờ định danh / ĐKKD */}
+      <div>
+        <label style={labelStyle}>Số giấy tờ định danh (CCCD/CMND/Hộ chiếu) / ĐKKD *</label>
+        <input 
+          type="text" 
+          name="identityNumber" 
+          required 
+          value={formData.identityNumber} 
+          onChange={handleChange}
+          placeholder="001099xxxxxx hoặc 0101234xxx" 
+          style={inputStyle}
+        />
+      </div>
+
+      {/* 3. Tài khoản cơ sở */}
+      <div>
+        <label style={labelStyle}>Tài khoản / Tiểu khoản chứng khoán cơ sở đăng ký API *</label>
+        <input 
+          type="text" 
+          name="accountBasic" 
+          required 
+          value={formData.accountBasic} 
+          onChange={handleChange}
+          placeholder="Ví dụ: 022C123456 hoặc 022C123456-1" 
+          style={inputStyle}
+        />
+      </div>
+
+      {/* 4. Tài khoản phái sinh (nếu có) */}
+      <div>
+        <label style={labelStyle}>Tài khoản / Tiểu khoản phái sinh đăng ký API (nếu có)</label>
+        <input 
+          type="text" 
+          name="accountDerivatives" 
+          value={formData.accountDerivatives} 
+          onChange={handleChange}
+          placeholder="Ví dụ: 022C123456-8" 
+          style={inputStyle}
+        />
+      </div>
+
+      {/* 5. Hồ sơ ký quỹ */}
+      <div>
+        <label style={labelStyle}>Hồ sơ ký quỹ áp dụng (nếu có)</label>
+        <input 
+          type="text" 
+          name="marginProfile" 
+          value={formData.marginProfile} 
+          onChange={handleChange}
+          placeholder="Nhập gói/hồ sơ ký quỹ đang áp dụng..." 
+          style={inputStyle}
+        />
+      </div>
+
+      {/* 6. Email nhận thông báo API */}
+      <div>
+        <label style={labelStyle}>Email nhận thông báo API *</label>
+        <input 
+          type="email" 
+          name="notificationEmail" 
+          required 
+          value={formData.notificationEmail} 
+          onChange={handleChange}
+          placeholder="example@gmail.com" 
+          style={inputStyle}
+        />
+      </div>
+
+      {/* 7. Số điện thoại nhận OTP/Cảnh báo */}
+      <div>
+        <label style={labelStyle}>Số điện thoại nhận OTP / Cảnh báo *</label>
+        <input 
+          type="tel" 
+          name="alertPhoneNumber" 
+          required 
+          value={formData.alertPhoneNumber} 
+          onChange={handleChange}
+          placeholder="0901234567" 
+          style={inputStyle}
+        />
+      </div>
+
+      {/* 8. Người phụ trách kỹ thuật / chức vụ */}
+      <div>
+        <label style={labelStyle}>Người phụ trách kỹ thuật / Chức vụ *</label>
+        <input 
+          type="text" 
+          name="technicalContactName" 
+          required 
+          value={formData.technicalContactName} 
+          onChange={handleChange}
+          placeholder="Trần Văn B - Lead Developer" 
+          style={inputStyle}
+        />
+      </div>
+
+      {/* 9. Email/SĐT người phụ trách kỹ thuật */}
+      <div>
+        <label style={labelStyle}>Email / Số điện thoại người phụ trách kỹ thuật *</label>
+        <input 
+          type="text" 
+          name="technicalContactInfo" 
+          required 
+          value={formData.technicalContactInfo} 
+          onChange={handleChange}
+          placeholder="tech.contact@example.com / 0987654321" 
+          style={inputStyle}
+        />
+      </div>
+
+      {status.error && (
+        <div style={{ color: '#e53e3e', fontSize: '14px' }}>
+          ⚠️ {status.error}
+        </div>
+      )}
+
+      <button 
+        type="submit" 
+        disabled={status.loading}
+        style={{ 
+          padding: '12px 20px', 
+          backgroundColor: '#0052cc', 
+          color: '#fff', 
+          border: 'none', 
+          borderRadius: '6px', 
+          fontWeight: 'bold', 
+          cursor: status.loading ? 'not-allowed' : 'pointer',
+          opacity: status.loading ? 0.7 : 1,
+          marginTop: '10px'
+        }}
+      >
+        {status.loading ? 'Đang gửi yêu cầu...' : 'Gửi yêu cầu đăng ký'}
+      </button>
+    </form>
+  );
+};
+
+[**Đơn đăng kí**](https://drive.google.com/file/d/1uq8-EvKYr5pPCRY3sC5OCe_8BUVIO16A/view?usp=drive_link)
+
+Để đăng ký sử dụng **PHS OpenAPI**, Quý Khách vui lòng:
+
+1. **Tải xuống** mẫu [**Đơn Đăng ký Sử dụng PHS OpenAPI**.](https://drive.google.com/file/d/1uq8-EvKYr5pPCRY3sC5OCe_8BUVIO16A/view?usp=drive_link)
+2. **Điền đầy đủ thông tin**, ký xác nhận (và đóng dấu nếu áp dụng).
+3. **Gửi hồ sơ** đến địa chỉ email [**support@phs.vn**](mailto:support@phs.vn).
+
+Sau khi tiếp nhận hồ sơ, PHS sẽ tiến hành kiểm tra và phản hồi kết quả đăng ký trong thời gian sớm nhất.
+
+Bằng việc gửi hồ sơ đăng ký, Quý Khách xác nhận rằng đã đọc, hiểu và đồng ý tuân thủ:
+
+- Điều khoản và Điều kiện sử dụng PHS OpenAPI
+- Bản Công bố Rủi ro
+- Tài liệu API và hướng dẫn kỹ thuật
+- Các chính sách, quy định và yêu cầu kỹ thuật do PHS ban hành hoặc cập nhật theo từng thời kỳ
+
+> **Lưu ý:** Quyền truy cập PHS OpenAPI chỉ được cấp sau khi hồ sơ đăng ký được PHS xem xét và chấp thuận.

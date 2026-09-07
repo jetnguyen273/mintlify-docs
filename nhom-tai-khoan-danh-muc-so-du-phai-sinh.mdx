@@ -1,0 +1,189 @@
+---
+title: "Nhóm API Tài khoản, Danh mục & Số dư — Phái sinh"
+---
+
+Các API chỉ đọc (GET) cho tài khoản phái sinh. Tất cả đều cần Authorization: Bearer \<access\_token\> lấy từ B2. Không cần x-otp-token vì không có thao tác gửi lệnh nào.
+
+\*\*Xác thực: \*\* Yêu cầu: Authorization: Bearer \<access\_token\> lấy từ B2. Chỉ dùng GET.
+
+## F1. Vị thế đang mở (Phái sinh)
+
+Trả về các vị thế phái sinh đang mở của tài khoản.
+
+\*\* GET   /accounts/:accountId/derivative/openPositions\*\*
+
+### URL Sandbox
+
+[https://flashapi.phs.vn/sandbox/oapi/accounts/:accountId/derivative/openPositions](https://flashapi.phs.vn/sandbox/oapi/accounts/:accountId/derivative/openPositions)
+
+ 
+
+### Tham số
+
+| **Vị trí** | **Tên** | **Bắt buộc** | **Mô tả** |
+| :-- | :-- | :-- | :-- |
+| path | accountId | Có | Mã tài khoản giao dịch. |
+
+ 
+
+### Ví dụ yêu cầu (cURL gọi vào Sandbox)
+
+curl "[https://flashapi.phs.vn/sandbox/oapi/accounts/\$ACCOUNT\_ID/derivative/openPositions](https://flashapi.phs.vn/sandbox/oapi/accounts/$ACCOUNT_ID/derivative/openPositions)" \\
+
+  -H "Authorization: Bearer \$ACCESS\_TOKEN"
+
+ 
+
+### Ví dụ phản hồi từ Sandbox
+
+\{ "s": "ok", "d": \[ \{ "symbol": "41I1G4000", "qtty": 5, "vwap": 1802,
+
+      "price\_secured": 1802, "totalplamt": 0 \} \] \}
+
+\*\*Hành vi trên Sandbox: \*\* Sandbox trả về đúng một bản ghi mẫu cố định cho bất kỳ accountId nào bạn truyền vào, giúp bạn xác nhận tên trường và kiểu dữ liệu trước khi trỏ hệ thống của bạn sang Production — nơi dữ liệu phản ánh đúng tài khoản thật.
+
+## F2. Vị thế đã đóng (Phái sinh)
+
+Trả về các vị thế phái sinh đã đóng (đã tất toán) của tài khoản.
+
+\*\* GET   /accounts/:accountId/derivative/closedPositions\*\*
+
+### URL Sandbox
+
+[https://flashapi.phs.vn/sandbox/oapi/accounts/:accountId/derivative/closedPositions](https://flashapi.phs.vn/sandbox/oapi/accounts/:accountId/derivative/closedPositions)
+
+ 
+
+### Tham số
+
+| **Vị trí** | **Tên** | **Bắt buộc** | **Mô tả** |
+| :-- | :-- | :-- | :-- |
+| path | accountId | Có | Mã tài khoản giao dịch. |
+
+ 
+
+### Ví dụ yêu cầu (cURL gọi vào Sandbox)
+
+curl "[https://flashapi.phs.vn/sandbox/oapi/accounts/\$ACCOUNT\_ID/derivative/closedPositions](https://flashapi.phs.vn/sandbox/oapi/accounts/$ACCOUNT_ID/derivative/closedPositions)" \\
+
+  -H "Authorization: Bearer \$ACCESS\_TOKEN"
+
+ 
+
+### Ví dụ phản hồi từ Sandbox
+
+\{ "s": "ok", "d": \[ \{ "symbol": "41I1G6000", "qtty": 1, "vwap": 1785, "svwap": 1785 \} \] \}
+
+\*\*Hành vi trên Sandbox: \*\* Sandbox trả về đúng một bản ghi mẫu cố định cho bất kỳ accountId nào bạn truyền vào, giúp bạn xác nhận tên trường và kiểu dữ liệu trước khi trỏ hệ thống của bạn sang Production — nơi dữ liệu phản ánh đúng tài khoản thật.
+
+## F3. Lệnh trong ngày (Phái sinh)
+
+Trả về các lệnh phái sinh trong phiên giao dịch hiện tại của tài khoản.
+
+\*\* GET   /accounts/:accountId/derivative/dailyOrder\*\*
+
+### URL Sandbox
+
+[https://flashapi.phs.vn/sandbox/oapi/accounts/:accountId/derivative/dailyOrder](https://flashapi.phs.vn/sandbox/oapi/accounts/:accountId/derivative/dailyOrder)
+
+ 
+
+### Tham số
+
+| **Vị trí** | **Tên** | **Bắt buộc** | **Mô tả** |
+| :-- | :-- | :-- | :-- |
+| path | accountId | Có | Mã tài khoản giao dịch. |
+
+ 
+
+### Ví dụ yêu cầu (cURL gọi vào Sandbox)
+
+curl "[https://flashapi.phs.vn/sandbox/oapi/accounts/\$ACCOUNT\_ID/derivative/dailyOrder](https://flashapi.phs.vn/sandbox/oapi/accounts/$ACCOUNT_ID/derivative/dailyOrder)" \\
+
+  -H "Authorization: Bearer \$ACCESS\_TOKEN"
+
+ 
+
+### Ví dụ phản hồi từ Sandbox
+
+\{ "s": "ok", "d": \[ \{ "orderid": "0001020326028362", "symbol": "41I1G9000",
+
+      "orderqtty": 1, "matchqtty": 1, "status": "TS" \} \] \}
+
+\*\*Hành vi trên Sandbox: \*\* Sandbox trả về đúng một bản ghi mẫu cố định cho bất kỳ accountId nào bạn truyền vào, giúp bạn xác nhận tên trường và kiểu dữ liệu trước khi trỏ hệ thống của bạn sang Production — nơi dữ liệu phản ánh đúng tài khoản thật.
+
+## F4. Báo cáo lệnh / Lịch sử lệnh (Phái sinh)
+
+Trả về lịch sử lệnh phái sinh của tài khoản trong một khoảng thời gian.
+
+\*\* GET   /accounts/:accountId/derivative/orderHistory\*\*
+
+### URL Sandbox
+
+[https://flashapi.phs.vn/sandbox/oapi/accounts/:accountId/derivative/orderHistory](https://flashapi.phs.vn/sandbox/oapi/accounts/:accountId/derivative/orderHistory)
+
+ 
+
+### Tham số
+
+| **Vị trí** | **Tên** | **Bắt buộc** | **Mô tả** |
+| :-- | :-- | :-- | :-- |
+| path | accountId | Có | Mã tài khoản giao dịch. |
+| query | fromDate | Không | Ngày bắt đầu, định dạng DD/MM/YYYY. Ví dụ: 16/03/2026 |
+| query | toDate | Không | Ngày kết thúc, định dạng DD/MM/YYYY. Ví dụ: 20/03/2026 |
+
+ 
+
+### Ví dụ yêu cầu (cURL gọi vào Sandbox)
+
+curl -G "[https://flashapi.phs.vn/sandbox/oapi/accounts/\$ACCOUNT\_ID/derivative/orderHistory](https://flashapi.phs.vn/sandbox/oapi/accounts/$ACCOUNT_ID/derivative/orderHistory)" \\
+
+  -H "Authorization: Bearer \$ACCESS\_TOKEN" \\
+
+  --data-urlencode "fromDate=16/03/2026" --data-urlencode "toDate=20/03/2026"
+
+ 
+
+### Ví dụ phản hồi từ Sandbox
+
+\{ "s": "ok", "d": \[ \{ "orderid": "0001020326028362", "code": "41I1G9000",
+
+      "orderqtty": 1, "matchqtty": 1, "status": "TS" \} \] \}
+
+\*\*Hành vi trên Sandbox: \*\* Sandbox trả về đúng một bản ghi mẫu cố định cho bất kỳ accountId nào bạn truyền vào, giúp bạn xác nhận tên trường và kiểu dữ liệu trước khi trỏ hệ thống của bạn sang Production — nơi dữ liệu phản ánh đúng tài khoản thật.
+
+## F5. Số dư / Tài sản (Phái sinh)
+
+Trả về dữ liệu số dư ký quỹ, tiền mặt và tỉ lệ rủi ro của tài khoản phái sinh.
+
+\*\* GET   /accounts/:accountId/derivative/assets\*\*
+
+### URL Sandbox
+
+[https://flashapi.phs.vn/sandbox/oapi/accounts/:accountId/derivative/assets](https://flashapi.phs.vn/sandbox/oapi/accounts/:accountId/derivative/assets)
+
+ 
+
+### Tham số
+
+| **Vị trí** | **Tên** | **Bắt buộc** | **Mô tả** |
+| :-- | :-- | :-- | :-- |
+| path | accountId | Có | Số tiểu khoản phái sinh. |
+
+ 
+
+### Ví dụ yêu cầu (cURL gọi vào Sandbox)
+
+curl "[https://flashapi.phs.vn/sandbox/oapi/accounts/\$ACCOUNT\_ID/derivative/assets](https://flashapi.phs.vn/sandbox/oapi/accounts/$ACCOUNT_ID/derivative/assets)" \\
+
+  -H "Authorization: Bearer \$ACCESS\_TOKEN"
+
+ 
+
+### Ví dụ phản hồi từ Sandbox
+
+\{ "s": "ok", "d": \{ "accountid": "0104005401", "cashonhand": 958388321,
+
+      "nav": 957638321, "accountratio": 44.68, "acccountstatus": "An toàn" \} \}
+
+\*\*Hành vi trên Sandbox: \*\* Sandbox trả về đúng một bản ghi mẫu cố định cho bất kỳ accountId nào bạn truyền vào, giúp bạn xác nhận tên trường và kiểu dữ liệu trước khi trỏ hệ thống của bạn sang Production — nơi dữ liệu phản ánh đúng tài khoản thật.

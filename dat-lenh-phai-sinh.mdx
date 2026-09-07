@@ -1,0 +1,203 @@
+---
+title: "Phái sinh"
+description: "Đặt, cập nhật và hủy lệnh phái sinh."
+---
+
+## Xác thực bắt buộc
+
+Tất cả các route dưới `/oapi/accounts/:accountId/orders/derivative` yêu cầu `Authorization: Bearer <access_token>`.
+
+Sử dụng `access_token` và `otp_token` được trả về từ [`POST /oapi/auth/gen-secret-key/derivative`](/phs-openapi-documents/authentication/derivative.md).
+
+Các request `GET` chỉ cần Bearer token.
+
+Các request `POST`, `PUT`, và `DELETE` cũng yêu cầu các header sau:
+
+- `x-otp-token: <otp_token>`
+
+Trong sandbox, dùng đúng OTP token mẫu: `2c897da51e69cd6f3a0701884ed706ac`.
+
+## Đặt lệnh
+
+```text
+POST /oapi/accounts/:accountId/orders/derivative
+```
+
+Đặt một lệnh phái sinh mới cho tài khoản.
+
+### Tham số đường dẫn bắt buộc
+
+- `accountId` — Mã tài khoản giao dịch.
+
+### Tham số thân bắt buộc
+
+- `instrument` — Mã sản phẩm. Ví dụ: `41BAG4000`
+- `qty` — Số lượng lệnh. Ví dụ: `1`
+- `side` — Chiều lệnh. Ví dụ: `buy`
+- `type` — Loại lệnh. Ví dụ: `LO`
+- `limitPrice` — Giá giới hạn. Ví dụ: `1802`
+- timetype — Kiểu hiệu lực thời gian. Ví dụ: `T`
+
+### Mô tả trường
+
+- `s` (`string`) — Trạng thái request. Ví dụ: `ok`
+- `d.orderid` (`string`) — Mã lệnh được tạo.
+
+### cURL
+
+```bash
+curl -X POST "$BASE_URL/oapi/accounts/$ACCOUNT_ID/orders/derivative" \
+  -H "Authorization: Bearer $ACCESS_TOKEN" \
+  -H "Content-Type: application/json" \
+  -H "x-lang: vi" \
+  -H "x-via: K" \
+  -H "x-otp-token: $OTP_TOKEN" \
+  -d '{
+    "instrument": "41BAG4000",
+    "qty": 1,
+    "side": "buy",
+    "type": "LO",
+    "limitPrice": 1802,
+    "timetype": "T"
+  }'
+```
+
+### Ví dụ phản hồi
+
+```json
+{
+    "s": "ok",
+    "d": {
+        "orderid": "8000180326000220"
+    }
+}
+```
+
+## Cập nhật lệnh
+
+```text
+PUT /oapi/accounts/:accountId/orders/derivative/:orderId
+```
+
+Cập nhật số lượng và giá giới hạn cho một lệnh phái sinh đã tồn tại.
+
+### Trường dữ liệu yêu cầu
+
+- `accountId` — Mã tài khoản giao dịch.
+- `orderId` — Mã lệnh cần cập nhật.
+
+### Trường thân dữ liệu yêu cầu
+
+- `qty` — Số lượng lệnh cập nhật. Ví dụ: `1`
+- `limitPrice` — Giá giới hạn cập nhật. Ví dụ: `1802`
+
+### cURL
+
+```bash
+curl -X PUT "$BASE_URL/oapi/accounts/$ACCOUNT_ID/orders/derivative/$ORDER_ID" \
+  -H "Authorization: Bearer $ACCESS_TOKEN" \
+  -H "Content-Type: application/json" \
+  -H "x-lang: vi" \
+  -H "x-via: K" \
+  -H "x-otp-token: $OTP_TOKEN" \
+  -d '{
+    "qty": 1,
+    "limitPrice": 1802
+  }'
+```
+
+### Ví dụ phản hồi
+
+```json
+{
+    "s": "ok"
+}
+```
+
+## Hủy lệnh
+
+```text
+DELETE /oapi/accounts/:accountId/orders/derivative/:orderId?timetype=T&isbuyin=N&otp=e176078d1876e71a856f968b8864da22
+```
+
+Hủy một lệnh phái sinh hiện có.
+
+### Trường dẫn dữ liệu yêu cầu bắt buộc
+
+- `accountId` — Mã tài khoản giao dịch.
+- `orderId` — Mã lệnh cần hủy.
+
+### Yêu cầu tham số truy vấn
+
+- `timetype` — Kiểu hiệu lực thời gian. Ví dụ: `T`
+- `isbuyin` — Cờ buy-in. Ví dụ: `N`
+- `otp` — Giá trị OTP truyền trong query string. Ví dụ: `e176078d1876e71a856f968b8864da22`
+
+### Ví dụ thân
+
+- `qty` — Số lượng dùng trong ví dụ request. Ví dụ: `1`
+- `limitPrice` — Giá giới hạn dùng trong ví dụ request. Ví dụ: `1802`
+
+### cURL
+
+```bash
+curl -X DELETE "$BASE_URL/oapi/accounts/$ACCOUNT_ID/orders/derivative/$ORDER_ID?timetype=T&isbuyin=N&otp=e176078d1876e71a856f968b8864da22" \
+  -H "Authorization: Bearer $ACCESS_TOKEN" \
+  -H "Content-Type: application/json" \
+  -H "x-lang: vi" \
+  -H "x-via: K" \
+  -H "x-otp-token: $OTP_TOKEN" \
+  -d '{
+    "qty": 1,
+    "limitPrice": 1802
+  }'
+```
+
+### Ví dụ phản hồi
+
+```json
+{
+    "s": "ok"
+}
+```
+
+## Lấy sức mua chứng khoán phái sinh
+
+```text
+GET /oapi/accounts/:accountId/derivative/buyingPower
+```
+
+Lấy sức mua tối đa (PPSE) để giao dịch chứng khoán phái sinh.
+
+### Tham số đường dẫn bắt buộc
+
+- `accountId` — Mã tài khoản giao dịch.
+
+### Tham số truy vấn bắt buộc
+
+- `symbol` — Mã hợp đồng phái sinh. Ví dụ: `41I1G7000`.
+
+### cURL
+
+```bash
+curl -X GET "$BASE_URL/oapi/accounts/$ACCOUNT_ID/derivative/buyingPower?symbol=41I1G7000" \
+  -H "Authorization: Bearer $ACCESS_TOKEN" \
+  -H "Accept: */*"
+```
+
+### Ví dụ phản hồi
+
+```json
+{
+  "s": "ok",
+  "d": {
+    "ppse": 0,
+    "ppse_long": 0,
+    "ppse_short": 0,
+    "intrasset": 0,
+    "maxbuyqty": 0,
+    "maxsellqty": 0,
+    "maxlimit_buyid": 0
+  }
+}
+```

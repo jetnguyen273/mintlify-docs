@@ -1,0 +1,34 @@
+---
+title: "Socket.IO-connection"
+---
+
+## Overview
+
+Instead of repeatedly calling the REST API to check for updates, you can open a **Socket.IO connection** and have PHS push data to you the moment it changes. This is the recommended way to build:
+
+- A live-updating priceboard
+- Real-time order status tracking (placed / matched / cancelled / amended)
+- Live buying power and portfolio updates
+
+There are **two separate socket connections** — they are not combined into one:
+
+| Connection | Purpose | Requires login token? |
+| --- | --- | --- |
+| **Market Data** | Live prices for any symbol | No |
+| **Order / Asset** | Your own orders, buying power, and portfolio changes | Yes |
+
+<Note>
+  These two connections use different hosts, paths, and message formats. Mixing them up is the most common integration mistake — see [Troubleshooting](#troubleshooting) below.
+</Note>
+
+---
+
+## Prerequisites
+
+- A Socket.IO client library. The examples below use `socket.io-client` for Node.js.
+- For the **Order / Asset** connection, an `access_token` from [the login endpoint](/authentication/underlying).
+- Your trading sub-account number, for subscribing to your own order/asset updates.
+
+<Warning>
+  Choose the correct `path` for your account type. `/realtime/eqt/socket.io` (underlying/cash) and `/realtime/fno/socket.io` (derivatives) are not interchangeable — subscribing on the wrong path will silently return nothing.
+</Warning>

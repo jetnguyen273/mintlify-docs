@@ -1,0 +1,164 @@
+---
+title: "Trading APIs — Underlying (Stocks)"
+---
+
+Place, amend, and cancel stock orders. Every call requires the `access_token` from B1 (Authentication — Underlying). POST, PUT, and DELETE calls additionally require `x-otp-token`, `x-lang`, and `x-via` headers.
+
+> **Authentication:** Requires `Authorization: Bearer <access_token>` from B1. POST/PUT/DELETE also require `x-otp-token: 552066a35eb30a9815afc952b14287a8` (sandbox fixture), `x-lang: vi`, `x-via: K`.
+
+## C1. Place Order (Underlying)
+
+Submits a new stock order for a sub-trading account.
+
+**POST `/accounts/:accountId/orders/underlying`**
+
+### Sandbox URL
+
+```text
+https://flashapi.phs.vn/sandbox/oapi/accounts/:accountId/orders/underlying
+```
+
+### Parameters
+
+| **Location** | **Name** | **Required** | **Description** |
+| :-- | :-- | :-- | :-- |
+| path | accountId | Yes | Sub trading account ID. |
+| body | instrument | Yes | Instrument code. Example: ACB |
+| body | qty | Yes | Order quantity. Example: 1 |
+| body | side | Yes | Order side. Example: buy |
+| body | type | Yes | Order type. Example: LO |
+| body | limitPrice | Yes | Limit price. Example: 23000 |
+| body | timetype | Yes | Time-in-force. Example: T |
+
+### Example Request (cURL against Sandbox)
+
+```bash
+curl -X POST "https://flashapi.phs.vn/sandbox/oapi/accounts/$ACCOUNT_ID/orders/underlying" \
+  -H "Authorization: Bearer $ACCESS_TOKEN" \
+  -H "Content-Type: application/json" \
+  -H "x-lang: vi" -H "x-via: K" \
+  -H "x-otp-token: 552066a35eb30a9815afc952b14287a8" \
+  -d '{ "instrument": "ACB", "qty": 1, "side": "buy", "type": "LO",
+        "limitPrice": 23000, "timetype": "T" }'
+```
+
+### Example Sandbox Response
+
+```json
+{ "s": "ok", "d": { "orderid": "8000180326000219" } }
+```
+
+> **Sandbox behavior:** Sandbox validates that all required fields are present and correctly typed, and requires the same headers as Production, but no real order reaches the exchange. Every successful call returns a fixed example order ID. In place of a one-time password sent to your phone, sandbox accepts the fixed fixture OTP token documented on this page — send that exact string in `x-otp-token`.
+
+## C2. Update Order (Underlying)
+
+Amends quantity and/or limit price on an existing, still-eligible stock order.
+
+**PUT `/accounts/:accountId/orders/underlying/:orderId`**
+
+### Sandbox URL
+
+```text
+https://flashapi.phs.vn/sandbox/oapi/accounts/:accountId/orders/underlying/:orderId
+```
+
+### Parameters
+
+| **Location** | **Name** | **Required** | **Description** |
+| :-- | :-- | :-- | :-- |
+| path | accountId | Yes | Sub trading account ID. |
+| path | orderId | Yes | Order ID to update. |
+| body | qty | Yes | Updated order quantity. |
+| body | limitPrice | Yes | Updated limit price. |
+
+### Example Request (cURL against Sandbox)
+
+```bash
+curl -X PUT "https://flashapi.phs.vn/sandbox/oapi/accounts/$ACCOUNT_ID/orders/underlying/$ORDER_ID" \
+  -H "Authorization: Bearer $ACCESS_TOKEN" \
+  -H "Content-Type: application/json" \
+  -H "x-lang: vi" -H "x-via: K" \
+  -H "x-otp-token: 552066a35eb30a9815afc952b14287a8" \
+  -d '{ "qty": 1, "limitPrice": 23000 }'
+```
+
+### Example Sandbox Response
+
+```json
+{ "s": "ok" }
+```
+
+> **Sandbox behavior:** Sandbox validates that all required fields are present and correctly typed, and requires the same headers as Production, but no real order reaches the exchange. Every successful call returns a fixed example order ID. In place of a one-time password sent to your phone, sandbox accepts the fixed fixture OTP token documented on this page — send that exact string in `x-otp-token`.
+
+## C3. Cancel Order (Underlying)
+
+Cancels an existing, unfilled stock order.
+
+**DELETE `/accounts/:accountId/orders/underlying/:orderId?timeType=T&isbuyin=N`**
+
+### Sandbox URL
+
+```text
+https://flashapi.phs.vn/sandbox/oapi/accounts/:accountId/orders/underlying/:orderId?timeType=T&isbuyin=N
+```
+
+### Parameters
+
+| **Location** | **Name** | **Required** | **Description** |
+| :-- | :-- | :-- | :-- |
+| path | accountId | Yes | Sub trading account ID. |
+| path | orderId | Yes | Order ID to cancel. |
+| query | timetype | Yes | Time-in-force. Example: T |
+| query | isbuyin | Yes | Buy-in flag. Example: N |
+
+### Example Request (cURL against Sandbox)
+
+```bash
+curl -X DELETE "https://flashapi.phs.vn/sandbox/oapi/accounts/$ACCOUNT_ID/orders/underlying/$ORDER_ID?timeType=T&isbuyin=N" \
+  -H "Authorization: Bearer $ACCESS_TOKEN" \
+  -H "x-lang: vi" -H "x-via: K" \
+  -H "x-otp-token: 552066a35eb30a9815afc952b14287a8"
+```
+
+### Example Sandbox Response
+
+```json
+{ "s": "ok" }
+```
+
+> **Sandbox behavior:** Sandbox validates that all required fields are present and correctly typed, and requires the same headers as Production, but no real order reaches the exchange. Every successful call returns a fixed example order ID. In place of a one-time password sent to your phone, sandbox accepts the fixed fixture OTP token documented on this page — send that exact string in `x-otp-token`.
+
+## C4. Get Underlying Buying Power
+
+Returns available buying power for a stock, given a proposed order price. GET-only — no `x-otp-token` needed.
+
+**GET `/accounts/:accountId/underlying/buyingPower`**
+
+### Sandbox URL
+
+```text
+https://flashapi.phs.vn/sandbox/oapi/accounts/:accountId/underlying/buyingPower
+```
+
+### Parameters
+
+| **Location** | **Name** | **Required** | **Description** |
+| :-- | :-- | :-- | :-- |
+| path | accountId | Yes | Trading account ID. |
+| query | symbol | Yes | Stock symbol. Example: VIC |
+| query | quotePrice | Yes | Order price used to calculate buying power. Example: 222000 |
+
+### Example Request (cURL against Sandbox)
+
+```bash
+curl "https://flashapi.phs.vn/sandbox/oapi/accounts/$ACCOUNT_ID/underlying/buyingPower?symbol=VIC&quotePrice=222000" \
+  -H "Authorization: Bearer $ACCESS_TOKEN"
+```
+
+### Example Sandbox Response
+
+```json
+{ "s": "ok", "d": [ { "ppse": 0, "maxqty": -1, "allowance": 16, "blocked": 0 } ] }
+```
+
+> **Sandbox behavior:** Sandbox returns one fixed example record for any accountId you pass, so you can validate field names and data types before pointing your integration at Production, where the data reflects the real account.

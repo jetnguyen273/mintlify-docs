@@ -1,0 +1,127 @@
+---
+title: "Kết nối WebSocket dữ liệu thị trường"
+description: "Hướng dẫn kết nối socket để nhận dữ liệu bảng giá realtime (quote, khớp lệnh, dư mua/bán) từ FlashOAPI."
+---
+
+## Tổng quan
+
+Priceboard Realtime cung cấp dữ liệu bảng giá theo thời gian thực (giá khớp, dư mua/bán) qua **Socket.IO**, tách biệt hoàn toàn với kênh lệnh/tài sản (Order & Account — xem trang [Kết nối Order & Account](https://flashapi.phs.vn/docs/websocket/du-lieu-giao-dich)).
+
+<Info>
+  Kênh này **không yêu cầu access token** — chỉ cần kết nối và subscribe đúng mã chứng khoán.
+</Info>
+
+## Thông tin kết nối
+
+| Thông số | Giá trị |
+| --- | --- |
+| **Host (Production)** | `https://flashapi.phs.vn` |
+| **Socket.IO path** | `/ws/socket.io` |
+| **Transport** | `websocket` (bắt buộc — không dùng `polling`) |
+| **Thư viện client** | `socket.io-client` |
+
+<Warning>
+  Phải chỉ định đúng `path`. Nếu gọi sai đường dẫn (ví dụ thiếu `/ws`), server sẽ trả về **301 redirect** sang trang tài liệu thay vì bắt tay Socket.IO, khiến client báo lỗi kết nối chung chung.
+</Warning>
+
+## Các bước kết nối
+
+<Steps>
+  <Step title="Khởi tạo client">
+    Kết nối tới host \+ path ở trên, ép transport là `websocket`.
+  </Step>
+  <Step title="Subscribe mã chứng khoán">
+    Sau sự kiện `connect`, gửi từng topic bằng sự kiện `subscribe` (chuỗi string, không phải object).
+  </Step>
+  <Step title="Lắng nghe dữ liệu">
+    Server trả dữ liệu qua sự kiện `publish` — mỗi lần có cập nhật giá/khớp lệnh.
+  </Step>
+</Steps>
+
+## Ví dụ code (Node.js / JavaScript)
+
+```javascript
+const io = require("socket.io-client");
+
+const socket = io("https://flashapi.phs.vn", {
+  path: "/ws/socket.io",
+  transports: ["websocket"],
+});
+
+socket.on("connect", () => {
+  console.log("Đã kết nối:", socket.id);
+
+  // Subscribe từng mã — lặp lại cho mỗi symbol cần theo dõi
+  socket.emit("subscribe", "market.quoteKrx.ACB");
+  socket.emit("subscribe", "market.bidofferKrx.ACB");
+});
+
+socket.on("publish", (data) => {
+  console.log("Dữ liệu nhận được:", data);
+});
+
+socket.on("connect_error", (err) => {
+  console.error("Lỗi kết nối:", err.message);
+});
+
+socket.on("disconnect", (reason) => {
+  console.log("Mất kết nối:", reason);
+});
+```
+
+## Bảng mapping topic (subscribe)
+
+| Topic subscribe | Mã chứng khoán (`<symbol>`) | Ý nghĩa |
+| --- | --- | --- |
+| `market.quoteKrx.<symbol>` | Ví dụ: `ACB` | Giá khớp lệnh realtime (quote) |
+| `market.bidofferKrx.<symbol>` | Ví dụ: `ACB` | Dư mua / dư bán (bid-offer) theo 3 mức giá |
+
+## Bảng mapping field trong `publish`
+
+Ví dụ dữ liệu thực tế nhận được:
+
+```json
+{
+  "type": "publish",
+  "data": {
+    "s": "ACB", "rc": "ACB", "m": "HOSE",
+    "n1": "Ngân hàng Thương mại Cổ phần Á Châu",
+    "marketId": "STO", "ti": 1787642809879,
+    "vo": 6489300, "va": 145709955000,
+    "bb": [{"p":22300,"v":67700},{"p":22250,"v":167500},{"p":22200,"v":152500}],
+    "bo": [{"p":22350,"v":5500},{"p":22400,"v":68300},{"p":22450,"v":144600}],
+    "tbo": 0, "too": 0
+  }
+}
+```
+
+| Field | Kiểu dữ liệu | Ý nghĩa |
+| --- | --- | --- |
+| `s` | string | Mã chứng khoán (symbol) |
+| `rc` | string | Mã tham chiếu gốc (root code) — thường trùng với `s` |
+| `m` | string | Sàn giao dịch (Market) — ví dụ `HOSE`, `HNX`, `UPCOM` |
+| `n1` | string | Tên đầy đủ tổ chức niêm yết |
+| `marketId` | string | Mã phân loại thị trường (`STO` = cổ phiếu cơ sở) |
+| `ti` | number | Thời điểm cập nhật — Unix timestamp tính bằng **mili-giây** |
+| `vo` | number | Khối lượng khớp lũy kế trong phiên (Volume) |
+| `va` | number | Giá trị khớp lũy kế trong phiên, đơn vị VNĐ (Value) |
+| `bb` | array `{p, v}` | Bảng giá **mua** (Best Bid) — tối đa 3 mức giá tốt nhất; `p` = giá (đồng), `v` = khối lượng đặt |
+| `bo` | array `{p, v}` | Bảng giá **bán** (Best Offer) — tối đa 3 mức giá tốt nhất; `p` = giá (đồng), `v` = khối lượng đặt |
+| `tbo` | number | tổng khối lượng đặt mua (Total Bid Order) |
+| `too` | number | tổng khối lượng đặt bán (Total Offer Order) |
+
+<Note>
+  Payload trên gộp chung dữ liệu quote và bid/offer trong cùng một sự kiện `publish` — không có field nào cho biết payload này đến từ topic `quoteKrx` hay `bidofferKrx`. Nếu subscribe cả hai topic cùng lúc, hãy dùng field `s` để phân biệt symbol, và kiểm tra sự tồn tại/thay đổi của `bb`/`bo` để nhận biết cập nhật dư mua-bán.
+</Note>
+
+## Xử lý sự cố thường gặp
+
+| Hiện tượng | Nguyên nhân khả dĩ | Cách kiểm tra |
+| --- | --- | --- |
+| Kết nối được nhưng không có `publish` nào | Sai định dạng subscribe (gửi object thay vì string), hoặc sai mã chứng khoán | Log lại đúng chuỗi topic đã gửi, so với format ở trên |
+| Lỗi `connect_error` ngay khi kết nối | Sai `path`, sai host, hoặc server yêu cầu `websocket` nhưng client cho phép `polling` trước | Kiểm tra lại `path: "/ws/socket.io"` và `transports: ["websocket"]` |
+| Nhận được HTML/301 thay vì bắt tay Socket.IO | Gọi nhầm sang path khác (ví dụ path của kênh Order & Account) | Xác nhận lại path đúng cho Priceboard là `/ws/socket.io`, khác với `/realtime/eqt(or fno)/socket.io` của Order & Account |
+
+## Bước tiếp theo
+
+## Để nhận dữ liệu lệnh, sức mua, danh mục realtime — xem [Kết nối Order & Account (EQT/FNO)](https://flashapi.phs.vn/docs/websocket/du-lieu-giao-dich).--- title: "Kết nối WebSocket dữ liệu thị trường"

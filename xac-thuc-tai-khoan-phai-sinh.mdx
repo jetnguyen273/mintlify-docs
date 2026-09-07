@@ -1,0 +1,28 @@
+---
+title: "Xác thực tài khoản phái sinh"
+---
+
+## B2. Xác thực — Tài khoản phái sinh
+
+Đăng nhập bằng tài khoản giao dịch phái sinh và trả về `access_token`, `refresh_token`, và `otp_token`.
+
+**POST /auth/gen-secret-key/derivative**
+
+### Sandbox URL
+
+[https://flashapi.phs.vn/sandbox/oapi/auth/gen-secret-key/derivative](https://flashapi.phs.vn/sandbox/oapi/auth/gen-secret-key/derivative)
+
+### Tham số
+
+| **Vị trí** | **Tên** | **Bắt buộc** | **Mô tả** |
+| :-- | :-- | :-- | :-- |
+| body | username | Có | Tên đăng nhập tài khoản. Ví dụ: 022C099995 |
+| body | password | Có | Mật khẩu tài khoản. Ví dụ: 123456aA@ |
+
+### Ví dụ request (cURL cho Sandbox)
+
+```bash
+curl -X POST "https://flashapi.phs.vn/sandbox/oapi/auth/gen-secret-key/derivative" \
+  -H "Content-Type: application/json" \
+  -d '{ "username": "<sandbox_username>", "password": "<sandbox_password>" }'
+```

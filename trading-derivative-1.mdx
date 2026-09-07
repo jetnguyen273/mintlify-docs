@@ -1,0 +1,8 @@
+---
+title: "Giao dịch phái sinh"
+description: "Yêu cầu mã xác thực Bearer khi giao dịch phái sinh; bắt buộc truyền các header x-otp-token đối với các phương thức POST/PUT/DELETE."
+---
+
+```text
+router.use('/accounts/:accountId/orders/derivative', requireDerivativeOrderHeaders);<br />router.get('/accounts/:accountId/orders/derivative', getOrdersDerivativeList);<br />router.post('/accounts/:accountId/orders/derivative', postOrdersDerivative);<br />router.get('/accounts/:accountId/orders/derivative/:orderId', putDeleteOrdersDerivativeById);<br />router.put('/accounts/:accountId/orders/derivative/:orderId', putDeleteOrdersDerivativeById);<br />router.delete('/accounts/:accountId/orders/derivative/:orderId', putDeleteOrdersDerivativeById);<br />\\
+```

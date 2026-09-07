@@ -1,0 +1,51 @@
+---
+title: "Cách hoạt động của URL Sandbox"
+description: "Cách chuyển đổi giữa Base URL Production và Sandbox trong FlashAPI"
+---
+
+## Bắt đầu nhanh — Thử ngay một API (Không cần cài đặt)
+
+Mọi đoạn mã mẫu trên trang tài liệu FlashAPI đều dùng một placeholder tên là `$BASE_URL`. Muốn xem một API thực sự hoạt động ra sao trước khi viết bất kỳ dòng code nào? Chỉ cần thay placeholder đó bằng địa chỉ Sandbox rồi chạy y nguyên request:
+
+```text
+$BASE_URL  →  https://flashapi.phs.vn/sandbox
+```
+
+### Ví dụ — trước và sau khi thay thế
+
+Như được trình bày trong tài liệu (còn dùng placeholder):
+
+```bash
+curl -G "$BASE_URL/oapi/priceboard/symbol-latest-data" \
+  --data-urlencode "symbolList=ACB,FPT,VIC"
+```
+
+Những gì bạn thực sự chạy để gọi vào Sandbox (đã thay placeholder):
+
+```bash
+curl -G "https://flashapi.phs.vn/sandbox/oapi/priceboard/symbol-latest-data" \
+  --data-urlencode "symbolList=ACB,FPT,VIC"
+```
+
+<Info>
+  **Điều cần biết:** Ở Production, phản hồi sẽ thay đổi tùy theo những gì bạn gửi lên — yêu cầu ACB thì nhận giá thật của ACB, đổi mã hay khoảng thời gian khác thì nhận dữ liệu khác. Ở Sandbox, phản hồi luôn là cùng một dữ liệu mẫu cố định, bất kể bạn nhập gì.
+
+  Đây là chủ đích: Sandbox không nhằm mô phỏng biến động thị trường thật, mà để cho bạn thấy chính xác cấu trúc phản hồi (có những trường nào, một mức giá trông như thế nào, một xác nhận lệnh được cấu trúc ra sao) để bạn hiểu trọn vẹn về API trước khi chạm vào dữ liệu thật hay tiền thật.
+</Info>
+
+<Tip>
+  Một cách hình dung đơn giản: Sandbox giống như một sản phẩm demo trong cửa hàng. Bấm bất kỳ nút nào, nó sẽ cho bạn thấy việc bấm nút trông như thế nào — chỉ là sẽ không có đơn hàng thật nào được ghi nhận.
+</Tip>
+
+## Quy tắc URL gốc (Tham khảo)
+
+Mỗi API của FlashAPI được ghi nhận với đường dẫn Production bắt đầu bằng `/oapi`. Để gọi cùng API đó trong Sandbox, chỉ cần chèn thêm `/sandbox` ngay trước `/oapi` và giữ nguyên phần còn lại của đường dẫn, query string và body.
+
+| Môi trường | Mẫu Base URL | Ví dụ — Lấy dữ liệu mới nhất theo mã |
+| --- | --- | --- |
+| **Production** | `https://flashapi.phs.vn/oapi/...` | `https://flashapi.phs.vn/oapi/priceboard/symbol-latest-data` |
+| **Sandbox** | `https://flashapi.phs.vn/sandbox/oapi/...` | `https://flashapi.phs.vn/sandbox/oapi/priceboard/symbol-latest-data` |
+
+<Note>
+  Mọi đoạn mã mẫu trong tài liệu này đã dùng sẵn Base URL của Sandbox, nên bạn có thể sao chép và chạy ngay. Khi sẵn sàng lên Production, chỉ cần thay Base URL — đường dẫn, tham số và header không thay đổi.
+</Note>

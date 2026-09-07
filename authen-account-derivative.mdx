@@ -1,0 +1,42 @@
+---
+title: "Authentication - Derivative Account"
+---
+
+## B2. Authentication — Derivative
+
+Logs in with a derivative trading account and returns an `access_token`, `refresh_token`, and `otp_token`.
+
+**POST `/auth/gen-secret-key/derivative`**
+
+### Sandbox URL
+
+[https://flashapi.phs.vn/sandbox/oapi/auth/gen-secret-key/derivative](https://flashapi.phs.vn/sandbox/oapi/auth/gen-secret-key/derivative)
+
+### Parameters
+
+| **Location** | **Name** | **Required** | **Description** |
+| :-- | :-- | :-- | :-- |
+| body | username | Yes | Account username. Example: 022C099995 |
+| body | password | Yes | Account password. Example: 123456aA@ |
+
+### Example Request (cURL against Sandbox)
+
+```bash
+curl -X POST "https://flashapi.phs.vn/sandbox/oapi/auth/gen-secret-key/derivative" \
+  -H "Content-Type: application/json" \
+  -d '{ "username": "<sandbox_username>", "password": "<sandbox_password>" }'
+```
+
+### Example Sandbox Response
+
+```json
+{
+  "access_token": "022C099995||KRYRTHUYUI||<...long token...>",
+  "refresh_token": "022C099995||KRYRTHUYUI||<...long token...>",
+  "expires_in": 28800,
+  "otp_token": "2c897da51e69cd6f3a0701884ed706ac",
+  "token_type": "Bearer"
+}
+```
+
+> **Sandbox behavior:** Sandbox accepts the demo username/password issued to you during onboarding (contact PHS OpenAPI support if you do not have one yet) and always returns the same fixed `access_token`, `refresh_token`, and `otp_token` shown below. Use these values exactly as returned — do not expect them to rotate between calls. Fixed sandbox fixture OTP token for this login: `2c897da51e69cd6f3a0701884ed706ac` — this is the same value you must send later as `x-otp-token` on derivative order requests.

@@ -1,0 +1,167 @@
+---
+title: "Trading APIs — Derivative (Futures)"
+description: "Trading Derivative Bearer required; x-lang, x-via, x-otp-token on POST/PUT/DELETE"
+---
+
+Place, amend, and cancel derivative (futures) orders. Every call requires the `access_token` from B2 (Authentication — Derivative). POST, PUT, and DELETE calls additionally require `x-otp-token`, `x-lang`, and `x-via` headers.
+
+> **Authentication:** Requires `Authorization: Bearer <access_token>` from B2. POST/PUT/DELETE also require `x-otp-token: 2c897da51e69cd6f3a0701884ed706ac` (sandbox fixture), `x-lang: vi`, `x-via: K`.
+
+## D1. Place Order (Derivative)
+
+Submits a new derivative order for a trading account.
+
+**POST `/accounts/:accountId/orders/derivative`**
+
+### Sandbox URL
+
+```text
+https://flashapi.phs.vn/sandbox/oapi/accounts/:accountId/orders/derivative
+```
+
+### Parameters
+
+| **Location** | **Name** | **Required** | **Description** |
+| :-- | :-- | :-- | :-- |
+| path | accountId | Yes | Trading account ID. |
+| body | instrument | Yes | Instrument code. Example: 41BAG4000 |
+| body | qty | Yes | Order quantity. Example: 1 |
+| body | side | Yes | Order side. Example: buy |
+| body | type | Yes | Order type. Example: LO |
+| body | limitPrice | Yes | Limit price. Example: 1802 |
+| body | timetype | Yes | Time-in-force. Example: T |
+
+### Example Request (cURL against Sandbox)
+
+```bash
+curl -X POST "https://flashapi.phs.vn/sandbox/oapi/accounts/$ACCOUNT_ID/orders/derivative" \
+  -H "Authorization: Bearer $ACCESS_TOKEN" \
+  -H "Content-Type: application/json" \
+  -H "x-lang: vi" -H "x-via: K" \
+  -H "x-otp-token: 2c897da51e69cd6f3a0701884ed706ac" \
+  -d '{ "instrument": "41BAG4000", "qty": 1, "side": "buy", "type": "LO",
+        "limitPrice": 1802, "timetype": "T" }'
+```
+
+### Example Sandbox Response
+
+```json
+{ "s": "ok", "d": { "orderid": "8000180326000220" } }
+```
+
+> **Sandbox behavior:** Sandbox validates that all required fields are present and correctly typed, and requires the same headers as Production, but no real order reaches the exchange. Every successful call returns a fixed example order ID. In place of a one-time password sent to your phone, sandbox accepts the fixed fixture OTP token documented on this page — send that exact string in `x-otp-token`.
+
+## D2. Update Order (Derivative)
+
+Amends quantity and/or limit price on an existing derivative order.
+
+**PUT `/accounts/:accountId/orders/derivative/:orderId`**
+
+### Sandbox URL
+
+```text
+https://flashapi.phs.vn/sandbox/oapi/accounts/:accountId/orders/derivative/:orderId
+```
+
+### Parameters
+
+| **Location** | **Name** | **Required** | **Description** |
+| :-- | :-- | :-- | :-- |
+| path | accountId | Yes | Trading account ID. |
+| path | orderId | Yes | Order ID to update. |
+| body | qty | Yes | Updated order quantity. |
+| body | limitPrice | Yes | Updated limit price. |
+
+### Example Request (cURL against Sandbox)
+
+```bash
+curl -X PUT "https://flashapi.phs.vn/sandbox/oapi/accounts/$ACCOUNT_ID/orders/derivative/$ORDER_ID" \
+  -H "Authorization: Bearer $ACCESS_TOKEN" \
+  -H "Content-Type: application/json" \
+  -H "x-lang: vi" -H "x-via: K" \
+  -H "x-otp-token: 2c897da51e69cd6f3a0701884ed706ac" \
+  -d '{ "qty": 1, "limitPrice": 1802 }'
+```
+
+### Example Sandbox Response
+
+```json
+{ "s": "ok" }
+```
+
+> **Sandbox behavior:** Sandbox validates that all required fields are present and correctly typed, and requires the same headers as Production, but no real order reaches the exchange. Every successful call returns a fixed example order ID. In place of a one-time password sent to your phone, sandbox accepts the fixed fixture OTP token documented on this page — send that exact string in `x-otp-token`.
+
+## D3. Cancel Order (Derivative)
+
+Cancels an existing derivative order. Note this endpoint additionally expects the OTP value in the query string (`otp`), on top of the `x-otp-token` header.
+
+**DELETE `/accounts/:accountId/orders/derivative/:orderId?timeType=T&isbuyin=N&otp=<otp_token>`**
+
+### Sandbox URL
+
+```text
+https://flashapi.phs.vn/sandbox/oapi/accounts/:accountId/orders/derivative/:orderId?timeType=T&isbuyin=N&otp=<otp_token>
+```
+
+### Parameters
+
+| **Location** | **Name** | **Required** | **Description** |
+| :-- | :-- | :-- | :-- |
+| path | accountId | Yes | Trading account ID. |
+| path | orderId | Yes | Order ID to cancel. |
+| query | timeType | Yes | Time-in-force. Example: T |
+| query | isbuyin | Yes | Buy-in flag. Example: N |
+| query | otp | Yes | OTP value in the query string. Sandbox: 2c897da51e69cd6f3a0701884ed706ac |
+
+### Example Request (cURL against Sandbox)
+
+```bash
+curl -X DELETE "https://flashapi.phs.vn/sandbox/oapi/accounts/$ACCOUNT_ID/orders/derivative/$ORDER_ID?timeType=T&isbuyin=N&otp=2c897da51e69cd6f3a0701884ed706ac" \
+  -H "Authorization: Bearer $ACCESS_TOKEN" \
+  -H "Content-Type: application/json" \
+  -H "x-lang: vi" -H "x-via: K" \
+  -H "x-otp-token: 2c897da51e69cd6f3a0701884ed706ac" \
+  -d '{ "qty": 1, "limitPrice": 1802 }'
+```
+
+### Example Sandbox Response
+
+```json
+{ "s": "ok" }
+```
+
+> **Sandbox behavior:** Sandbox validates that all required fields are present and correctly typed, and requires the same headers as Production, but no real order reaches the exchange. Every successful call returns a fixed example order ID. In place of a one-time password sent to your phone, sandbox accepts the fixed fixture OTP token documented on this page — send that exact string in `x-otp-token`.
+
+## D4. Get Derivative Buying Power
+
+Returns the maximum buying power (PPSE) for a derivative contract. GET-only — no `x-otp-token` needed.
+
+**GET `/accounts/:accountId/derivative/buyingPower`**
+
+### Sandbox URL
+
+```text
+https://flashapi.phs.vn/sandbox/oapi/accounts/:accountId/derivative/buyingPower
+```
+
+### Parameters
+
+| **Location** | **Name** | **Required** | **Description** |
+| :-- | :-- | :-- | :-- |
+| path | accountId | Yes | Trading account ID. |
+| query | symbol | Yes | Derivative contract symbol. Example: 41I1G7000 |
+
+### Example Request (cURL against Sandbox)
+
+```bash
+curl "https://flashapi.phs.vn/sandbox/oapi/accounts/$ACCOUNT_ID/derivative/buyingPower?symbol=41I1G7000" \
+  -H "Authorization: Bearer $ACCESS_TOKEN"
+```
+
+### Example Sandbox Response
+
+```json
+{ "s": "ok", "d": { "ppse": 0, "ppse_long": 0, "ppse_short": 0, "maxbuyqty": 0, "maxsellqty": 0 } }
+```
+
+> **Sandbox behavior:** Sandbox returns one fixed example record for any accountId you pass, so you can validate field names and data types before pointing your integration at Production, where the data reflects the real account.

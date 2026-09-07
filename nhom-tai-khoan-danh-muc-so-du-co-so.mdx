@@ -1,0 +1,156 @@
+---
+title: "Nhóm API Tài khoản, Danh mục & Số dư — Cơ sở"
+---
+
+Các API chỉ đọc (GET) cho tài khoản chứng khoán cơ sở. Tất cả đều cần Authorization: Bearer \<access\_token\> lấy từ B1. Không cần x-otp-token vì không có thao tác gửi lệnh nào.
+
+\*\*Xác thực: \*\* Yêu cầu: Authorization: Bearer \<access\_token\> lấy từ B1. Chỉ dùng GET.
+
+## E1. Danh mục (Cơ sở)
+
+Trả về danh mục chứng khoán hiện có của tài khoản (khối lượng, giá vốn bình quân, giá trị thị trường, lãi/lỗ chưa thực hiện, v.v.).
+
+\*\* GET   /accounts/:accountId/underlying/portfolio\*\*
+
+### URL Sandbox
+
+[https://flashapi.phs.vn/sandbox/oapi/accounts/:accountId/underlying/portfolio](https://flashapi.phs.vn/sandbox/oapi/accounts/:accountId/underlying/portfolio)
+
+ 
+
+### Tham số
+
+| **Vị trí** | **Tên** | **Bắt buộc** | **Mô tả** |
+| :-- | :-- | :-- | :-- |
+| path | accountId | Có | Mã tài khoản giao dịch. |
+
+ 
+
+### Ví dụ yêu cầu (cURL gọi vào Sandbox)
+
+curl "[https://flashapi.phs.vn/sandbox/oapi/accounts/\$ACCOUNT\_ID/underlying/portfolio](https://flashapi.phs.vn/sandbox/oapi/accounts/$ACCOUNT_ID/underlying/portfolio)" \\
+
+  -H "Authorization: Bearer \$ACCESS\_TOKEN"
+
+ 
+
+### Ví dụ phản hồi từ Sandbox
+
+\{ "s": "ok", "d": \[ \{ "symbol": "ACV", "total": 3551, "costPrice": 61193,
+
+      "basicprice": 49000, "pnlAmt": -43297343, "pnlRate": -19.93 \} \] \}
+
+\*\*Hành vi trên Sandbox: \*\* Sandbox trả về đúng một bản ghi mẫu cố định cho bất kỳ accountId nào bạn truyền vào, giúp bạn xác nhận tên trường và kiểu dữ liệu trước khi trỏ hệ thống của bạn sang Production — nơi dữ liệu phản ánh đúng tài khoản thật.
+
+## E2. Lệnh trong ngày (Cơ sở)
+
+Trả về các lệnh chứng khoán trong phiên giao dịch hiện tại của tài khoản.
+
+\*\* GET   /accounts/:accountId/underlying/dailyOrder\*\*
+
+### URL Sandbox
+
+[https://flashapi.phs.vn/sandbox/oapi/accounts/:accountId/underlying/dailyOrder](https://flashapi.phs.vn/sandbox/oapi/accounts/:accountId/underlying/dailyOrder)
+
+ 
+
+### Tham số
+
+| **Vị trí** | **Tên** | **Bắt buộc** | **Mô tả** |
+| :-- | :-- | :-- | :-- |
+| path | accountId | Có | Mã tài khoản giao dịch. |
+
+ 
+
+### Ví dụ yêu cầu (cURL gọi vào Sandbox)
+
+curl "[https://flashapi.phs.vn/sandbox/oapi/accounts/\$ACCOUNT\_ID/underlying/dailyOrder](https://flashapi.phs.vn/sandbox/oapi/accounts/$ACCOUNT_ID/underlying/dailyOrder)" \\
+
+  -H "Authorization: Bearer \$ACCESS\_TOKEN"
+
+ 
+
+### Ví dụ phản hồi từ Sandbox
+
+\{ "s": "ok", "d": \[ \{ "orderid": "8000180326000188", "symbol": "ACB",
+
+      "orderqtty": 100, "quoteprice": 22100, "status": "Chờ gửi", "exectypedesc": "Buy" \} \] \}
+
+\*\*Hành vi trên Sandbox: \*\* Sandbox trả về đúng một bản ghi mẫu cố định cho bất kỳ accountId nào bạn truyền vào, giúp bạn xác nhận tên trường và kiểu dữ liệu trước khi trỏ hệ thống của bạn sang Production — nơi dữ liệu phản ánh đúng tài khoản thật.
+
+## E3. Báo cáo lệnh (Cơ sở)
+
+Trả về lịch sử lệnh chứng khoán của tài khoản trong một khoảng thời gian, kèm theo các số liệu tổng hợp (khối lượng, giá trị mua/bán, số lệnh hủy).
+
+\*\* GET   /accounts/:accountId/underlying/orderReport\*\*
+
+### URL Sandbox
+
+[https://flashapi.phs.vn/sandbox/oapi/accounts/:accountId/underlying/orderReport](https://flashapi.phs.vn/sandbox/oapi/accounts/:accountId/underlying/orderReport)
+
+ 
+
+### Tham số
+
+| **Vị trí** | **Tên** | **Bắt buộc** | **Mô tả** |
+| :-- | :-- | :-- | :-- |
+| path | accountId | Có | Mã tài khoản giao dịch. |
+| query | fromDate | Không | Ngày bắt đầu, định dạng DD/MM/YYYY. Ví dụ: 16/03/2026 |
+| query | toDate | Không | Ngày kết thúc, định dạng DD/MM/YYYY. Ví dụ: 20/03/2026 |
+| query | symbol | Không | Lọc theo mã chứng khoán. Ví dụ: ACB |
+
+ 
+
+### Ví dụ yêu cầu (cURL gọi vào Sandbox)
+
+curl -G "[https://flashapi.phs.vn/sandbox/oapi/accounts/\$ACCOUNT\_ID/underlying/orderReport](https://flashapi.phs.vn/sandbox/oapi/accounts/$ACCOUNT_ID/underlying/orderReport)" \\
+
+  -H "Authorization: Bearer \$ACCESS\_TOKEN" \\
+
+  --data-urlencode "fromDate=16/03/2026" --data-urlencode "toDate=20/03/2026" --data-urlencode "symbol=ACB"
+
+ 
+
+### Ví dụ phản hồi từ Sandbox
+
+\{ "s": "ok", "d": \[ \{ "orderid": "8000180326000188", "symbol": "ACB",
+
+      "exectype": "Buy", "orderqtty": 100, "totalorder": 1 \} \] \}
+
+\*\*Hành vi trên Sandbox: \*\* Sandbox trả về đúng một bản ghi mẫu cố định cho bất kỳ accountId nào bạn truyền vào, giúp bạn xác nhận tên trường và kiểu dữ liệu trước khi trỏ hệ thống của bạn sang Production — nơi dữ liệu phản ánh đúng tài khoản thật.
+
+## E4. Số dư / Tài sản (Cơ sở)
+
+Trả về dữ liệu số dư tiền mặt và sức mua của tài khoản chứng khoán. Nếu truyền thêm symbol và quotePrice, hệ thống sẽ trả về thêm khối lượng tối đa có thể mua ở mức giá đó.
+
+\*\* GET   /accounts/:accountId/underlying/assets\*\*
+
+### URL Sandbox
+
+[https://flashapi.phs.vn/sandbox/oapi/accounts/:accountId/underlying/assets](https://flashapi.phs.vn/sandbox/oapi/accounts/:accountId/underlying/assets)
+
+ 
+
+### Tham số
+
+| **Vị trí** | **Tên** | **Bắt buộc** | **Mô tả** |
+| :-- | :-- | :-- | :-- |
+| path | accountId | Có | Mã tài khoản giao dịch. |
+| query | symbol | Không | Mã dùng để tính khả năng giao dịch. Ví dụ: ACB |
+| query | quotePrice | Không | Giá dùng để tính số dư. Ví dụ: 23000 |
+
+ 
+
+### Ví dụ yêu cầu (cURL gọi vào Sandbox)
+
+curl "[https://flashapi.phs.vn/sandbox/oapi/accounts/\$ACCOUNT\_ID/underlying/assets?symbol=ACB&quotePrice=23000](https://flashapi.phs.vn/sandbox/oapi/accounts/$ACCOUNT_ID/underlying/assets?symbol=ACB&quotePrice=23000)" \\
+
+  -H "Authorization: Bearer \$ACCESS\_TOKEN"
+
+ 
+
+### Ví dụ phản hồi từ Sandbox
+
+\{ "s": "ok", "d": \[ \{ "ppse": 944754, "maxqty": 0, "trade": 0, "rtt": 124.82 \} \] \}
+
+\*\*Hành vi trên Sandbox: \*\* Sandbox trả về đúng một bản ghi mẫu cố định cho bất kỳ accountId nào bạn truyền vào, giúp bạn xác nhận tên trường và kiểu dữ liệu trước khi trỏ hệ thống của bạn sang Production — nơi dữ liệu phản ánh đúng tài khoản thật. Nếu không truyền symbol/quotePrice, maxqty và trade sẽ trả về 0 — đây là hành vi đã được tài liệu hóa, không phải lỗi.

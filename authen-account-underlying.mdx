@@ -1,0 +1,92 @@
+---
+title: "Authentication — Underlying Account"
+---
+
+Every **Trading**, **Account**, **Portfolio**, and **Balance** endpoint requires an authentication token from this group.
+
+PHS provides two independent authentication flows:
+
+- **Underlying Account** — for stock trading accounts
+- **Derivative Account** — for derivative trading accounts
+
+These are separated because PHS treats stock and derivative products as independent trading permissions.
+
+## B1. Authentication — Underlying
+
+Logs in with a **stock (underlying) trading account** and returns the credentials required for subsequent authenticated API requests.
+
+### Endpoint
+
+`POST /auth/gen-secret-key/underlying`
+
+### Sandbox URL
+
+```text
+https://flashapi.phs.vn/sandbox/oapi/auth/gen-secret-key/underlying
+```
+
+### Parameters
+
+| Location | Name | Required | Description |
+| --- | --- | --- | --- |
+| Body | `username` | Yes | Account username. Example: `022C099995` |
+| Body | `password` | Yes | Account password. Example: `123456aA@` |
+
+### Example Request
+
+```bash
+curl -X POST "https://flashapi.phs.vn/sandbox/oapi/auth/gen-secret-key/underlying" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "username": "<sandbox_username>",
+    "password": "<sandbox_password>"
+  }'
+```
+
+### Example Response
+
+```json
+{
+  "access_token": "022C099995||KRYRTHUYUI||<...long token...>",
+  "refresh_token": "022C099995||KRYRTHUYUI||<...long token...>",
+  "expires_in": 28800,
+  "otp_token": "552066a35eb30a9815afc952b14287a8",
+  "token_type": "Bearer"
+}
+```
+
+### Response Fields
+
+| Field | Description |
+| --- | --- |
+| `access_token` | Token used to authenticate subsequent API requests. |
+| `refresh_token` | Token used to refresh authentication when required. |
+| `expires_in` | Access token validity period in seconds. |
+| `otp_token` | OTP token required for underlying order requests. |
+| `token_type` | Authentication scheme. The value is `Bearer`. |
+
+> **Note:** The `access_token` and `refresh_token` should be included according to the authentication requirements of subsequent API endpoints.
+
+> **Warning: Sandbox behavior** — The Sandbox accepts the demo username and password issued during onboarding. If you do not have Sandbox credentials, contact PHS OpenAPI Support.
+
+### Sandbox Token Behavior
+
+The Sandbox uses fixed authentication credentials for this login flow.
+
+The Sandbox returns the same fixed values for:
+
+- `access_token`
+- `refresh_token`
+- `otp_token`
+
+These values do **not** rotate between Sandbox login requests.
+
+The fixed Sandbox OTP token for underlying account authentication is:
+
+```text
+552066a35eb30a9815afc952b14287a8
+```
+
+Use this value as the `x-otp-token` header when submitting **underlying order requests** in the Sandbox.
+
+> **Note:** Use the token values exactly as returned by the Sandbox. Do not expect the authentication tokens to change between login requests.

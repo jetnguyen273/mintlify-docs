@@ -1,0 +1,89 @@
+---
+title: "Lấy dữ liệu thống kê của mã chứng khoán"
+description: "Trả về thống kê khớp lệnh theo từng bước giá cho một mã chứng khoán."
+---
+
+## Endpoint
+
+```text
+GET /oapi/priceboard/symbol-statics-data
+```
+
+Trả về thống kê khớp lệnh theo từng bước giá cho một mã chứng khoán.
+
+## Các tham số bắt buộc
+
+- `symbol` — Mã chứng khoán. Ví dụ: `ACB`
+- `fetchCount` — Số bước giá muốn trả về. Ví dụ: `10`
+
+## Mô tả trường
+
+- `price` (`number`) — Bước giá.
+- `volume` (`number`) — Khối lượng khớp tại bước giá này.
+- `buyVolume` (`number`) — Khối lượng khớp mua tại bước giá này.
+- `sellVolume` (`number`) — Khối lượng khớp bán tại bước giá này.
+- `bsVolume` (`number`) — Khối lượng khớp nhưng không xác định bên mua hoặc bên bán. Thường gặp trong `ATO` hoặc `ATC`.
+- `buyRate` (`number`) — Tỷ lệ khớp mua tại bước giá này.
+- `sellRate` (`number`) — Tỷ lệ khớp bán tại bước giá này.
+- `bsRate` (`number`) — Tỷ lệ khớp mua/bán chưa xác định tại bước giá này.
+- `rate` (`number`) — Tổng tỷ lệ khối lượng khớp theo bước giá.
+
+## cURL
+
+```bash
+curl -G "$BASE_URL/oapi/priceboard/symbol-statics-data" \
+  --data-urlencode "symbol=ACB" \
+  --data-urlencode "fetchCount=10"
+```
+
+## Python
+
+```python
+import requests
+
+BASE_URL = "https://api.example.com"
+
+params = {
+    "symbol": "ACB",
+    "fetchCount": 10,
+}
+
+response = requests.get(
+    f"{BASE_URL}/oapi/priceboard/symbol-statics-data",
+    params=params,
+)
+response.raise_for_status()
+
+print(response.json())
+```
+
+## Ví dụ phản hồi
+
+```json
+[
+    {
+        "price": 23500,
+        "volume": 2400,
+        "buyVolume": 2400,
+        "sellVolume": 0,
+        "bsVolume": 0,
+        "buyRate": 1,
+        "sellRate": 0,
+        "bsRate": 0,
+        "rate": 0.0002
+    },
+    {
+        "price": 23450,
+        "volume": 5000,
+        "buyVolume": 100,
+        "sellVolume": 4900,
+        "bsVolume": 0,
+        "buyRate": 0.02,
+        "sellRate": 0.98,
+        "bsRate": 0,
+        "rate": 0.0004
+    }
+]
+```
+
+> Thay `BASE_URL` bằng host API của bạn.

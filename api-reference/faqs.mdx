@@ -1,0 +1,366 @@
+---
+title: "Frequently Asked Questions (FAQ)"
+description: "A single consolidated OpenAPI guide covering onboarding, usage, workflows, limits, and common questions."
+---
+
+## 1. What is OpenAPI?
+
+### Purpose
+
+OpenAPI is a secure way for customers, partners, and applications to connect to a brokerage platform using approved APIs.
+
+### Overview
+
+It lets users view market information, check their account, monitor their portfolio, and place trades without using a manual web workflow for every action.
+
+### When to Use
+
+Use OpenAPI when you want to build a trading app, client portal, internal dashboard, reporting tool, or automation workflow.
+
+### Step-by-Step Guide
+
+<Steps>
+  <Step title="Register for an account">
+    [Register](https://flashapi.phs.vn/docs/registration-form) for an account.
+  </Step>
+  <Step title="Subscribe to OpenAPI">
+    Subscribe to the OpenAPI service if required.
+  </Step>
+  <Step title="Get access credentials">
+    Get access credentials for the sandbox or production environment.
+  </Step>
+  <Step title="Authenticate your application">
+    Authenticate your application.
+  </Step>
+  <Step title="Call the APIs">
+    Call the APIs needed for market data, portfolio, or trading.
+  </Step>
+  <Step title="Handle responses">
+    Handle responses, errors, and permission checks carefully.
+  </Step>
+</Steps>
+
+<Note>
+  **Example Scenario:** A retail investor uses a trading app that shows real-time prices, portfolio value, and current orders. The app uses OpenAPI to fetch data and submit orders.
+</Note>
+
+---
+
+## 2. Getting Started with Flash API
+
+### Account registration
+
+[Register](https://flashapi.phs.vn/docs/registration-form) with the online form using the approved onboarding process and provide the required business or personal information.
+
+### API subscription process
+
+After registration, request OpenAPI access and complete the approval steps required by the CS (if have).
+
+### Sandbox vs Production environment
+
+Use sandbox for testing and development. Use production only for live business activity after credentials and permissions are approved.
+
+### Step-by-Step Guide
+
+<Steps>
+  <Step title="Confirm your account">
+    Create or confirm your brokerage account.
+  </Step>
+  <Step title="Submit access request">
+    Submit the OpenAPI access request.
+  </Step>
+  <Step title="Wait for approval">
+    Wait for approval and setup instructions.
+  </Step>
+  <Step title="Test in sandbox">
+    Use sandbox credentials for testing.
+  </Step>
+  <Step title="Move to production">
+    Move to production only after validation is complete.
+  </Step>
+</Steps>
+
+<Note>
+  **Example Scenario:** A development team tests login, market data, and order placement in sandbox before enabling the same workflow for live users in production.
+</Note>
+
+---
+
+## 3. How OpenAPI Works
+
+### Authentication flow
+
+Your application sends credentials through the approved authentication process. After validation, the system returns an access token.
+
+### Access Token concept
+
+An access token is a temporary digital key that proves your application is allowed to make requests.
+
+### Request → Response flow
+
+- Your app sends a request to an API endpoint.
+- The request includes the access token.
+- The platform checks the token, permissions, and environment.
+- The platform returns data, a success message, or an error.
+
+### Typical API workflow
+
+<Steps>
+  <Step title="Authenticate">
+  </Step>
+  <Step title="Retrieve the access token">
+  </Step>
+  <Step title="Call the required API">
+  </Step>
+  <Step title="Read the response">
+  </Step>
+  <Step title="Handle errors or retry when appropriate">
+  </Step>
+</Steps>
+
+<Note>
+  **Example Scenario:** A portfolio app logs in, receives an access token, requests account details, and then displays cash balance and positions on screen.
+</Note>
+
+---
+
+## 4. Market Data APIs
+
+### Available market data
+
+Depending on permission and product setup, market data may include last traded price, bid and ask information, high and low values, volume, turnover, symbol reference details, and market status.
+
+### Common use cases
+
+- Live quote display
+- Order ticket pricing
+- Watchlist monitoring
+- Charts and market summaries
+- Client reporting dashboards
+
+### Sample business scenarios
+
+A wealth app shows stock prices so users can decide when to buy. A research tool displays market snapshots for analysts. A branch support team checks quotes while speaking with a customer.
+
+### Step-by-Step Guide
+
+<Steps>
+  <Step title="Authenticate your application">
+  </Step>
+  <Step title="Choose the market data endpoint you need">
+  </Step>
+  <Step title="Send the request with a valid token">
+  </Step>
+  <Step title="Display the response in a user-friendly format">
+  </Step>
+  <Step title="Refresh data based on your application needs and rate limits">
+  </Step>
+</Steps>
+
+<Note>
+  **Example Scenario:** A user opens a stock detail page. The app calls Market Data APIs, gets the latest price and spread, and shows a simple summary with charts and movement indicators.
+</Note>
+
+---
+
+## 5. Account & Portfolio APIs
+
+### Account information
+
+Account information may include account number, account type, currency, cash balance, buying power, and account status.
+
+### Asset information
+
+Asset information may include security code, symbol, name, exchange, and current valuation details.
+
+### Position information
+
+Position information usually shows quantity, average price, market value, unrealized profit or loss, and available balance.
+
+### Portfolio monitoring
+
+Portfolio monitoring helps users track exposure, concentration, performance, and changes over time.
+
+### Step-by-Step Guide
+
+<Steps>
+  <Step title="Authenticate the user session">
+  </Step>
+  <Step title="Call the account information endpoint">
+  </Step>
+  <Step title="Retrieve asset and position data">
+  </Step>
+  <Step title="Summarize the information in a portfolio view">
+  </Step>
+  <Step title="Refresh the data regularly for accurate monitoring">
+  </Step>
+</Steps>
+
+<Note>
+  **Example Scenario:** An investor opens their app and sees a portfolio summary. The system fetches account details, current holdings, and position values so the investor can review their investments at a glance.
+</Note>
+
+---
+
+## 6. Trading APIs
+
+### Place order
+
+A place order request starts a new trade instruction. Your application should validate the symbol, quantity, side, and product type before submission.
+
+### Amend order
+
+An amend order request updates an existing order, such as changing price or quantity, if the order is still eligible for modification.
+
+### Cancel order
+
+A cancel order request removes an active order if it has not already been fully executed.
+
+### Order status tracking
+
+Order status tracking lets users follow the progress of an order through states such as pending, accepted, partially filled, filled, canceled, or rejected.
+
+### Step-by-Step Guide
+
+<Steps>
+  <Step title="Confirm trading permissions">
+    Authenticate and confirm trading permissions.
+  </Step>
+  <Step title="Build the order request">
+    Build the order request with the correct symbol, quantity, and price type.
+  </Step>
+  <Step title="Submit the order">
+    Submit the order.
+  </Step>
+  <Step title="Save the order reference">
+    Save the response or order reference number.
+  </Step>
+  <Step title="Check order status">
+    Check status until the order is filled, rejected, canceled, or expired.
+  </Step>
+</Steps>
+
+<Note>
+  **Example Scenario:** A customer wants to buy shares of a company. The app submits a place order request, shows the response, and then updates the order screen until the order is completed.
+</Note>
+
+---
+
+## 7. Common API Workflow Examples
+
+### Login → Get Market Data → Place Order
+
+<Steps>
+  <Step title="Authenticate the user">
+  </Step>
+  <Step title="Fetch the latest market price">
+  </Step>
+  <Step title="Present the quote in the order ticket">
+  </Step>
+  <Step title="Submit the buy or sell order">
+  </Step>
+  <Step title="Track the response and order status">
+  </Step>
+</Steps>
+
+### Login → Retrieve Portfolio → Monitor Positions
+
+<Steps>
+  <Step title="Authenticate the user">
+  </Step>
+  <Step title="Retrieve account details">
+  </Step>
+  <Step title="Load current positions and asset values">
+  </Step>
+  <Step title="Display the portfolio dashboard">
+  </Step>
+  <Step title="Refresh data to monitor changes over time">
+  </Step>
+</Steps>
+
+<Note>
+  **Example Scenario:** A mobile trading app uses the first workflow for active trading and the second workflow for daily portfolio review.
+</Note>
+
+---
+
+## 8. API Limits & Best Practices
+
+### Rate limits
+
+Rate limits control how many requests your application can send in a given time period. They protect the system and help keep service stable.
+
+### Security recommendations
+
+- Keep credentials secret
+- Use the correct environment
+- Store access tokens securely
+- Remove unnecessary permissions
+- Log errors without exposing sensitive data
+
+### Error handling guidance
+
+Check the error message, confirm your token, review permissions, and retry only when it is safe to do so.
+
+### Step-by-Step Guide
+
+<Steps>
+  <Step title="Monitor request frequency">
+  </Step>
+  <Step title="Use the correct authentication flow">
+  </Step>
+  <Step title="Retry only when the error is temporary">
+  </Step>
+  <Step title="Avoid exposing secrets in logs or screens">
+  </Step>
+  <Step title="Validate trading data before submitting requests">
+  </Step>
+</Steps>
+
+<Note>
+  **Example Scenario:** An application sends too many quote requests and reaches the limit. The system slows down the requests and uses caching so the user can continue working smoothly.
+</Note>
+
+---
+
+## 9. Frequently Asked Questions
+
+### General issues
+
+<AccordionGroup>
+  <Accordion title="Registration issues">
+    Check whether your business details, contact information, and approval documents were submitted correctly.
+  </Accordion>
+
+  <Accordion title="Authentication issues">
+    Confirm that your credentials are correct, your token is current, and your application is calling the right environment.
+  </Accordion>
+
+  <Accordion title="Trading permissions">
+    Make sure trading access has been approved for the account you are using.
+  </Accordion>
+
+  <Accordion title="Environment access">
+    Verify that you are using sandbox credentials in sandbox and production credentials in production.
+  </Accordion>
+</AccordionGroup>
+
+### Specific questions
+
+<AccordionGroup>
+  <Accordion title="I cannot register. What should I check first?">
+    Verify your account details, company information, and any required approval documents.
+  </Accordion>
+
+  <Accordion title="Why am I getting authentication errors?">
+    Common causes are expired tokens, incorrect credentials, or using the wrong environment.
+  </Accordion>
+
+  <Accordion title="Why can I view data but not trade?">
+    You may have market data or account access only. Trading permission may be missing.
+  </Accordion>
+
+  <Accordion title="Why does sandbox work but production fails?">
+    Production usually has stricter permissions, credentials, and compliance checks.
+  </Accordion>
+</AccordionGroup>

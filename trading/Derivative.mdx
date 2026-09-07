@@ -1,0 +1,203 @@
+---
+title: "Derivative"
+description: "Place, update, and cancel derivative orders."
+---
+
+## Authentication requirements
+
+All routes under `/oapi/accounts/:accountId/orders/derivative` require `Authorization: Bearer <access_token>`.
+
+Use the `access_token` and `otp_token` returned by [`POST /oapi/auth/gen-secret-key/derivative`](/phs-openapi-documents/authentication/derivative.md).
+
+`GET` requests require the Bearer token only.
+
+`POST`, `PUT`, and `DELETE` requests also require these headers:
+
+- `x-otp-token: <otp_token>`
+
+In sandbox, use the exact fixture OTP token: `2c897da51e69cd6f3a0701884ed706ac`.
+
+## Place order
+
+```text
+POST /oapi/accounts/:accountId/orders/derivative
+```
+
+Places a new derivative order for an account.
+
+### Required path parameters
+
+- `accountId` — Sub-derivatives account ID.
+
+### Required body parameters
+
+- `instrument` — Instrument code. Example: `41BAG4000`
+- `qty` — Order quantity. Example: `1`
+- `side` — Order side. Example: `buy`
+- `type` — Order type. Example: `LO`
+- `limitPrice` — Limit price. Example: `1802`
+- timetype — Time-in-force type. Example: `T`
+
+### Response fields
+
+- `s` (`string`) — Request status. Example: `ok`
+- `d.orderid` (`string`) — Created order ID.
+
+### cURL
+
+```bash
+curl -X POST "$BASE_URL/oapi/accounts/$ACCOUNT_ID/orders/derivative" \
+  -H "Authorization: Bearer $ACCESS_TOKEN" \
+  -H "Content-Type: application/json" \
+  -H "x-lang: vi" \
+  -H "x-via: K" \
+  -H "x-otp-token: $OTP_TOKEN" \
+  -d '{
+    "instrument": "41BAG4000",
+    "qty": 1,
+    "side": "buy",
+    "type": "LO",
+    "limitPrice": 1802,
+    "timetype": "T"
+  }'
+```
+
+### Example response
+
+```json
+{
+    "s": "ok",
+    "d": {
+        "orderid": "8000180326000220"
+    }
+}
+```
+
+## Update order
+
+```text
+PUT /oapi/accounts/:accountId/orders/derivative/:orderId
+```
+
+Updates quantity and limit price for an existing derivative order.
+
+### Required path parameters
+
+- `accountId` — Sub-derivatives account ID.
+- `orderId` — Order ID to update.
+
+### Required body parameters
+
+- `qty` — Updated order quantity. Example: `1`
+- `limitPrice` — Updated limit price. Example: `1802`
+
+### cURL
+
+```bash
+curl -X PUT "$BASE_URL/oapi/accounts/$ACCOUNT_ID/orders/derivative/$ORDER_ID" \
+  -H "Authorization: Bearer $ACCESS_TOKEN" \
+  -H "Content-Type: application/json" \
+  -H "x-lang: vi" \
+  -H "x-via: K" \
+  -H "x-otp-token: $OTP_TOKEN" \
+  -d '{
+    "qty": 1,
+    "limitPrice": 1802
+  }'
+```
+
+### Example response
+
+```json
+{
+    "s": "ok"
+}
+```
+
+## Cancel order
+
+```text
+DELETE /oapi/accounts/:accountId/orders/derivative/:orderId?timeType=T&isbuyin=N&otp=e176078d1876e71a856f968b8864da22
+```
+
+Cancels an existing derivative order.
+
+### Required path parameters
+
+- `accountId` — Sub-derivatives account ID.
+- `orderId` — Order ID to cancel.
+
+### Required query parameters
+
+- `timeType` — Time-in-force type. Example: `T`
+- `isbuyin` — Buy-in flag. Example: `N`
+- `otp` — OTP value passed in the query string. Example: `e176078d1876e71a856f968b8864da22`
+
+### Example body
+
+- `qty` — Quantity used in the provided request example. Example: `1`
+- `limitPrice` — Limit price used in the provided request example. Example: `1802`
+
+### cURL
+
+```bash
+curl -X DELETE "$BASE_URL/oapi/accounts/$ACCOUNT_ID/orders/derivative/$ORDER_ID?timeType=T&isbuyin=N&otp=e176078d1876e71a856f968b8864da22" \
+  -H "Authorization: Bearer $ACCESS_TOKEN" \
+  -H "Content-Type: application/json" \
+  -H "x-lang: vi" \
+  -H "x-via: K" \
+  -H "x-otp-token: $OTP_TOKEN" \
+  -d '{
+    "qty": 1,
+    "limitPrice": 1802
+  }'
+```
+
+### Example response
+
+```json
+{
+    "s": "ok"
+}
+```
+
+## Get Derivative Buying Power
+
+```text
+`GET /oapi/accounts/:accountId/derivative/buyingPower`
+```
+
+Retrieves the maximum buying power (PPSE) for trading derivative securities.
+
+### Required Path Parameters
+
+- `accountId` — Sub-derivatives account ID.
+
+### Required Query Parameters
+
+- `symbol` — Derivative contract symbol. Example: `41I1G7000`.
+
+### cURL
+
+```bash
+curl -X GET "$BASE_URL/oapi/accounts/$ACCOUNT_ID/derivative/buyingPower?symbol=41I1G7000" \
+  -H "Authorization: Bearer $ACCESS_TOKEN" \
+  -H "Accept: */*"
+```
+
+### Example Response
+
+```json
+{
+  "s": "ok",
+  "d": {
+    "ppse": 0,
+    "ppse_long": 0,
+    "ppse_short": 0,
+    "intrasset": 0,
+    "maxbuyqty": 0,
+    "maxsellqty": 0,
+    "maxlimit_buyid": 0
+  }
+}
+```

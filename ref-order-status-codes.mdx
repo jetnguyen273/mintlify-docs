@@ -1,0 +1,62 @@
+---
+title: "Reference: Order Status Codes"
+---
+
+These are the values returned in order-related responses (Section C, D, E, F) so you can map a status code to a human-readable state in your UI.
+
+## 10.1 Derivative Order Status
+
+| **Code** | **Meaning** |
+| :-- | :-- |
+| BB | Sending Order |
+| DD | Cancelled |
+| DE | Cancel Request Sent Successfully |
+| DN | Cancel Request Failed |
+| DR | Cancel Request Rejected by Exchange |
+| DS | Cancelled Successfully |
+| EE | Amend Request Sent Successfully |
+| EN | Amend Request Failed |
+| ES | Amended Successfully |
+| FF | Order Released |
+| GG | Order Released Successfully |
+| MM | Insufficient Core Banking Balance |
+| NN | Pending Submission |
+| PP | Order Expired |
+| RR | Rejected by Buyer |
+| SD | Cancelling |
+| SE | Pending Amendment |
+| SR | Rejected by Exchange |
+| SS | Submitted |
+| TP | Partially Filled |
+| TS | Fully Filled |
+| U1 | Original Order Pending Cancellation |
+| U5 | Pending Cancel/Amend Result |
+
+ 
+
+## 10.2 Underlying (Stock) Order Status
+
+| **Code** | **Meaning** |
+| :-- | :-- |
+| 0 | Rejected by Exchange |
+| 1 | Open |
+| 2 | Sent |
+| 3 | Cancelled |
+| 4 | Matched |
+| 5 | Expired |
+| 6 | Rejected |
+| 7 | Completed |
+| 8 | Pending Send |
+| 9 | Pending Approval |
+| 10 | Amended |
+| 11 | Sending |
+| 12 | Fully Matched |
+| 13 | Pending Confirmation |
+| 14 | Processing |
+| 15 | Processed |
+| A | Amending |
+| C | Cancelling |
+| P | Pending Processing |
+| E | Expired |
+| R | Cancelled |
+| W | Pending Bank Margin Deposit |

@@ -1,0 +1,127 @@
+---
+title: "Underlying"
+description: "Returns underlying all asset data for an account."
+---
+
+## Endpoint
+
+```text
+GET /oapi/accounts/:accountId/underlying/assets
+```
+
+Returns underlying asset data for an account.
+
+### Required path parameters
+
+- `accountId` — underlying sub account ID.
+
+### Response fields
+
+- `s` (`string`) — Request status. Always returns `ok`.
+- `d` (`array`) — Account asset rows.
+
+## Account Asset fields
+
+- `afacctno` (`string`) — Sub-account number.
+- `pp` (`number`) — Buying power.
+- `balance` (`number`) — Cash balance.
+- `balancemainsub` (`number`) — Main account balance.
+- `baldefovd` (`number`) — Withdrawable cash balance.
+- `totalcashsend` (`number`) — Total pending buy amount.
+- `ovamt` (`number`) — Estimated loan amount for the day.
+- `avladvance` (`number`) — Advanceable cash amount.
+- `totalcashreceive` (`number`) — Total pending sell proceeds.
+- `cashreceivingt1` (`number`) — T1 sell proceeds.
+- `cashreceivingt2` (`number`) — T2 sell proceeds.
+- `totalloan` (`number`) — Current loan balance.
+- `dueamt` (`number`) — Due amount payable today.
+- `addamt` (`number`) — Maintenance amount.
+- `marginrate` (`number`) — Real-time ratio (RTT).
+- `receiving_right` (`number`) — Pending dividend amount.
+
+## cURL
+
+```bash
+curl "$BASE_URL/oapi/accounts/$ACCOUNT_ID/underlying/assets" \
+  -H "Authorization: Bearer $ACCESS_TOKEN"
+```
+
+## Example response
+
+```json
+{
+    "s": "ok",
+    "d": [
+        {
+            "accounttype": "C",
+            "fullname": "ĐOÀN XUÂN DƯƠNG",
+            "afacctno": "0301001424",
+            "descstatus": "Hoạt động",
+            "pp": 176,
+            "balancebuf": 176,
+            "advanceline": 0,
+            "baldefovd": 176,
+            "bankavlbal": 0,
+            "bankbalance": 0,
+            "avladvance": 0,
+            "aamt": 0,
+            "bamt": 0,
+            "odamt": 0,
+            "dealpaidamt": 0,
+            "outstanding": 0,
+            "floatamt": 0,
+            "receiving": 0,
+            "netting": 0,
+            "cashreceivingt0": 0,
+            "cashreceivingt1": 0,
+            "cashreceivingt2": 0,
+            "cashreceivingt3": 0,
+            "totalcashreceive": 0,
+            "cashreceivingtn": 0,
+            "cashsendingt0": 0,
+            "totalcashsend": 0,
+            "cashsendingt1": 0,
+            "cashsendingt2": 0,
+            "cashsendingt3": 0,
+            "cashsendingtn": 0,
+            "cashpendwithdraw": 0,
+            "cashpendtransfer": 0,
+            "avladvt3": 0,
+            "avladvt1": 0,
+            "avladvt2": 0,
+            "cashpendingsend": 0,
+            "casht2sending": 0,
+            "avlwithdraw": 176,
+            "ppref": 176,
+            "advlimit": 0,
+            "seamt": 0,
+            "dueamt": 0,
+            "ovamt": 0,
+            "marginrate": 100000,
+            "callamtmb": 0,
+            "callamtmr": 0,
+            "callamtmc": 0,
+            "t0odamt": 0,
+            "dpodamt": 0,
+            "careceiving": 0,
+            "balancemainsub": 176,
+            "addamt": 0,
+            "balance": 176,
+            "corebank": "N",
+            "totalloan": 0,
+            "netassval": 176,
+            "pnlamt": 0,
+            "sesecured": 0,
+            "mrirate": 0,
+            "exctime": "14:58:29",
+            "payinday": -176,
+            "receivingright": 0,
+            "totalbalance": 176,
+            "iscorebank": "N",
+            "bankstatus": null
+        }
+    ]
+}
+```
+
+> Replace `BASE_URL`, `ACCOUNT_ID`, and `ACCESS_TOKEN` with your values.

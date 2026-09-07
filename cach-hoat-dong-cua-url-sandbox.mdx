@@ -1,0 +1,12 @@
+---
+title: "Cách hoạt động của URL Sandbox"
+---
+
+Mỗi endpoint của FlashAPI đều được tài liệu hóa với đường dẫn Production bắt đầu bằng **/oapi**. Để gọi cùng endpoint đó trong Sandbox, hãy chèn **/sandbox** ngay **trước /oapi** và giữ nguyên toàn bộ phần còn lại của đường dẫn, query string, và body.
+
+| **Môi trường** | **Mẫu base URL** | **Ví dụ — Lấy dữ liệu mới nhất của mã chứng khoán** |
+| :-- | :-- | :-- |
+| Production | [\{your\_path\}/oapi/](https://flashapi.phs.vn/oapi)... | [\{your\_path\}](https://flashapi.phs.vn/oapi)[/oapi/priceboard/symbol-latest-data](https://flashapi.phs.vn/oapi/priceboard/symbol-latest-data) |
+| Sandbox | [https://flashapi.phs.vn/sandbox/oapi/](https://flashapi.phs.vn/sandbox/oapi)... | [https://flashapi.phs.vn/sandbox/oapi/priceboard/symbol-latest-data](https://flashapi.phs.vn/sandbox/oapi/priceboard/symbol-latest-data) |
+
+Mọi ví dụ code trong tài liệu này đều đã sử dụng sẵn base URL của Sandbox, vì vậy bạn có thể sao chép request và chạy ngay. Khi đã sẵn sàng chuyển sang Production, bạn chỉ cần thay base URL — còn đường dẫn, tham số và headers thì giữ nguyên.

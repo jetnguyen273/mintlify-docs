@@ -1,0 +1,110 @@
+---
+title: "Get symbol matching data"
+description: "Returns matching data for a symbol."
+---
+
+## Endpoint
+
+```text
+GET /oapi/priceboard/symbol-matching-data
+```
+
+### Test this API in our Sandbox using simulated data.
+
+_Try the **Sandbox** to see how the API works with simulated data — no production account or live trading required._
+
+```text
+GET https://flashapi.phs.vn/sandbox/oapi/priceboard/symbol-matching-data
+```
+
+[**View Sandbox Guide →**](https://flashapi.phs.vn/docs/market)
+
+## Required query parameters
+
+- `symbol` — Symbol code. Example: `ACB`
+- `fetchCount` — Number of matching records to return. Example: `10`
+
+## Field descriptions
+
+- `fromIndex` (`number`) — Start volume index for the returned range.
+- `toIndex` (`number`) — End volume index for the returned range.
+- `data` (`array`) — Matching records in the selected range.
+  - `o` (`number | null`) — Open price.
+  - `ti` (`number`) — Match timestamp.
+  - `c` (`number`) — Latest matched price.
+  - `ch` (`number`) — Price change.
+  - `h` (`number`) — High price.
+  - `l` (`number`) — Low price.
+  - `mb` (`string`) — Match side. Example: `BUY` or `SELL`.
+  - `mv` (`number`) — Matched volume for this record.
+  - `r` (`number`) — Change rate.
+  - `va` (`number`) — Trading value after this match.
+  - `vo` (`number`) — Trading volume after this match.
+
+## cURL
+
+```bash
+curl -G "$BASE_URL/oapi/priceboard/symbol-matching-data" \
+  --data-urlencode "symbol=ACB" \
+  --data-urlencode "fetchCount=10"
+```
+
+## Python
+
+```python
+import requests
+
+BASE_URL = "https://api.example.com"
+
+params = {
+    "symbol": "ACB",
+    "fetchCount": 10,
+}
+
+response = requests.get(
+    f"{BASE_URL}/oapi/priceboard/symbol-matching-data",
+    params=params,
+)
+response.raise_for_status()
+
+print(response.json())
+```
+
+## Example response
+
+```json
+{
+    "fromIndex": 13745600,
+    "toIndex": 13775200,
+    "data": [
+        {
+            "o": null,
+            "ti": 1773992700007,
+            "c": 23000,
+            "ch": -600,
+            "h": 23500,
+            "l": 23000,
+            "mb": "SELL",
+            "mv": 6400,
+            "r": -2.54,
+            "va": 319093870000,
+            "vo": 13775200
+        },
+        {
+            "o": null,
+            "ti": 1773992700007,
+            "c": 23000,
+            "ch": -600,
+            "h": 23500,
+            "l": 23000,
+            "mb": "SELL",
+            "mv": 100,
+            "r": -2.54,
+            "va": 318946670000,
+            "vo": 13768800
+        }
+    ]
+}
+```
+
+> Replace `BASE_URL` with your API host.

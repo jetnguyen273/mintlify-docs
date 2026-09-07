@@ -1,0 +1,119 @@
+---
+title: "Sandbox dùng để làm gì?"
+description: "Tổng quan về môi trường Sandbox của PHS OpenAPI (FlashAPI)"
+---
+
+**PHS OpenAPI (FlashAPI)** là nền tảng API chính thức của **Công ty Cổ phần Chứng khoán Phú Hưng (PHS)**. Tài liệu này dành cho những người lần đầu kiểm thử **FlashAPI**.
+
+## Sandbox dùng để làm gì?
+
+**Sandbox** là môi trường kiểm thử an toàn của FlashAPI.
+
+Sandbox sử dụng cùng cấu trúc API với Production, bao gồm:
+
+- Đường dẫn API
+- Tham số request
+- Cấu trúc request
+- Cấu trúc response
+- Luồng authentication
+
+Tuy nhiên, dữ liệu và giao dịch trong Sandbox được tách biệt hoàn toàn khỏi môi trường Production.
+
+## Sandbox hoạt động như thế nào?
+
+### Market Data
+
+Các API dữ liệu thị trường luôn trả về **một bộ dữ liệu mẫu cố định**.
+
+Sandbox giúp bạn kiểm tra:
+
+- Tên field
+- Kiểu dữ liệu
+- Cấu trúc response
+- Cách xử lý dữ liệu trong ứng dụng
+
+### Trading
+
+Các API giao dịch vẫn thực hiện validation request đầy đủ nhưng **không gửi lệnh đến sàn giao dịch thật**.
+
+Do đó:
+
+- Không có lệnh thật được tạo
+- Không có tiền thật được sử dụng
+- Không ảnh hưởng đến tài khoản giao dịch thật
+
+### Authentication
+
+Sandbox hỗ trợ tài khoản demo để kiểm thử authentication.
+
+Các API login trả về **token cố định**, bao gồm:
+
+- `access_token`
+- `refresh_token`
+- `otp_token`
+
+Sandbox không yêu cầu OTP thật từ SMS hoặc thiết bị OTP.
+
+<Note>
+  **Sandbox OTP:** Sử dụng giá trị OTP cố định được cung cấp trong tài liệu authentication tương ứng. Không tự tạo OTP khi kiểm thử Sandbox.
+</Note>
+
+### Ví dụ quy trình
+
+```text
+Đăng nhập
+   ↓
+Lấy thông tin thị trường
+   ↓
+Tra cứu tài khoản / danh mục
+   ↓
+Đặt lệnh
+   ↓
+Kiểm tra trạng thái lệnh
+   ↓
+Sửa hoặc hủy lệnh
+```
+
+Tất cả các bước giao dịch trên đều được thực hiện trong môi trường Sandbox và không tạo ra giao dịch thật.
+
+## Sandbox vs Production
+
+|  | Sandbox | Production |
+| --- | --- | --- |
+| **Mục đích** | Development & Testing | Giao dịch thật |
+| **Market Data** | Dữ liệu mẫu cố định | Dữ liệu thị trường thực |
+| **Trading** | Mô phỏng | Gửi lệnh thật |
+| **Tiền** | Không sử dụng tiền thật | Có thể phát sinh giao dịch tài chính thực |
+| **Authentication** | Tài khoản demo | Tài khoản Production |
+| **OTP** | OTP mẫu cố định | OTP thật |
+| **Rủi ro** | Không có rủi ro tài chính | Có rủi ro tài chính |
+
+<Tip>
+  **Khuyến nghị:** Hoàn tất việc phát triển và kiểm thử integration trên Sandbox trước khi chuyển sang Production.
+</Tip>
+
+## Khi nào chuyển sang Production?
+
+Chỉ chuyển sang Production khi:
+
+<Steps>
+  <Step title="Kiểm thử hoàn chỉnh trên Sandbox">
+    Integration đã được kiểm thử hoàn chỉnh trên Sandbox.
+  </Step>
+  <Step title="Xác nhận request/response">
+    Các request và response đã được xác nhận.
+  </Step>
+  <Step title="Xác nhận luồng authentication">
+    Luồng authentication đã hoạt động đúng.
+  </Step>
+  <Step title="Kiểm thử luồng giao dịch">
+    Luồng giao dịch đã được kiểm thử.
+  </Step>
+  <Step title="Được PHS phê duyệt">
+    Bạn đã được **PHS phê duyệt quyền truy cập OpenAPI Production**.
+  </Step>
+</Steps>
+
+<Warning>
+  Không sử dụng tài khoản thật hoặc Production credentials cho quá trình development và testing. Hãy hoàn tất kiểm thử trên Sandbox trước khi thực hiện giao dịch trên Production.
+</Warning>

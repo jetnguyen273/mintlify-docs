@@ -1,0 +1,72 @@
+---
+title: "Appendix"
+---
+
+## Full Endpoint Quick Reference
+
+The following table provides a complete overview of the Flash API endpoints covered in this documentation.
+
+| API | Method | Path |
+| --- | --- | --- |
+| **A1. Get Symbol Latest Data** | GET | `/priceboard/symbol-latest-data` |
+| **A2. Get Symbol Statics Data** | GET | `/priceboard/symbol-statics-data` |
+| **A3. Get Symbol Matching Data** | GET | `/priceboard/symbol-matching-data` |
+| **A4. Get All Stocks** | GET | `/priceboard/all-stocks` |
+| **A5. Get Candlestick Data** | GET | `/priceboard/candlestick-data` |
+| **B1. Authentication — Underlying** | POST | `/auth/gen-secret-key/underlying` |
+| **B2. Authentication — Derivative** | POST | `/auth/gen-secret-key/derivative` |
+| **C1. Place Order — Underlying** | POST | `/accounts/:accountId/orders/underlying` |
+| **C2. Update Order — Underlying** | PUT | `/accounts/:accountId/orders/underlying/:orderId` |
+| **C3. Cancel Order — Underlying** | DELETE | `/accounts/:accountId/orders/underlying/:orderId` |
+| **C4. Get Underlying Buying Power** | GET | `/accounts/:accountId/underlying/buyingPower` |
+| **D1. Place Order — Derivative** | POST | `/accounts/:accountId/orders/derivative` |
+| **D2. Update Order — Derivative** | PUT | `/accounts/:accountId/orders/derivative/:orderId` |
+| **D3. Cancel Order — Derivative** | DELETE | `/accounts/:accountId/orders/derivative/:orderId` |
+| **D4. Get Derivative Buying Power** | GET | `/accounts/:accountId/derivative/buyingPower` |
+| **E1. Portfolio — Underlying** | GET | `/accounts/:accountId/underlying/portfolio` |
+| **E2. Daily Order — Underlying** | GET | `/accounts/:accountId/underlying/dailyOrder` |
+| **E3. Order Report — Underlying** | GET | `/accounts/:accountId/underlying/orderReport` |
+| **E4. Balance / Assets — Underlying** | GET | `/accounts/:accountId/underlying/assets` |
+| **F1. Open Positions — Derivative** | GET | `/accounts/:accountId/derivative/openPositions` |
+| **F2. Closed Positions — Derivative** | GET | `/accounts/:accountId/derivative/closedPositions` |
+| **F3. Daily Order — Derivative** | GET | `/accounts/:accountId/derivative/dailyOrder` |
+| **F4. Order Report / Order History — Derivative** | GET | `/accounts/:accountId/derivative/orderHistory` |
+| **F5. Balance / Assets — Derivative** | GET | `/accounts/:accountId/derivative/assets` |
+
+## Postman Environment Variables
+
+Use the following environment variables when testing Flash API with Postman.
+
+| Variable | Example Value | Set By |
+| --- | --- | --- |
+| `base_url` | `https://flashapi.phs.vn/sandbox/oapi` | Pre-filled in the attached environment |
+| `username` | Your Sandbox demo username | You |
+| `password` | Your Sandbox demo password | You |
+| `access_token` | Auto-filled after authentication | Authentication request test script |
+| `otp_token` | Auto-filled after authentication | Authentication request test script |
+| `account_id` | Your Sandbox test account ID | You |
+| `order_id` | Auto-filled from the Place Order response | Place Order request test script |
+
+### Recommended Postman Flow
+
+```text
+1. Set Sandbox credentials
+        ↓
+2. Set account_id
+        ↓
+3. Run Authentication
+        ↓
+4. access_token + otp_token are stored automatically
+        ↓
+5. Call Account / Trading APIs
+        ↓
+6. Place Order
+        ↓
+7. order_id is stored automatically
+        ↓
+8. Use order_id for Update / Cancel / Order Report APIs
+```
+
+> **Tip:** Keep `base_url` environment-based so you can switch between Sandbox and Production without changing individual request URLs.
+
+> **Sandbox:** The example `base_url` points to the Sandbox environment. Use Production credentials and the Production base URL only after your Production OpenAPI access has been approved.

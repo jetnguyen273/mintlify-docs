@@ -1,0 +1,95 @@
+---
+title: "Nhóm API Xác thực"
+---
+
+Mọi API thuộc nhóm **Giao dịch** và **Tài khoản/Danh mục/Số dư** đều yêu cầu token từ nhóm này trước. Có hai API đăng nhập độc lập — một dành cho **tài khoản cơ sở (chứng khoán)** và một dành cho **tài khoản phái sinh** — vì PHS quản lý hai sản phẩm này như hai quyền giao dịch riêng biệt.
+
+> **Xác thực:** Nhóm này tạo ra thông tin xác thực (token) mà mọi lệnh gọi API cần xác thực khác đều cần dùng.
+
+## B1. Xác thực — Cơ sở
+
+Đăng nhập bằng tài khoản giao dịch chứng khoán cơ sở và trả về `access_token`, `refresh_token` và `otp_token`.
+
+**POST `/auth/gen-secret-key/underlying`**
+
+### URL Sandbox
+
+```text
+https://flashapi.phs.vn/sandbox/oapi/auth/gen-secret-key/underlying
+```
+
+### Tham số
+
+| **Vị trí** | **Tên** | **Bắt buộc** | **Mô tả** |
+| :-- | :-- | :-- | :-- |
+| body | `username` | Có | Tên đăng nhập tài khoản. Ví dụ: `022C099995` |
+| body | `password` | Có | Mật khẩu tài khoản. Ví dụ: `123456aA@` |
+
+### Ví dụ yêu cầu (cURL gọi vào Sandbox)
+
+```bash
+curl -X POST "https://flashapi.phs.vn/sandbox/oapi/auth/gen-secret-key/underlying" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "username": "<sandbox_username>",
+    "password": "<sandbox_password>"
+  }'
+```
+
+### Ví dụ phản hồi từ Sandbox
+
+```json
+{
+  "access_token": "022C099995||KRYRTHUYUI||<...token dài...>",
+  "refresh_token": "022C099995||KRYRTHUYUI||<...token dài...>",
+  "expires_in": 28800,
+  "otp_token": "552066a35eb30a9815afc952b14287a8",
+  "token_type": "Bearer"
+}
+```
+
+> **Hành vi trên Sandbox:** Sandbox chấp nhận tài khoản/mật khẩu demo được cấp cho bạn trong quá trình đăng ký (liên hệ bộ phận hỗ trợ OpenAPI của PHS nếu bạn chưa có) và luôn trả về đúng một bộ `access_token`, `refresh_token` và `otp_token` cố định như bên dưới. Hãy sử dụng chính xác các giá trị được trả về — đừng kỳ vọng chúng sẽ thay đổi giữa các lần gọi. Mã OTP mẫu cố định của Sandbox cho lượt đăng nhập này là `552066a35eb30a9815afc952b14287a8` — đây chính là giá trị bạn sẽ dùng sau này cho header `x-otp-token` khi đặt lệnh cơ sở.
+
+## B2. Xác thực — Phái sinh
+
+Đăng nhập bằng tài khoản giao dịch phái sinh và trả về `access_token`, `refresh_token` và `otp_token`.
+
+**POST `/auth/gen-secret-key/derivative`**
+
+### URL Sandbox
+
+```text
+https://flashapi.phs.vn/sandbox/oapi/auth/gen-secret-key/derivative
+```
+
+### Tham số
+
+| **Vị trí** | **Tên** | **Bắt buộc** | **Mô tả** |
+| :-- | :-- | :-- | :-- |
+| body | `username` | Có | Tên đăng nhập tài khoản. Ví dụ: `022C099995` |
+| body | `password` | Có | Mật khẩu tài khoản. Ví dụ: `123456aA@` |
+
+### Ví dụ yêu cầu (cURL gọi vào Sandbox)
+
+```bash
+curl -X POST "https://flashapi.phs.vn/sandbox/oapi/auth/gen-secret-key/derivative" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "username": "<sandbox_username>",
+    "password": "<sandbox_password>"
+  }'
+```
+
+### Ví dụ phản hồi từ Sandbox
+
+```json
+{
+  "access_token": "022C099995||KRYRTHUYUI||<...token dài...>",
+  "refresh_token": "022C099995||KRYRTHUYUI||<...token dài...>",
+  "expires_in": 28800,
+  "otp_token": "2c897da51e69cd6f3a0701884ed706ac",
+  "token_type": "Bearer"
+}
+```
+
+> **Hành vi trên Sandbox:** Sandbox chấp nhận tài khoản/mật khẩu demo được cấp cho bạn trong quá trình đăng ký (liên hệ bộ phận hỗ trợ OpenAPI của PHS nếu bạn chưa có) và luôn trả về đúng một bộ `access_token`, `refresh_token` và `otp_token` cố định như bên dưới. Hãy sử dụng chính xác các giá trị được trả về — đừng kỳ vọng chúng sẽ thay đổi giữa các lần gọi. Mã OTP mẫu cố định của Sandbox cho lượt đăng nhập này là `2c897da51e69cd6f3a0701884ed706ac` — đây chính là giá trị bạn sẽ dùng sau này cho header `x-otp-token` khi đặt lệnh phái sinh.

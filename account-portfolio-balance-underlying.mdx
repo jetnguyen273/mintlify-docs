@@ -1,0 +1,156 @@
+---
+title: "Account, Portfolio & Balance APIs — Underlying"
+---
+
+Read-only (GET) endpoints for a stock account. All require Authorization: Bearer \<access\_token\> from B1. No x-otp-token is needed since nothing is being submitted.
+
+**Authentication: ** Requires: Authorization: Bearer \<access\_token\> from B1. GET only.
+
+## E1. Portfolio (Underlying)
+
+Returns the current stock holdings for an account (quantity, average cost, market value, unrealized P/L, etc.).
+
+** GET   /accounts/:accountId/underlying/portfolio**
+
+### Sandbox URL
+
+[https://flashapi.phs.vn/sandbox/oapi/accounts/:accountId/underlying/portfolio](https://flashapi.phs.vn/sandbox/oapi/accounts/:accountId/underlying/portfolio)
+
+ 
+
+### Parameters
+
+| **Location** | **Name** | **Required** | **Description** |
+| :-- | :-- | :-- | :-- |
+| path | accountId | Yes | Trading account ID. |
+
+ 
+
+### Example Request (cURL against Sandbox)
+
+curl "[https://flashapi.phs.vn/sandbox/oapi/accounts/\$ACCOUNT\_ID/underlying/portfolio](https://flashapi.phs.vn/sandbox/oapi/accounts/$ACCOUNT_ID/underlying/portfolio)" \\
+
+  -H "Authorization: Bearer \$ACCESS\_TOKEN"
+
+ 
+
+### Example Sandbox Response
+
+\{ "s": "ok", "d": \[ \{ "symbol": "ACV", "total": 3551, "costPrice": 61193,
+
+      "basicprice": 49000, "pnlAmt": -43297343, "pnlRate": -19.93 \} \] \}
+
+**Sandbox behavior: ** Sandbox returns one fixed example record for any accountId you pass, so you can validate field names and data types before pointing your integration at Production, where the data reflects the real account.
+
+## E2. Daily Order (Underlying)
+
+Returns the current trading day's stock orders for an account.
+
+** GET   /accounts/:accountId/underlying/dailyOrder**
+
+### Sandbox URL
+
+[https://flashapi.phs.vn/sandbox/oapi/accounts/:accountId/underlying/dailyOrder](https://flashapi.phs.vn/sandbox/oapi/accounts/:accountId/underlying/dailyOrder)
+
+ 
+
+### Parameters
+
+| **Location** | **Name** | **Required** | **Description** |
+| :-- | :-- | :-- | :-- |
+| path | accountId | Yes | Trading account ID. |
+
+ 
+
+### Example Request (cURL against Sandbox)
+
+curl "[https://flashapi.phs.vn/sandbox/oapi/accounts/\$ACCOUNT\_ID/underlying/dailyOrder](https://flashapi.phs.vn/sandbox/oapi/accounts/$ACCOUNT_ID/underlying/dailyOrder)" \\
+
+  -H "Authorization: Bearer \$ACCESS\_TOKEN"
+
+ 
+
+### Example Sandbox Response
+
+\{ "s": "ok", "d": \[ \{ "orderid": "8000180326000188", "symbol": "ACB",
+
+      "orderqtty": 100, "quoteprice": 22100, "status": "Chờ gửi", "exectypedesc": "Buy" \} \] \}
+
+**Sandbox behavior: ** Sandbox returns one fixed example record for any accountId you pass, so you can validate field names and data types before pointing your integration at Production, where the data reflects the real account.
+
+## E3. Order Report (Underlying)
+
+Returns historical stock orders for an account within a date range, with running totals (buy/sell volume, value, cancellations).
+
+** GET   /accounts/:accountId/underlying/orderReport**
+
+### Sandbox URL
+
+[https://flashapi.phs.vn/sandbox/oapi/accounts/:accountId/underlying/orderReport](https://flashapi.phs.vn/sandbox/oapi/accounts/:accountId/underlying/orderReport)
+
+ 
+
+### Parameters
+
+| **Location** | **Name** | **Required** | **Description** |
+| :-- | :-- | :-- | :-- |
+| path | accountId | Yes | Trading account ID. |
+| query | fromDate | No | Start date, DD/MM/YYYY. Example: 16/03/2026 |
+| query | toDate | No | End date, DD/MM/YYYY. Example: 20/03/2026 |
+| query | symbol | No | Filter by symbol. Example: ACB |
+
+ 
+
+### Example Request (cURL against Sandbox)
+
+curl -G "[https://flashapi.phs.vn/sandbox/oapi/accounts/\$ACCOUNT\_ID/underlying/orderReport](https://flashapi.phs.vn/sandbox/oapi/accounts/$ACCOUNT_ID/underlying/orderReport)" \\
+
+  -H "Authorization: Bearer \$ACCESS\_TOKEN" \\
+
+  --data-urlencode "fromDate=16/03/2026" --data-urlencode "toDate=20/03/2026" --data-urlencode "symbol=ACB"
+
+ 
+
+### Example Sandbox Response
+
+\{ "s": "ok", "d": \[ \{ "orderid": "8000180326000188", "symbol": "ACB",
+
+      "exectype": "Buy", "orderqtty": 100, "totalorder": 1 \} \] \}
+
+**Sandbox behavior: ** Sandbox returns one fixed example record for any accountId you pass, so you can validate field names and data types before pointing your integration at Production, where the data reflects the real account.
+
+## E4. Balance / Assets (Underlying)
+
+Returns cash and buying-power balance data for a stock account. Passing symbol and quotePrice additionally returns the max quantity you could buy at that price.
+
+** GET   /accounts/:accountId/underlying/assets**
+
+### Sandbox URL
+
+[https://flashapi.phs.vn/sandbox/oapi/accounts/:accountId/underlying/assets](https://flashapi.phs.vn/sandbox/oapi/accounts/:accountId/underlying/assets)
+
+ 
+
+### Parameters
+
+| **Location** | **Name** | **Required** | **Description** |
+| :-- | :-- | :-- | :-- |
+| path | accountId | Yes | Trading account ID. |
+| query | symbol | No | Symbol for trading-availability calc. Example: ACB |
+| query | quotePrice | No | Quote price for the calc. Example: 23000 |
+
+ 
+
+### Example Request (cURL against Sandbox)
+
+curl "[https://flashapi.phs.vn/sandbox/oapi/accounts/\$ACCOUNT\_ID/underlying/assets?symbol=ACB&quotePrice=23000](https://flashapi.phs.vn/sandbox/oapi/accounts/$ACCOUNT_ID/underlying/assets?symbol=ACB&quotePrice=23000)" \\
+
+  -H "Authorization: Bearer \$ACCESS\_TOKEN"
+
+ 
+
+### Example Sandbox Response
+
+\{ "s": "ok", "d": \[ \{ "ppse": 944754, "maxqty": 0, "trade": 0, "rtt": 124.82 \} \] \}
+
+**Sandbox behavior: ** Sandbox returns one fixed example record for any accountId you pass, so you can validate field names and data types before pointing your integration at Production, where the data reflects the real account. Without symbol/quotePrice, maxqty and trade return 0 — this is documented behavior

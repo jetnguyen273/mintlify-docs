@@ -1,0 +1,20 @@
+---
+title: "Xác thực tài khoản"
+---
+
+**FlashAPI** có hai cơ chế đăng nhập độc lập — một cho tài khoản cổ phiếu (sản phẩm cơ sở), một cho tài khoản phái sinh — vì hai sản phẩm này là hai quyền giao dịch riêng biệt trên một tài khoản PHS. Mục B sẽ trình bày đầy đủ cả hai endpoint đăng nhập; phần này giải thích quy trình liên kết đăng nhập với các chức năng còn lại.
+
+**Những nhóm API nào cần đăng nhập trước?**
+
+- Section A (Market Data / Priceboard) — không cần đăng nhập. Có thể gọi trực tiếp.
+- Section C, D, E, F (Trading và Account/Portfolio/Balance) — luôn cần đăng nhập từ Section B trước.
+
+**Các bước thực hiện**
+
+1. Gọi endpoint đăng nhập tương ứng trong Section B — `/auth/gen-secret-key/underlying` cho tài khoản cổ phiếu, hoặc `/auth/gen-secret-key/derivative` cho tài khoản phái sinh — kèm theo username và password.
+2. Lấy `access_token` và `otp_token` từ phản hồi.
+3. Với mọi request GET trong Section C–F, gửi `access_token` trong header `Authorization: Bearer <access_token>`.
+4. Với mọi request đặt lệnh dạng POST, PUT hoặc DELETE (Section C và D), đồng thời gửi thêm: `x-otp-token: <otp_token>`, `x-lang: vi`, và `x-via: K`.
+5. Trong Sandbox, `x-otp-token` phải là giá trị fixture cố định được ghi trên trang đăng nhập tương ứng (Section B1 / B2) — không phải giá trị do bạn tự tạo. Trong Production, giá trị này sẽ là OTP thực được gửi đến khách hàng.
+
+> **Lưu ý quan trọng cho Sandbox:** Bạn không cần thiết bị OTP thật hoặc SMS để kiểm thử đặt lệnh trong Sandbox. Hãy sử dụng giá trị fixed fixture OTP token được hiển thị trong Section B cho đúng loại sản phẩm (cơ sở hoặc phái sinh) mỗi lần gọi.

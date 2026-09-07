@@ -1,0 +1,41 @@
+---
+title: "API Giao dịch — Cổ phiếu (Cơ sở)"
+---
+
+Đặt, sửa và hủy lệnh cổ phiếu. Mỗi request đều yêu cầu `access_token` từ B1 (Xác thực — Cơ sở). Các request POST, PUT và DELETE additionally yêu cầu các header `x-otp-token`, `x-lang` và `x-via`.
+
+**Xác thực:** Yêu cầu: `Authorization: Bearer <access_token>` từ B1. POST/PUT/DELETE additionally yêu cầu `x-otp-token: 552066a35eb30a9815afc952b14287a8` (giá trị cố định trong Sandbox), `x-lang: vi`, `x-via: K`.
+
+## C1. Đặt lệnh (Cổ phiếu)
+
+Gửi một lệnh cổ phiếu mới cho tài khoản giao dịch phụ.
+
+**POST /accounts/:accountId/orders/underlying**
+
+### Sandbox URL
+
+[https://flashapi.phs.vn/sandbox/oapi/accounts/:accountId/orders/underlying](https://flashapi.phs.vn/sandbox/oapi/accounts/:accountId/orders/underlying)
+
+### Tham số
+
+| **Vị trí** | **Tên** | **Bắt buộc** | **Mô tả** |
+| :-- | :-- | :-- | :-- |
+| path | accountId | Có | Mã tài khoản giao dịch phụ. |
+| body | instrument | Có | Mã chứng khoán. Ví dụ: ACB |
+| body | qty | Có | Khối lượng đặt lệnh. Ví dụ: 1 |
+| body | side | Có | Bên đặt lệnh. Ví dụ: buy |
+| body | type | Có | Loại lệnh. Ví dụ: LO |
+| body | limitPrice | Có | Giá giới hạn. Ví dụ: 23000 |
+| body | timetype | Có | Thời hạn lệnh. Ví dụ: T |
+
+### Ví dụ request (cURL cho Sandbox)
+
+```bash
+curl -X POST "https://flashapi.phs.vn/sandbox/oapi/accounts/$ACCOUNT_ID/orders/underlying" \
+  -H "Authorization: Bearer $ACCESS_TOKEN" \
+  -H "Content-Type: application/json" \
+  -H "x-lang: vi" -H "x-via: K" \
+  -H "x-otp-token: 552066a35eb30a9815afc952b14287a8" \
+  -d '{ "instrument": "ACB", "qty": 1, "side": "buy", "type": "LO",
+        "limitPrice": 23000, "timetype": "T" }'
+```

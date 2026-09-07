@@ -1,0 +1,183 @@
+---
+title: "Trading data WebSocket (EQT+FNO)"
+description: "How to connect a socket to receive realtime order, buying power, and portfolio data from FlashOAPI."
+---
+
+## Overview
+
+This channel streams realtime **account-related** data: orders, buying power, and portfolio — over Socket.IO. It is a **separate** channel from Priceboard (see [Connecting to Priceboard](https://flashapi.phs.vn/docs/websocket/market-data)) and **requires a valid access token**.
+
+<Info>
+  There are two distinct paths depending on product type — use the one matching the account you're working with:
+
+  - **Stocks / underlying securities:** `eqt`
+  - **Derivatives:** `fno`
+</Info>
+
+## Connection details
+
+| Setting | Underlying (EQT) | Derivatives (FNO) |
+| --- | --- | --- |
+| **Host (Production)** | `https://flashapi.phs.vn` | `https://flashapi.phs.vn` |
+| **Socket.IO path** | `/realtime/eqt/socket.io` | `/realtime/fno/socket.io` |
+| **Transport** | `websocket` | `websocket` |
+
+## Prerequisites
+
+Before connecting, you need:
+
+1. **`access_token`** — obtained from the login API (`auth/gen-secret-key/underlying`). It must still be valid at the time you subscribe.
+2. **`sub_account_id`** (trading sub-account) — **NOT** your login username / custody code (e.g. `022Cxxxxxx`). This is the actual trading sub-account number, formatted like `0301001425`. Using the wrong value here causes `FO20010 - Invalid sub-account` errors elsewhere in the API, and prevents the realtime subscription from returning the correct account data.
+
+<Warning>
+  Confusing the login/custody code with the trading sub-account (`accountId`) is the most common integration mistake for this channel. If unsure, obtain the exact `accountId` from the trading app or PHS operations team.
+</Warning>
+
+## Connection steps
+
+<Steps>
+  <Step title="Log in to get an access_token">
+    Call the auth API to obtain a valid token for the session.
+  </Step>
+  <Step title="Initialize the client">
+    Connect to the matching host \+ path (`eqt` or `fno`), forcing the `websocket` transport.
+  </Step>
+  <Step title="Send the subscribe payload">
+    After `connect`, emit a `get` event with a payload containing your `sub_account_id` and `access_token`.
+  </Step>
+  <Step title="Listen per channel">
+    The server pushes data through separate events by business type — see the mapping table below.
+  </Step>
+</Steps>
+
+## Example code (Node.js / JavaScript — Underlying/EQT)
+
+```javascript
+const io = require("socket.io-client");
+
+const SUB_ACCOUNT = "0301001425"; // Trading sub-account — NOT your login username
+const accessToken = "..."; // From the login API, never hardcoded
+
+const socket = io("https://flashapi.phs.vn", {
+  path: "/realtime/eqt/socket.io", // use /realtime/fno/socket.io for derivatives
+  transports: ["websocket"],
+});
+
+socket.on("connect", () => {
+  console.log("Connected:", socket.id);
+
+  socket.emit("get", {
+    data: {
+      args: [`account:${SUB_ACCOUNT}`],
+      op: "subscribe",
+      token: accessToken,
+    },
+    method: "get",
+    url: "/client/send",
+  });
+});
+
+// Main data channels
+socket.on("OM", (data) => console.log("Order Management:", data));
+socket.on("CI", (data) => console.log("Cash Info:", data));
+socket.on("SE", (data) => console.log("Securities Equity:", data));
+
+socket.on("connect_error", (err) => {
+  console.error("Connection error:", err.message);
+});
+
+socket.on("disconnect", (reason) => {
+  console.log("Disconnected:", reason);
+});
+```
+
+## Channel mapping
+
+| Event received | Full name | Meaning | Typical UI use |
+| --- | --- | --- | --- |
+| `OM` | Order Management | Order status updates (matched, cancelled, amended...) | Daily order book table |
+| `CI` | Cash Info | Buying power / cash updates | Buying power widget |
+| `SE` | Securities Equity | Portfolio holdings updates | Portfolio / holdings table |
+
+<Note>
+  Some older gateways may emit `instrument`, `trade`, `account` instead of `OM`/`CI`/`SE`. If you're unsure which gateway version you're on, register listeners for both naming sets for backward compatibility.
+</Note>
+
+## Response structure
+
+Account data arrives wrapped in a common envelope. The `EVENTTYPE` field inside `DT` — not the outer Socket.IO event name — is what actually tells you whether this is `OM`, `CI`, or `SE`.
+
+Real example — a `CI` (Cash Info / buying power) event:
+
+```json
+{
+  "type": "account",
+  "channel": "account",
+  "label": "Account",
+  "data": {
+    "ACC": "0102009737",
+    "DT": {
+      "MSGTYPE": "R",
+      "EVENTTYPE": "CI",
+      "AUTOID": "0102009737",
+      "ACCTNO": "0102009737",
+      "AFACCTNO": "0102009737",
+      "LOGTIME": "20260825-02:08:24",
+      "APPLYTIME": "20260731-12:07:00",
+      "PPREF": "10810",
+      "PP": "10810",
+      "BALANCE": "10858",
+      "BALDEFOVD": "10810.264",
+      "AVLWITHDRAW": "10810",
+      "AVLADVANCE": "0"
+    }
+  }
+}
+```
+
+### Common envelope (applies to every `EVENTTYPE`)
+
+| Field | Meaning |
+| --- | --- |
+| `type` / `channel` | Internal broadcast type (`account`) |
+| `label` | Display label (`Account`) |
+| `data.ACC` | Trading sub-account number (accountId) |
+| `data.DT.MSGTYPE` | Message type — `R` observed, likely Response/Realtime update |
+| `data.DT.EVENTTYPE` | **The actual data-channel code** — `OM` \| `CI` \| `SE` (branch your handling on this field, not the outer Socket.IO event name) |
+
+### `CI` (Cash Info — Buying Power) fields
+
+| Field | Meaning |
+| --- | --- |
+| `AUTOID` | Internal record ID — observed to match the sub-account number |
+| `ACCTNO` | Sub-account number |
+| `AFACCTNO` | Affiliated account number |
+| `LOGTIME` | Log timestamp, format `YYYYMMDD-HH:MM:SS` |
+| `APPLYTIME` | Effective timestamp for the data, same format |
+| `PPREF` | Purchasing Power Reference — _exact business meaning to be confirmed (e.g. start-of-day vs. pre-trade)_ |
+| `PP` | Current Purchasing Power (buying power) |
+| `BALANCE` | Cash balance in the account |
+| `BALDEFOVD` | _(to be confirmed)_ — likely balance after deducting overdue debt/advance |
+| `AVLWITHDRAW` | Amount available to withdraw |
+| `AVLADVANCE` | Amount available for cash advance |
+
+<Warning>
+  `PPREF` and `BALDEFOVD` are inferred from their abbreviated names and **have not been officially confirmed by PHS**. Verify against internal business documentation or the operations team before using them in calculations or customer-facing displays.
+</Warning>
+
+<Note>
+  The `DT` field structure for `OM` (Order Management) and `SE` (Securities Equity) differs from `CI` and will be added once a corresponding real sample is available.
+</Note>
+
+## Troubleshooting
+
+| Symptom | Likely cause | How to check |
+| --- | --- | --- |
+| `FO20010 - Invalid sub-account` | Used the login/custody code instead of `sub_account_id` | Confirm the `accountId` is in sub-account format (e.g. `0301001425`) |
+| Connects fine but no `OM`/`CI`/`SE` events | Expired token, or wrong `sub_account_id` in the subscribe payload | Re-login for a fresh token; log the exact `sub_account_id` sent |
+| Receives HTML / 301 instead of a Socket.IO handshake | Wrong path — used the Priceboard path or mistyped `eqt`/`fno` | Confirm the path matches the account type in use |
+| `connect_error` immediately on connect | Wrong host/path, or missing `transports: ["websocket"]` | Double-check client config against the example above |
+
+## Next step
+
+For realtime market data, see [Connecting to Priceboard](https://flashapi.phs.vn/docs/websocket/market-data).

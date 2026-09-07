@@ -1,0 +1,126 @@
+---
+title: "Cơ sở"
+description: "Trả về dữ liệu số dư cơ sở cho một tài khoản."
+---
+
+## Endpoint
+
+```text
+GET /oapi/accounts/:accountId/underlying/assets
+```
+
+Trả về dữ liệu số dư underlying cho một tài khoản.
+
+### Tham số đường dẫn
+
+- `accountId` — Mã tài khoản giao dịch.
+
+### Trường phản hồi
+
+- `s` (`string`) — Trạng thái request. Luôn trả về `ok`.
+- `d` (`array`) — Danh sách các dòng số dư.
+
+### Trường số dư
+
+- `afacctno` (`string`) — Tiểu khoản.
+- `pp` (`number`) — Sức mua.
+- `balance` (`number`) — Tiền mặt.
+- `balancemainsub` (`number`) — Tiền trên tài khoản chính.
+- `baldefovd` (`number`) — Tiền mặt có thể rút.
+- `totalcashsend` (`number`) — Tiền đặt mua.
+- `ovamt` (`number`) — Dự kiến phát vay trong ngày.
+- `avladvance` (`number`) — Tiền có thể ứng.
+- `totalcashreceive` (`number`) — Tổng tiền bán chờ về.
+- `cashreceivingt1` (`number`) — Tiền bán T1.
+- `cashreceivingt2` (`number`) — Tiền bán T2.
+- `totalloan` (`number`) — Dư nợ hiện tại.
+- `dueamt` (`number`) — Nợ đến hạn thanh toán trong ngày.
+- `addamt` (`number`) — Tiền đưa về duy trì.
+- `marginrate` (`number`) — RTT.
+- `receiving_right` (`number`) — Cổ tức chờ về.
+
+## cURL
+
+```bash
+curl "$BASE_URL/oapi/accounts/$ACCOUNT_ID/underlying/assets" \
+  -H "Authorization: Bearer $ACCESS_TOKEN"
+```
+
+## Ví dụ
+
+```json
+{
+    "s": "ok",
+    "d": [
+        {
+            "accounttype": "C",
+            "fullname": "ĐOÀN XUÂN DƯƠNG",
+            "afacctno": "0301001424",
+            "descstatus": "Hoạt động",
+            "pp": 176,
+            "balancebuf": 176,
+            "advanceline": 0,
+            "baldefovd": 176,
+            "bankavlbal": 0,
+            "bankbalance": 0,
+            "avladvance": 0,
+            "aamt": 0,
+            "bamt": 0,
+            "odamt": 0,
+            "dealpaidamt": 0,
+            "outstanding": 0,
+            "floatamt": 0,
+            "receiving": 0,
+            "netting": 0,
+            "cashreceivingt0": 0,
+            "cashreceivingt1": 0,
+            "cashreceivingt2": 0,
+            "cashreceivingt3": 0,
+            "totalcashreceive": 0,
+            "cashreceivingtn": 0,
+            "cashsendingt0": 0,
+            "totalcashsend": 0,
+            "cashsendingt1": 0,
+            "cashsendingt2": 0,
+            "cashsendingt3": 0,
+            "cashsendingtn": 0,
+            "cashpendwithdraw": 0,
+            "cashpendtransfer": 0,
+            "avladvt3": 0,
+            "avladvt1": 0,
+            "avladvt2": 0,
+            "cashpendingsend": 0,
+            "casht2sending": 0,
+            "avlwithdraw": 176,
+            "ppref": 176,
+            "advlimit": 0,
+            "seamt": 0,
+            "dueamt": 0,
+            "ovamt": 0,
+            "marginrate": 100000,
+            "callamtmb": 0,
+            "callamtmr": 0,
+            "callamtmc": 0,
+            "t0odamt": 0,
+            "dpodamt": 0,
+            "careceiving": 0,
+            "balancemainsub": 176,
+            "addamt": 0,
+            "balance": 176,
+            "corebank": "N",
+            "totalloan": 0,
+            "netassval": 176,
+            "pnlamt": 0,
+            "sesecured": 0,
+            "mrirate": 0,
+            "exctime": "14:58:29",
+            "payinday": -176,
+            "receivingright": 0,
+            "totalbalance": 176,
+            "iscorebank": "N",
+            "bankstatus": null
+        }
+    ]
+}
+> Thay `BASE_URL`, `ACCOUNT_ID`, và `ACCESS_TOKEN` bằng giá trị của bạn.
+```

@@ -1,0 +1,25 @@
+---
+title: "Error Codes"
+---
+
+FlashAPI returns a structured error object on failure, for example:
+
+> \{
+>
+>   "code": "OAPI\_EQT\_500",
+>
+>   "messageParams": \{
+>
+>     "error": "server\_error",
+>
+>     "error\_description": "-107 Tên đăng nhập hoặc mật khẩu không đúng",
+>
+>     "s": 500
+>
+>   \},
+>
+>   "source": "oapi-bridge-eqt"
+>
+> \}
+
+There are several hundred specific error codes (login failures, limit breaches, validation errors, and so on), grouped by upstream system. Rather than duplicate the full list here, treat the Error Code page of the FlashAPI documentation site as the single source of truth and link to it from your own integration's error-handling notes. Upstream error text may be returned in Vietnamese even when the rest of the response is in English.

@@ -1,0 +1,73 @@
+---
+title: "Get all stocks"
+description: "Retrieve basic info for all market symbols, including underlying, derivative, CW, and index instruments."
+---
+
+## Endpoint
+
+```text
+GET /oapi/priceboard/all-stocks
+```
+
+### Test this API in our Sandbox using simulated data.
+
+_Try the **Sandbox** to see how the API works with simulated data — no production account or live trading required._
+
+```text
+GET https://flashapi.phs.vn/sandbox/oapi/priceboard/all-stocks
+```
+
+[**View Sandbox Guide →**](/docs/sandbox)
+
+## Required query parameters
+
+None.
+
+## Field descriptions
+
+- `s` (`string`) — Symbol code. Example: `ACB`.
+- `ti` (`number`) — Latest update time.
+- `t` (`string`) — Symbol type. Example: `STOCK`, `FUTURE`, `CW`, `INDEX`.
+- `n1` (`string`) — Symbol name.
+- `n2` (`string`) — English name.
+- `marketId` (`string`) — Market code. Example: `STO`, `STX`, `UPX`, `DVX`.
+- `m` (`string`) — Exchange. Example: `HOSE`, `HNX`, `UPCOM`.
+
+## cURL
+
+```bash
+curl "$BASE_URL/oapi/priceboard/all-stocks"
+```
+
+## Python
+
+```python
+import requests
+
+BASE_URL = "https://api.example.com"
+
+response = requests.get(
+    f"{BASE_URL}/oapi/priceboard/all-stocks",
+)
+response.raise_for_status()
+
+print(response.json())
+```
+
+## Example response
+
+```json
+[
+    {
+        "s": "ACB",
+        "ti": 1774332196854,
+        "t": "STOCK",
+        "n1": "Ngân hàng Thương mại Cổ phần Á Châu",
+        "n2": "Asia Commercial Joint Stock Bank",
+        "marketId": "STO",
+        "m": "HOSE"
+    }
+]
+```
+
+> Replace `BASE_URL` with your API host.

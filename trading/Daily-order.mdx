@@ -1,0 +1,146 @@
+---
+title: "Daily Order"
+---
+
+Retrieve current trading day underlying orders for an account.
+
+## Endpoint
+
+```text
+GET /oapi/accounts/:accountId/underlying/dailyOrder
+```
+
+Returns the current trading day's underlying orders for an account.
+
+### Required path parameters
+
+- `accountId` — Trading account ID.
+
+### Response fields
+
+- `s` (`string`) — Request status. Example: `ok`.
+- `d` (`array`) — Daily order rows.
+
+## Order fields
+
+- `tlid` (`string`) — Internal user or terminal ID.
+- `tlname` (`string`) — Internal user or terminal name.
+- `exectype` (`string`) — Side code.
+- `exectypedesccode` (`string`) — Execution type code.
+- `matchtype` (`string`) — Match type.
+- `pricetype` (`string`) — Order type.
+- `custodycd` (`string`) — Account number.
+- `afacctno` (`string`) — Sub-account number.
+- `symbol` (`string`) — Symbol code.
+- `orderqtty` (`number`) — Ordered quantity.
+- `quoteprice` (`number`) — Order price.
+- `qttyimplement` (`string | null`) — Implemented quantity value.
+- `orstatusfo` (`string`) — Internal order status code.
+- `orstatuscode` (`string`) — Order status code.
+- `status` (`string`) — Order status text.
+- `orderid` (`string`) — Order ID.
+- `hosesession` (`string | null`) — HOSE session value.
+- `lastchange` (`string | null`) — Last matched time.
+- `remainqtty` (`number`) — Remaining quantity.
+- `cancelqtty` (`number`) — Cancelled quantity.
+- `adjustqtty` (`number`) — Amended quantity.
+- `tradeplace` (`string`) — Trading venue.
+- `descexectype` (`string`) — Execution type description.
+- `iscancel` (`string`) — Cancel permission flag.
+- `isadmend` (`string`) — Amend permission flag.
+- `isdisposal` (`string`) — Disposal sale flag.
+- `foacctno` (`string`) — Front-office reference number.
+- `odtimestamp` (`string`) — Order timestamp.
+- `orstatusvalue` (`string`) — Order status value.
+- `limitprice` (`number`) — Limit price.
+- `quoteqtty` (`number`) — Quoted quantity.
+- `confirmed` (`string`) — Confirmation flag.
+- `execqtty` (`number`) — Matched quantity.
+- `execamt` (`number`) — Matched value.
+- `orstatus` (`string`) — English order status.
+- `execprice` (`number`) — Average matched price.
+- `txtime` (`string`) — Order time.
+- `username` (`string`) — User ID.
+- `txdate` (`string`) — Trading date.
+- `viafo` (`string`) — Order channel code.
+- `via` (`string`) — Order channel.
+- `feedbackmsg` (`string`) — Feedback message.
+- `timetype` (`string`) — Time-in-force key.
+- `timetypevalue` (`string`) — Time-in-force value.
+- `remainamt` (`number`) — Remaining amount.
+- `rootorderid` (`string`) — Root order ID.
+- `reforderid` (`string | null`) — Reference order ID.
+- `timetypecode` (`string`) — Time-in-force code.
+- `isbuyin` (`string`) — Buy-in flag.
+- `exectypedesc` (`string`) — Side description. Example: `Buy`.
+
+## cURL
+
+```bash
+curl "$BASE_URL/oapi/accounts/$ACCOUNT_ID/underlying/dailyOrder" \
+  -H "Authorization: Bearer $ACCESS_TOKEN"
+```
+
+## Example response
+
+```json
+{
+    "s": "ok",
+    "d": [
+        {
+            "tlid": "7878",
+            "tlname": "MTSTRADING",
+            "exectype": "NB",
+            "exectypedesccode": "NB",
+            "matchtype": "NB",
+            "pricetype": "LO",
+            "custodycd": "022C099995",
+            "afacctno": "0301001425",
+            "symbol": "ACB",
+            "orderqtty": 100,
+            "quoteprice": 22100,
+            "qttyimplement": null,
+            "orstatusfo": "OD_ORSTATUS_8",
+            "orstatuscode": "8",
+            "status": "Chờ gửi",
+            "orderid": "8000180326000188",
+            "hosesession": null,
+            "lastchange": null,
+            "remainqtty": 100,
+            "cancelqtty": 0,
+            "adjustqtty": 0,
+            "tradeplace": "HOSE",
+            "descexectype": "Mua thông thường",
+            "iscancel": "Y",
+            "isadmend": "Y",
+            "isdisposal": "N",
+            "foacctno": "18/03/20260023406868",
+            "odtimestamp": "2026/03/19 14:33:42.807145000",
+            "orstatusvalue": "8",
+            "limitprice": 22100,
+            "quoteqtty": 0,
+            "confirmed": "N",
+            "execqtty": 0,
+            "execamt": 0,
+            "orstatus": "Sending pending",
+            "execprice": 0,
+            "txtime": "14:33:42",
+            "username": "0301001024",
+            "txdate": "2026-03-18T00:00:00.000Z",
+            "viafo": "R",
+            "via": "MTS Trading",
+            "feedbackmsg": "Chờ gửi",
+            "timetype": "SATIMETYPE_T",
+            "timetypevalue": "T",
+            "remainamt": 2210000,
+            "rootorderid": "8000180326000188",
+            "reforderid": null,
+            "timetypecode": "T",
+            "isbuyin": "N",
+            "exectypedesc": "Buy"
+        }
+    ]
+}
+```
+
+> Replace `BASE_URL`, `ACCOUNT_ID`, and `ACCESS_TOKEN` with your values.

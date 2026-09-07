@@ -1,0 +1,318 @@
+---
+title: "Lấy dữ liệu mới nhất của mã chứng khoán"
+description: "Trả về dữ liệu thị trường mới nhất hiện có cho một mã chứng khoán"
+---
+
+## Endpoint
+
+```text
+GET /oapi/priceboard/symbol-latest-data
+```
+
+Trả về dữ liệu thị trường mới nhất hiện có cho một mã chứng khoán.
+
+## Các tham số truy vấn bắt buộc
+
+- `symbolList` — Danh sách mã chứng khoán, phân tách bằng dấu phẩy. Ví dụ: `ACB,FPT,VIC`
+- `fields` — Danh sách các trường dữ liệu muốn trả về, phân tách bằng dấu phẩy.
+
+## Các trường hợp lệ
+
+```text
+marketId,o,h,sessionId,l,c,ch,r,ti,a,re,vo,va,ce,fl,ep,er,ec,ev,mv,bbOd,boOd,bbBi,boBi,biC,biCh,biR,biVo,biVa,biMv,odC,odCh,odR,odVo,odVa,odMv,odH,odL,i,fsp,noFsp,ba,oi,exp,exr,ltd,is,be,underlyingSymbol,underlyingPrice,underlyingStatus,aFrNSva6m,frSvo,aFrBvo1y,ch1y,aFrBva1w,aVa3m,r5ss,aVa1m,aFrSvo3m,aFrBva6m,aVo6m,frTr,aVa6m,aFrBvo6m,aFrNSva1w,aFrSvo1m,aFrSvo3m,aFrSvo1w,aFrNBva6m,aFrSvo1w,aFrBvo3m,frCr,ch5ss,aVo3m,aFrBva3m,aFrBvo1w,aVo5ss,aFrSva6m,r6m,td1m,frNBva,aVa1y,aVa5ss,r3m,aFrSva1y,r1w,aFrNBva1m,frBvo,aFrNSva3m,ch6m,aVo1m,aFrBvo1m,aFrNSva1m,frBva,aFrSvo6m,r1m,ch1m,aFrNBva3m,aVa1w,aFrBva1y,frNSva,r1y,frSva,ch3m,aFrSva1m,aFrNBva1y,aFrSvo1y,aVo1y,aVo1w,ch1w,aFrNBva1w,aFrNSva1y,aFrBva1m
+```
+
+## Mô tả trường
+
+- `marketId` (`string`) — Mã thị trường. Ví dụ: `STO`, `STX`, `UPX`, `DVX`.
+- `s` (`string`) — Mã chứng khoán.
+- `t` (`string`) — Loại mã. Ví dụ: `STOCK`, `CW`, `INDEX`.
+- `o` (`number`) — Giá mở cửa.
+- `h` (`number`) — Giá cao nhất.
+- `l` (`number`) — Giá thấp nhất.
+- `c` (`number`) — Giá khớp gần nhất.
+- `ch` (`number`) — Mức thay đổi.
+- `r` (`number`) — Tỷ lệ thay đổi.
+- `ti` (`number`) — Thời gian cập nhật gần nhất của mã.
+- `a` (`number`) — Giá trung bình.
+- `re` (`number`) — Giá tham chiếu mới.
+- `vo` (`number`) — Khối lượng giao dịch.
+- `va` (`number`) — Giá trị giao dịch.
+- `ce` (`number`) — Giá trần.
+- `fl` (`number`) — Giá sàn.
+- `ep` (`number`) — Giá kỳ vọng cho `ATO` hoặc `ATC`.
+- `er` (`number`) — Tỷ lệ kỳ vọng.
+- `ec` (`number`) — Mức thay đổi kỳ vọng.
+- `ev` (`number`) — Khối lượng kỳ vọng.
+- `mv` (`number`) — Khối lượng khớp gần nhất.
+- `sessionId` (`string`) — Mã phiên giao dịch. Ví dụ: `99`.
+- `bbOd` (`array`) — Sổ lệnh mua lô lẻ. Mỗi phần tử gồm `p` (`number`) là giá và `v` (`number`) là khối lượng.
+- `boOd` (`array`) — Sổ lệnh bán lô lẻ. Mỗi phần tử gồm `p` (`number`) là giá và `v` (`number`) là khối lượng.
+- `bbBi` (`array`) — Sổ lệnh mua BuyIn. Mỗi phần tử gồm `p` (`number`) là giá và `v` (`number`) là khối lượng.
+- `boBi` (`array`) — Sổ lệnh bán BuyIn. Mỗi phần tử gồm `p` (`number`) là giá và `v` (`number`) là khối lượng.
+- `biC` (`number`) — Giá BuyIn.
+- `biCh` (`number`) — Mức thay đổi BuyIn.
+- `biR` (`number`) — Tỷ lệ BuyIn.
+- `biVo` (`number`) — Khối lượng BuyIn.
+- `biVa` (`number`) — Giá trị BuyIn.
+- `biMv` (`number`) — Khối lượng khớp BuyIn.
+- `odC` (`number`) — Giá lô lẻ.
+- `odCh` (`number`) — Mức thay đổi lô lẻ.
+- `odR` (`number`) — Tỷ lệ lô lẻ.
+- `odVo` (`number`) — Khối lượng lô lẻ.
+- `odVa` (`number`) — Giá trị lô lẻ.
+- `odMv` (`number`) — Khối lượng khớp lô lẻ.
+- `odH` (`number`) — Giá lô lẻ cao nhất.
+- `odL` (`number`) — Giá lô lẻ thấp nhất.
+- `ba` (`number`) — Basis, tức độ lệch so với VN30.
+- `oi` (`number`) — Open interest.
+- `exp` (`number`) — Giá thực hiện của chứng quyền.
+- `exr` (`string`) — Tỷ lệ chuyển đổi.
+- `ltd` (`string`) — Ngày giao dịch chứng quyền.
+- `is` (`string`) — Tổ chức phát hành chứng quyền.
+- `be` (`number`) — Điểm hòa vốn của chứng quyền.
+- `underlyingSymbol` (`string`) — Mã chứng khoán cơ sở.
+- `underlyingPrice` (`number`) — Giá của mã chứng khoán cơ sở.
+- `underlyingStatus` (`string`) — Trạng thái của mã cơ sở.
+- `n1` (`string`) — Tên chứng khoán.
+- `n2` (`string`) — Tên tiếng Anh.
+- `m` (`string`) — Sàn giao dịch. Ví dụ: `HOSE`, `HNX`, `UPCOM`.
+- `isin` (`string`) — Mã chứng khoán do sàn quy định.
+- `rc` (`string`) — Mã tham chiếu.
+- `i` (`boolean`) — Cờ highlight, không nên dùng.
+- `fsp` (`number`) — Không nên dùng.
+- `noFsp` (`number`) — Không nên dùng.
+- `frBvo` (`number`) — Khối lượng mua nước ngoài.
+- `frSvo` (`number`) — Khối lượng bán nước ngoài.
+- `frBva` (`number`) — Giá trị mua nước ngoài.
+- `frSva` (`number`) — Giá trị bán nước ngoài.
+- `frTr` (`number`) — Room nước ngoài tổng.
+- `frCr` (`number`) — Room nước ngoài hiện tại.
+- `frNBva` (`number`) — Giá trị mua ròng nước ngoài.
+- `frNSva` (`number`) — Giá trị bán ròng nước ngoài.
+- `c5ss` (`number`) — Giá đóng cửa cách 5 phiên.
+- `c1w` (`number`) — Giá đóng cửa cách 1 tuần.
+- `c1m` (`number`) — Giá đóng cửa cách 1 tháng.
+- `c3m` (`number`) — Giá đóng cửa cách 3 tháng.
+- `c6m` (`number`) — Giá đóng cửa cách 6 tháng.
+- `c1y` (`number`) — Giá đóng cửa cách 1 năm.
+- `va5ss` (`number`) — Giá trị giao dịch cách 5 phiên.
+- `va1w` (`number`) — Giá trị giao dịch cách 1 tuần.
+- `va1m` (`number`) — Giá trị giao dịch cách 1 tháng.
+- `va3m` (`number`) — Giá trị giao dịch cách 3 tháng.
+- `va6m` (`number`) — Giá trị giao dịch cách 6 tháng.
+- `va1y` (`number`) — Giá trị giao dịch cách 1 năm.
+- `td5ss` (`number`) — Tổng số phiên giao dịch cách 5 phiên.
+- `td1w` (`number`) — Tổng số phiên giao dịch cách 1 tuần.
+- `td1m` (`number`) — Tổng số phiên giao dịch cách 1 tháng.
+- `td3m` (`number`) — Tổng số phiên giao dịch cách 3 tháng.
+- `td6m` (`number`) — Tổng số phiên giao dịch cách 6 tháng.
+- `td1y` (`number`) — Tổng số phiên giao dịch cách 1 năm.
+- `ch5ss` (`number`) — Mức thay đổi so với 5 phiên trước.
+- `ch1w` (`number`) — Mức thay đổi so với 1 tuần trước.
+- `ch1m` (`number`) — Mức thay đổi so với 1 tháng trước.
+- `ch3m` (`number`) — Mức thay đổi so với 3 tháng trước.
+- `ch6m` (`number`) — Mức thay đổi so với 6 tháng trước.
+- `ch1y` (`number`) — Mức thay đổi so với 1 năm trước.
+- `r5ss` (`number`) — Tỷ lệ thay đổi so với 5 phiên trước.
+- `r1w` (`number`) — Tỷ lệ thay đổi so với 1 tuần trước.
+- `r1m` (`number`) — Tỷ lệ thay đổi so với 1 tháng trước.
+- `r3m` (`number`) — Tỷ lệ thay đổi so với 3 tháng trước.
+- `r6m` (`number`) — Tỷ lệ thay đổi so với 6 tháng trước.
+- `r1y` (`number`) — Tỷ lệ thay đổi so với 1 năm trước.
+- `aVa5ss` (`number`) — Giá trị giao dịch cách 5 phiên.
+- `aVa1w` (`number`) — Giá trị giao dịch cách 1 tuần.
+- `aVa1m` (`number`) — Giá trị giao dịch cách 1 tháng.
+- `aVa3m` (`number`) — Giá trị giao dịch cách 3 tháng.
+- `aVa6m` (`number`) — Giá trị giao dịch cách 6 tháng.
+- `aVa1y` (`number`) — Giá trị giao dịch cách 1 năm.
+- `aVo5ss` (`number`) — Khối lượng giao dịch cách 5 phiên.
+- `aVo1w` (`number`) — Khối lượng giao dịch cách 1 tuần.
+- `aVo1m` (`number`) — Khối lượng giao dịch cách 1 tháng.
+- `aVo3m` (`number`) — Khối lượng giao dịch cách 3 tháng.
+- `aVo6m` (`number`) — Khối lượng giao dịch cách 6 tháng.
+- `aVo1y` (`number`) — Khối lượng giao dịch cách 1 năm.
+- `aFrBvo1w` (`number`) — Khối lượng mua nước ngoài cách 1 tuần.
+- `aFrBvo1m` (`number`) — Khối lượng mua nước ngoài cách 1 tháng.
+- `aFrBvo3m` (`number`) — Khối lượng mua nước ngoài cách 3 tháng.
+- `aFrBvo6m` (`number`) — Khối lượng mua nước ngoài cách 6 tháng.
+- `aFrBvo1y` (`number`) — Khối lượng mua nước ngoài cách 1 năm.
+- `aFrSvo1w` (`number`) — Khối lượng bán nước ngoài cách 1 tuần.
+- `aFrSvo1m` (`number`) — Khối lượng bán nước ngoài cách 1 tháng.
+- `aFrSvo3m` (`number`) — Khối lượng bán nước ngoài cách 3 tháng.
+- `aFrSvo6m` (`number`) — Khối lượng bán nước ngoài cách 6 tháng.
+- `aFrSvo1y` (`number`) — Khối lượng bán nước ngoài cách 1 năm.
+- `aFrBva1w` (`number`) — Giá trị mua nước ngoài cách 1 tuần.
+- `aFrBva1m` (`number`) — Giá trị mua nước ngoài cách 1 tháng.
+- `aFrBva3m` (`number`) — Giá trị mua nước ngoài cách 3 tháng.
+- `aFrBva6m` (`number`) — Giá trị mua nước ngoài cách 6 tháng.
+- `aFrBva1y` (`number`) — Giá trị mua nước ngoài cách 1 năm.
+- `aFrSva1w` (`number`) — Giá trị bán nước ngoài cách 1 tuần.
+- `aFrSva1m` (`number`) — Giá trị bán nước ngoài cách 1 tháng.
+- `aFrSva3m` (`number`) — Giá trị bán nước ngoài cách 3 tháng.
+- `aFrSva6m` (`number`) — Giá trị bán nước ngoài cách 6 tháng.
+- `aFrSva1y` (`number`) — Giá trị bán nước ngoài cách 1 năm.
+- `aFrNBva1w` (`number`) — Giá trị mua ròng nước ngoài cách 1 tuần.
+- `aFrNBva1m` (`number`) — Giá trị mua ròng nước ngoài cách 1 tháng.
+- `aFrNBva3m` (`number`) — Giá trị mua ròng nước ngoài cách 3 tháng.
+- `aFrNBva6m` (`number`) — Giá trị mua ròng nước ngoài cách 6 tháng.
+- `aFrNBva1y` (`number`) — Giá trị mua ròng nước ngoài cách 1 năm.
+- `aFrNSva1w` (`number`) — Giá trị bán ròng nước ngoài cách 1 tuần.
+- `aFrNSva1m` (`number`) — Giá trị bán ròng nước ngoài cách 1 tháng.
+- `aFrNSva3m` (`number`) — Giá trị bán ròng nước ngoài cách 3 tháng.
+- `aFrNSva6m` (`number`) — Giá trị bán ròng nước ngoài cách 6 tháng.
+- `aFrNSva1y` (`number`) — Giá trị bán ròng nước ngoài cách 1 năm.
+
+## cURL
+
+```bash
+curl -G "$BASE_URL/oapi/priceboard/symbol-latest-data" \
+  --data-urlencode "symbolList=ACB,FPT,VIC" \
+  --data-urlencode "fields=marketId,o,h,l,c,vo"
+```
+
+## Python
+
+```python
+import requests
+
+BASE_URL = "https://api.example.com"
+
+params = {
+    "symbolList": "ACB,FPT,VIC",
+    "fields": "marketId,o,h,l,c,vo",
+}
+
+response = requests.get(
+    f"{BASE_URL}/oapi/priceboard/symbol-latest-data",
+    params=params,
+)
+response.raise_for_status()
+
+print(response.json())
+```
+
+## Ví dụ phản hồi
+
+```json
+[
+    {
+        "s": "ACB",
+        "o": 23400,
+        "h": 23500,
+        "ce": 25250,
+        "fl": 21950,
+        "l": 23000,
+        "c": 23000,
+        "ch": -600,
+        "r": -2.54,
+        "vo": 13775200,
+        "va": 319093870000,
+        "a": null,
+        "re": 23600,
+        "ti": 1773992705686,
+        "mv": 6400,
+        "bbOd": [
+            {
+                "p": 23200,
+                "v": 103
+            },
+            {
+                "p": 23150,
+                "v": 1673
+            },
+            {
+                "p": 23100,
+                "v": 1312
+            }
+        ],
+        "boOd": [
+            {
+                "p": 23250,
+                "v": 92
+            },
+            {
+                "p": 23300,
+                "v": 161
+            },
+            {
+                "p": 23350,
+                "v": 30
+            }
+        ],
+        "bbBi": [
+            {
+                "p": 0,
+                "v": 0
+            },
+            {
+                "p": 0,
+                "v": 0
+            },
+            {
+                "p": 0,
+                "v": 0
+            }
+        ],
+        "boBi": [
+            {
+                "p": 0,
+                "v": 0
+            },
+            {
+                "p": 0,
+                "v": 0
+            },
+            {
+                "p": 0,
+                "v": 0
+            }
+        ],
+        "fsp": null,
+        "noFsp": null,
+        "t": "STOCK",
+        "n1": "Ngân hàng Thương mại Cổ phần Á Châu",
+        "n2": "Asia Commercial Joint Stock Bank",
+        "marketId": "STO",
+        "m": "HOSE",
+        "isin": "VN000000ACB8",
+        "rc": "ACB",
+        "odH": 23600,
+        "odL": 23200,
+        "odC": 23200,
+        "odCh": -400,
+        "odR": -1.69,
+        "odMv": 2,
+        "odVo": 10634,
+        "odVa": 247743450,
+        "biC": null,
+        "biCh": null,
+        "biR": null,
+        "biVo": null,
+        "biVa": null,
+        "biMv": null,
+        "frBvo": 1729501,
+        "frSvo": 7552813,
+        "is": null,
+        "exr": null,
+        "ltd": null,
+        "underlyingSymbol": null,
+        "frBva": 40070453250,
+        "frSva": 175015403600,
+        "frTr": 1540996979,
+        "frCr": 130293727,
+        "frNBva": -134944950350,
+        "frNSva": 134944950350,
+        "ep": 0,
+        "ec": 0,
+        "er": 0,
+        "ev": 0,
+        "be": null,
+        "ba": null,
+        "oi": null,
+        "i": false
+    }
+]
+```
+
+> Thay `BASE_URL` bằng host API của bạn. Thay danh sách mã và trường dữ liệu theo nhu cầu sử dụng.

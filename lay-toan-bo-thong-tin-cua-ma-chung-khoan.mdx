@@ -1,0 +1,65 @@
+---
+title: "Lấy toàn bộ thông tin cổ phiếu/mã chứng khoán"
+description: "Lấy thông tin cơ bản cho tất cả mã thị trường, bao gồm mã cơ sở, phái sinh, chứng quyền và chỉ số."
+---
+
+## Endpoint
+
+```text
+GET /oapi/priceboard/all-stocks
+```
+
+Trả về thông tin cơ bản cho tất cả các mã trên thị trường. Bao gồm mã cơ sở, phái sinh, chứng quyền và chỉ số.
+
+## Các trường bắt buộc
+
+Không có.
+
+## Mô tả trường
+
+- `s` (`string`) — Mã chứng khoán. Ví dụ: `ACB`.
+- `ti` (`number`) — Thời gian cập nhật gần nhất.
+- `t` (`string`) — Loại mã. Ví dụ: `STOCK`, `FUTURE`, `CW`, `INDEX`.
+- `n1` (`string`) — Tên chứng khoán.
+- `n2` (`string`) — Tên tiếng Anh.
+- `marketId` (`string`) — Mã thị trường. Ví dụ: `STO`, `STX`, `UPX`, `DVX`.
+- `m` (`string`) — Sàn giao dịch. Ví dụ: `HOSE`, `HNX`, `UPCOM`.
+
+## cURL
+
+```bash
+curl "$BASE_URL/oapi/priceboard/all-stocks"
+```
+
+## Python
+
+```python
+import requests
+
+BASE_URL = "https://api.example.com"
+
+response = requests.get(
+    f"{BASE_URL}/oapi/priceboard/all-stocks",
+)
+response.raise_for_status()
+
+print(response.json())
+```
+
+## Ví dụ phản hồi
+
+```json
+[
+    {
+        "s": "ACB",
+        "ti": 1774332196854,
+        "t": "STOCK",
+        "n1": "Ngân hàng Thương mại Cổ phần Á Châu",
+        "n2": "Asia Commercial Joint Stock Bank",
+        "marketId": "STO",
+        "m": "HOSE"
+    }
+]
+```
+
+> Thay `BASE_URL` bằng host API của bạn.

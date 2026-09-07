@@ -1,0 +1,220 @@
+---
+title: "Underlying"
+description: "Place, update, and cancel underlying orders."
+---
+
+## Authentication requirements
+
+All routes under `/oapi/accounts/:accountId/orders/underlying` require `Authorization: Bearer <access_token>`.
+
+Use the `access_token` and `otp_token` returned by [`POST /oapi/auth/gen-secret-key/underlying`](/phs-openapi-documents/authentication/underlying.md).
+
+`GET` requests require the Bearer token only.
+
+`POST`, `PUT`, and `DELETE` requests also require these headers:
+
+- `x-otp-token: <otp_token>`
+
+In sandbox, use the exact fixture OTP token: `552066a35eb30a9815afc952b14287a8`.
+
+## Place order
+
+```text
+POST /oapi/accounts/:accountId/orders/underlying
+```
+
+Places a new underlying order for an account.
+
+### Required path parameters
+
+- `accountId` — Sub underlying account ID.
+
+### Required body parameters
+
+- `instrument` — Instrument code. Example: `ACB`
+- `qty` — Order quantity. Example: `1`
+- `side` — Order side. Example: `buy`
+- `type` — Order type. Example: `LO`
+- `limitPrice` — Limit price. Example: `23000`
+- `timetype` — Time-in-force type. Example: `T`
+
+### Response fields
+
+- `s` (`string`) — Request status. Example: `ok`
+- `d.orderid` (`string`) — Created order ID.
+
+### cURL
+
+```bash
+curl -X POST "$BASE_URL/oapi/accounts/$ACCOUNT_ID/orders/underlying" \
+  -H "Authorization: Bearer $ACCESS_TOKEN" \
+  -H "Content-Type: application/json" \
+  -H "x-lang: vi" \
+  -H "x-via: K" \
+  -H "x-otp-token: $OTP_TOKEN" \
+  -d '{
+    "instrument": "ACB",
+    "qty": 1,
+    "side": "buy",
+    "type": "LO",
+    "limitPrice": 23000,
+    "timetype": "T"
+  }'
+```
+
+### Example response
+
+```json
+{
+    "s": "ok",
+    "d": {
+        "orderid": "8000180326000219"
+    }
+}
+```
+
+## Update order
+
+```text
+`PUT /oapi/accounts/:accountId/orders/underlying/:orderId`
+```
+
+Updates quantity and limit price for an existing underlying order.
+
+### Required path parameters
+
+- `accountId` — Sub-underlying account ID.
+- `orderId` — Order ID to update.
+
+### Required body parameters
+
+- `qty` — Updated order quantity. Example: `1`
+- `limitPrice` — Updated limit price. Example: `23000`
+
+### cURL
+
+```bash
+curl -X PUT "$BASE_URL/oapi/accounts/$ACCOUNT_ID/orders/underlying/$ORDER_ID" \
+  -H "Authorization: Bearer $ACCESS_TOKEN" \
+  -H "Content-Type: application/json" \
+  -H "x-lang: vi" \
+  -H "x-via: K" \
+  -H "x-otp-token: $OTP_TOKEN" \
+  -d '{
+    "qty": 1,
+    "limitPrice": 23000
+  }'
+```
+
+### Example response
+
+```json
+{
+    "s": "ok"
+}
+```
+
+## Cancel order
+
+```text
+`DELETE /oapi/accounts/:accountId/orders/underlying/:orderId?timeType=T&isbuyin=N`
+```
+
+Cancels an existing underlying order.
+
+### Required path parameters
+
+- `accountId` — Sub underlying account ID.
+- `orderId` — Order ID to cancel.
+
+### Required query parameters
+
+- `timetype` — Time-in-force type. Example: `T`
+- `isbuyin` — Buy-in flag. Example: `N`
+
+### cURL
+
+```bash
+curl -X DELETE "$BASE_URL/oapi/accounts/$ACCOUNT_ID/orders/underlying/$ORDER_ID?timeType=T&isbuyin=N" \
+  -H "Authorization: Bearer $ACCESS_TOKEN" \
+  -H "x-lang: vi" \
+  -H "x-via: K" \
+  -H "x-otp-token: $OTP_TOKEN"
+```
+
+### Example response
+
+```json
+{
+    "s": "ok"
+}
+```
+
+## Get Underlying Buying Power
+
+```text
+`GET /oapi/accounts/:accountId/underlying/buyingPower`
+```
+
+Retrieves the available buying power for trading underlying securities.
+
+### Required Path Parameters
+
+- `accountId` — underlying sub account ID.
+
+### Required Query Parameters
+
+- `symbol` — Stock symbol. Example: `VIC`.
+- `quotePrice` — Order price used to calculate buying power. Example: `222000`.
+
+### cURL
+
+```bash
+curl -X GET "$BASE_URL/oapi/accounts/$ACCOUNT_ID/underlying/buyingPower?symbol=VIC&quotePrice=222000" \
+  -H "Authorization: Bearer $ACCESS_TOKEN" \
+  -H "Accept: */*"
+```
+
+### Example Response
+
+```json
+{
+  "s": "ok",
+  "d": [
+    {
+      "ppse": 0,
+      "ppseref": 0,
+      "mrratioloan": "---",
+      "mrpriceloan": "---",
+      "exceptional": 0,
+      "maxqty": -1,
+      "trade": 0,
+      "receiving": 0,
+      "ref": 10000,
+      "allowance": 16,
+      "withdraw": 0,
+      "private": 0,
+      "blocked": 0,
+      "mortage": 0
+    }
+  ]
+}
+```
+
+### Response fields
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `ppse` | String | Maximum buying power |
+| `receiving` | String | Securities pending delivery |
+| `maxqty` | String | Maximum buy quantity = max(maxqty, 0) |
+| `mrrationloan` | String | Loan ratio |
+| `trade` | String | Maximum sell quantity |
+| `allbalance` | String | Cash \+ bank balance |
+| `ppseref` | String | Optimal buying power |
+| `rtt` | String | Actual ratio |
+| `mrirate` | String | Safety ratio |
+| `blocked` | String | Blocked securities |
+| `mortage` | String | Mortgaged securities |
+
+> Replace `BASE_URL`, `ACCOUNT_ID`, `ACCESS_TOKEN`, `OTP_TOKEN`, and `ORDER_ID` with your values.

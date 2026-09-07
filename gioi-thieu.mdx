@@ -1,0 +1,17 @@
+---
+title: "Giới thiệu"
+---
+
+PHS OpenAPI (FlashAPI) là nền tảng API chính thức của Phú Hưng Securities. Nền tảng này cho phép đối tác và nhà đầu tư xây dựng ứng dụng giao dịch cho thị trường chứng khoán Việt Nam: dữ liệu thị trường theo thời gian thực và lịch sử, truy vấn tài khoản và danh mục, cũng như đặt lệnh cho cả sản phẩm cơ sở (cổ phiếu) và sản phẩm phái sinh (futures).
+
+Hướng dẫn này được viết cho bất kỳ ai lần đầu kiểm thử _FlashAPI_ — từ lập trình viên đang tích hợp hệ thống, đến người dùng nghiệp vụ/sản phẩm **muốn xác minh từng API trả về gì trước khi** bắt đầu phát triển. Tài liệu này tập trung vào môi trường **Sandbox**: Sandbox là gì, từng endpoint hoạt động như thế nào ở đây so với Production, và hai cách để gọi API thực tế (trực tiếp từ website tài liệu, hoặc bằng Postman / code của riêng bạn).
+
+**Sandbox dùng để làm gì?**
+
+Sandbox là một bản sao an toàn, không rủi ro của FlashAPI. Nó sử dụng đúng các đường dẫn, tham số và cấu trúc phản hồi giống hệt Production, nhưng:
+
+- Các API dữ liệu thị trường luôn trả về cùng một bộ dữ liệu mẫu thực tế, bất kể bạn yêu cầu symbol hay fields nào.
+- Các API giao dịch (đặt / sửa / hủy lệnh) vẫn được kiểm tra hợp lệ đầy đủ nhưng không bao giờ gửi tới sàn thật — không có tiền nào được chuyển và không có lệnh thật nào được tạo.
+- Các API đăng nhập chấp nhận thông tin xác thực demo của Sandbox và luôn trả về cùng một bộ token cố định, bao gồm cả token OTP cố định dùng thay cho mã xác thực một lần thực tế.
+
+Hãy sử dụng Sandbox để tìm hiểu cấu trúc của từng API, xây dựng và gỡ lỗi tích hợp end-to-end, và mô phỏng đầy đủ một quy trình (đăng nhập → lấy báo giá → đặt lệnh) — sau đó chỉ chuyển sang Production khi mọi thứ đã được xác thực và quyền truy cập OpenAPI của bạn đã được phê duyệt.

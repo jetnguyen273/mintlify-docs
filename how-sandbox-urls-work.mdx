@@ -1,0 +1,80 @@
+---
+title: "How Sandbox URLs Work"
+---
+
+Every FlashAPI endpoint is documented using its **Production path**, which starts with:
+
+```text
+/oapi/
+```
+
+To call the same endpoint in the **Sandbox**, insert `/sandbox` immediately before `/oapi`.
+
+The rest of the request remains exactly the same, including:
+
+\* Endpoint path \* Query parameters \* Request body \* Headers
+
+## URL Structure
+
+| Environment | Base URL Pattern | Example — Get Symbol Latest Data |
+| --- | --- | --- |
+| **Production** | `https://flashapi.phs.vn/oapi/...` | `https://flashapi.phs.vn/oapi/priceboard/symbol-latest-data` |
+| **Sandbox** | `https://flashapi.phs.vn/sandbox/oapi/...` | `https://flashapi.phs.vn/sandbox/oapi/priceboard/symbol-latest-data` |
+
+### Production
+
+```text
+https://flashapi.phs.vn/oapi/priceboard/symbol-latest-data
+```
+
+### Sandbox
+
+```text
+https://flashapi.phs.vn/sandbox/oapi/priceboard/symbol-latest-data
+```
+
+The only difference is the `/sandbox` segment:
+
+```text
+Production:
+https://flashapi.phs.vn/oapi/...
+
+Sandbox:
+https://flashapi.phs.vn/sandbox/oapi/...
+```
+
+## Switching Between Sandbox and Production
+
+All code examples in this guide use the **Sandbox URL** by default.
+
+You can copy and run the examples directly for testing.
+
+When you are ready to switch to Production, replace **only the base URL**.
+
+### Example
+
+**Sandbox:**
+
+```bash
+curl -X GET \
+  "https://flashapi.phs.vn/sandbox/oapi/priceboard/symbol-latest-data"
+```
+
+**Production:**
+
+```bash
+curl -X GET \
+  "https://flashapi.phs.vn/oapi/priceboard/symbol-latest-data"
+```
+
+The following remain unchanged:
+
+\* Endpoint path \* Query parameters \* Request body \* Headers \* API request structure
+
+<Note>
+  You only need to replace the base URL when switching from Sandbox to Production. No changes to the endpoint path, parameters, or request structure are required.
+</Note>
+
+<Warning>
+  Before calling Production APIs, make sure your Production OpenAPI access has been approved and you are using the appropriate Production credentials.
+</Warning>

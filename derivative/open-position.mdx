@@ -1,0 +1,167 @@
+---
+title: "Open Positions"
+---
+
+## Endpoint
+
+```text
+GET /oapi/accounts/:accountId/derivative/openPositions
+```
+
+Returns open derivative positions for an account.
+
+## Required path parameters
+
+- `accountId` — Trading account ID.
+
+## Response fields
+
+- `s` (`string`) — Request status. Always returns `ok`.
+- `d` (`array`) — Open position rows.
+
+## Open position fields
+
+- `dtacctno` (`string`) — Trading account.
+- `codeid` (`string`) — Instrument code ID.
+- `symbol` (`string`) — Instrument symbol.
+- `qtty` (`number`) — Position quantity.
+- `isclose` (`string`) — Whether the position can be closed.
+- `isnet` (`string`) — Whether netting is enabled.
+- `pendinglqtty` (`number`) — Pending long quantity.
+- `pendingsqtty` (`number`) — Pending short quantity.
+- `rdsp` (`number`) — DSP price.
+- `nonrplamt` (`number`) — Unrealized P/L for the day.
+- `position` (`string`) — Position side or type.
+- `custodycd` (`string`) — Margin account.
+- `price_secured` (`number`) — Market price.
+- `nvalue` (`number`) — Contract multiplier.
+- `vwap` (`number`) — Average cost price.
+- `pecentnonrplamt` (`number`) — Percentage unrealized P/L.
+- `vrdebtvmamt` (`number`) — Realized P/L.
+- `totalplamt` (`number`) — Total profit or loss value.
+- `last_change` (`string`) — Last update timestamp.
+- `vrimamt` (`number`) — Total margin value.
+- `diff` (`number`) — Point difference.
+- `vm` (`number`) — VM loss.
+
+> Your field notes use `pricesecured` and `lastchange`. The sample response returns `price_secured` and `last_change`. Document the response using the exact keys returned by the API.
+
+## cURL
+
+```bash
+curl "$BASE_URL/oapi/accounts/$ACCOUNT_ID/derivative/openPositions" \
+  -H "Authorization: Bearer $ACCESS_TOKEN"
+```
+
+## Example response
+
+```json
+{
+  "s": "ok",
+  "d": [
+    {
+      "dtacctno": "0104005401",
+      "codeid": "000118",
+      "symbol": "41I1G4000",
+      "qtty": 5,
+      "isclose": "Y",
+      "isnet": "N",
+      "pendinglqtty": 0,
+      "pendingsqtty": 2,
+      "rdsp": 205380000,
+      "nonrplamt": 0,
+      "position": "1",
+      "custodycd": "022C979999",
+      "price_secured": 1802,
+      "nvalue": 100000,
+      "vwap": 1802,
+      "pecentnonrplamt": 0,
+      "vrdebtvmamt": 0,
+      "totalplamt": 0,
+      "last_change": "2026-03-20T14:56:23.191Z",
+      "vrimamt": 153170000,
+      "diff": 0,
+      "vm": 0
+    }
+  ]
+}
+```
+
+> Replace `BASE_URL`, `ACCOUNT_ID`, and `ACCESS_TOKEN` with your values.
+
+- `accountId` — Trading account ID.
+
+### Response fields
+
+- `s` (`string`) — Request status. Always returns `ok`.
+- `d` (`array`) — Open position rows.
+
+## Open position fields
+
+- `dtacctno` (`string`) — Trading account.
+- `codeid` (`string`) — Instrument code ID.
+- `symbol` (`string`) — Instrument symbol.
+- `qtty` (`number`) — Position quantity.
+- `isclose` (`string`) — Whether the position can be closed.
+- `isnet` (`string`) — Whether netting is enabled.
+- `pendinglqtty` (`number`) — Pending long quantity.
+- `pendingsqtty` (`number`) — Pending short quantity.
+- `rdsp` (`number`) — DSP price.
+- `nonrplamt` (`number`) — Unrealized P/L for the day.
+- `position` (`string`) — Position side or type.
+- `custodycd` (`string`) — Margin account.
+- `price_secured` (`number`) — Market price.
+- `nvalue` (`number`) — Contract multiplier.
+- `vwap` (`number`) — Average cost price.
+- `pecentnonrplamt` (`number`) — Percentage unrealized P/L.
+- `vrdebtvmamt` (`number`) — Realized P/L.
+- `totalplamt` (`number`) — Total profit or loss value.
+- `last_change` (`string`) — Last update timestamp.
+- `vrimamt` (`number`) — Total margin value.
+- `diff` (`number`) — Point difference.
+- `vm` (`number`) — VM loss.
+
+> Your field notes use `pricesecured` and `lastchange`. The sample response returns `price_secured` and `last_change`. Document the response using the exact keys returned by the API.
+
+## cURL
+
+```bash
+curl "$BASE_URL/oapi/accounts/$ACCOUNT_ID/derivative/openPositions" \
+  -H "Authorization: Bearer $ACCESS_TOKEN"
+```
+
+## Example response
+
+```json
+{
+  "s": "ok",
+  "d": [
+    {
+      "dtacctno": "0104005401",
+      "codeid": "000118",
+      "symbol": "41I1G4000",
+      "qtty": 5,
+      "isclose": "Y",
+      "isnet": "N",
+      "pendinglqtty": 0,
+      "pendingsqtty": 2,
+      "rdsp": 205380000,
+      "nonrplamt": 0,
+      "position": "1",
+      "custodycd": "022C979999",
+      "price_secured": 1802,
+      "nvalue": 100000,
+      "vwap": 1802,
+      "pecentnonrplamt": 0,
+      "vrdebtvmamt": 0,
+      "totalplamt": 0,
+      "last_change": "2026-03-20T14:56:23.191Z",
+      "vrimamt": 153170000,
+      "diff": 0,
+      "vm": 0
+    }
+  ]
+}
+```
+
+> Replace `BASE_URL`, `ACCOUNT_ID`, and `ACCESS_TOKEN` with your values.

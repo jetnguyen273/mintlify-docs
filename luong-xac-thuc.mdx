@@ -1,0 +1,67 @@
+---
+title: "Luồng xác thực"
+---
+
+FlashAPI có **2 luồng đăng nhập độc lập**:
+
+- **Underlying** — tài khoản chứng khoán
+- **Derivative** — tài khoản phái sinh
+
+## API nào cần đăng nhập?
+
+| Nhóm | Authentication |
+| --- | --- |
+| **Market Data** | Không cần |
+| **Trading / Account / Portfolio / Balance** | Bắt buộc |
+
+## Luồng xác thực
+
+### 1. Đăng nhập
+
+**Underlying:**
+
+```text
+/auth/gen-secret-key/underlying
+```
+
+**Derivative:**
+
+```text
+/auth/gen-secret-key/derivative
+```
+
+Gửi `username` và `password`.
+
+### 2. Lấy token
+
+Response trả về:
+
+```text
+access_token
+otp_token
+```
+
+### 3. Gọi API
+
+**GET — Account / Portfolio / Trading:**
+
+```http
+Authorization: Bearer <access_token>
+```
+
+**POST / PUT / DELETE — Order:**
+
+```http
+Authorization: Bearer <access_token>
+x-otp-token: <otp_token>
+x-lang: vi
+x-via: K
+```
+
+## Sandbox OTP
+
+Trong Sandbox, sử dụng **OTP cố định** được cung cấp tại trang authentication tương ứng.
+
+Không cần OTP thật hoặc SMS.
+
+> **Lưu ý:** Production sử dụng credentials và OTP thật. Không dùng Sandbox token/OTP cho Production.

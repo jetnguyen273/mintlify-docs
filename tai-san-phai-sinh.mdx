@@ -1,0 +1,123 @@
+---
+title: "Phái sinh"
+description: "Trả về dữ liệu số dư phái sinh cho một tài khoản."
+---
+
+## Endpoint
+
+```text
+GET /oapi/accounts/:accountId/derivative/assets
+```
+
+Trả về dữ liệu số dư phái sinh cho một tài khoản.
+
+### Tham số đường dẫn
+
+- `accountId` — Mã tiểu khoản Phái sinh.
+
+### Trường phản hồi
+
+- `s` (`string`) — Trạng thái request. Luôn trả về `ok`.
+- `d` (`object`) — Chi tiết số dư phái sinh.
+
+## Trường số dư
+
+- `accountid` (`string`) — Số tiểu khoản phái sinh.
+- `cashonhand` (`number`) — Tiền mặt tại KBSV.
+- `imcash` (`number`) — Tiền ký quỹ margin.
+- `requiredimamt` (`number`) — Giá trị ký quỹ ban đầu theo IM của KBSV.
+- `requiredimamtccp` (`number`) — Giá trị ký quỹ ban đầu theo IM của CCP.
+- `requireddmamt` (`number`) — Giá trị ký quỹ giao hàng theo DM của KBSV.
+- `requireddmamtccp` (`number`) — Giá trị ký quỹ giao hàng theo DM của CCP.
+- `requiredmarginamt` (`number`) — Tổng yêu cầu ký quỹ duy trì DTA.
+- `requiredmarginamtccp` (`number`) — Tổng yêu cầu ký quỹ duy trì DMA.
+- `eca` (`number`) — Giá trị tài sản đủ điều kiện cho DTA.
+- `ecaccp` (`number`) — Giá trị tài sản đủ điều kiện cho DMA.
+- `prcash` (`number`) — Tỷ lệ tiền mặt tối thiểu cho DTA.
+- `prcashccp` (`number`) — Tỷ lệ tiền mặt tối thiểu cho DMA.
+- `accountratio` (`number`) — Tỷ lệ thực tế cho DTA.
+- `accountratioccp` (`number`) — Tỷ lệ thực tế cho DMA.
+- `acccountstatus` (`string`) — Trạng thái tài khoản DTA.
+- `acccountstatus_code` (`string`) — Mã trạng thái tài khoản DTA.
+- `acccountstatusccp` (`string`) — Trạng thái tài khoản DMA.
+- `acccountstatusccp_code` (`string`) — Mã trạng thái tài khoản DMA.
+- `pp` (`number`) — Sức mua hoặc sức bán cho DTA.
+- `ppccp` (`number`) — Sức mua hoặc sức bán cho DMA.
+- `reqaddsecured` (`number`) — Số tiền bổ sung cần nộp để đưa DTA về ngưỡng an toàn.
+- `reqaddsecuredccp` (`number`) — Số tiền bổ sung cần nộp để đưa DMA về ngưỡng an toàn.
+- `tradefeeamt` (`number`) — Phí giao dịch tại KBSV.
+- `tradefeevsd` (`number`) — Phí giao dịch của sở.
+- `incometax` (`number`) — Thuế thu nhập cá nhân.
+- `taxfeeamt` (`number`) — Tổng phí và thuế.
+- `posfeeamt` (`number`) — Phí vị thế.
+- `ecafeeamt` (`number`) — Phí quản lý tài sản bảo đảm.
+- `totalfeeamt` (`number`) — Tổng phí và thuế.
+- `overdrafamt` (`number`) — Gốc thấu chi.
+- `overdrafacr` (`number`) — Lãi thấu chi.
+- `totaloverdrafamt` (`number`) — Tổng nợ, bao gồm gốc và lãi thấu chi.
+- `execpnlamt` (`number`) — Lãi/lỗ VM đã thực hiện.
+- `nonpnlamt` (`number`) — Lãi/lỗ VM dự kiến.
+- `vmamt` (`number`) — Tổng lãi/lỗ VM trong ngày.
+- `vmnetamt` (`number`) — Lãi/lỗ VM ròng sau phí và thuế.
+- `nav` (`number`) — Giá trị tài sản ròng.
+- `imnoncashdta` (`number`) — Giá trị chứng khoán cho DTA.
+- `imnoncashdma` (`number`) — Giá trị chứng khoán cho DMA.
+
+## cURL
+
+```bash
+curl "$BASE_URL/oapi/accounts/$ACCOUNT_ID/derivative/assets" \
+  -H "Authorization: Bearer $ACCESS_TOKEN"
+```
+
+## Ví dụ phản hồi
+
+```json
+{
+  "s": "ok",
+  "d": {
+    "accountid": "0104005401",
+    "cashonhand": 958388321,
+    "imcash": 0,
+    "requiredimamt": 275136500,
+    "requiredimamtccp": 0,
+    "requireddmamt": 0,
+    "requireddmamtccp": 0,
+    "requiredmarginamt": 275886500,
+    "requiredmarginamtccp": 0,
+    "eca": 958107696,
+    "ecaccp": 0,
+    "prcash": 100,
+    "prcashccp": 100,
+    "accountratio": 44.684069,
+    "accountratioccp": 0,
+    "acccountstatus": "An toàn",
+    "acccountstatus_code": "0",
+    "acccountstatusccp": "An toàn",
+    "acccountstatusccp_code": "0",
+    "pp": 290459272,
+    "ppccp": 290459272,
+    "reqaddsecured": 0,
+    "reqaddsecuredccp": 0,
+    "tradefeeamt": -28050,
+    "tradefeevsd": 28050,
+    "incometax": 167875,
+    "taxfeeamt": 167875,
+    "posfeeamt": 0,
+    "ecafeeamt": 0,
+    "totalfeeamt": 167875,
+    "overdrafamt": 0,
+    "overdrafacr": 0,
+    "totaloverdrafamt": 0,
+    "execpnlamt": 0,
+    "nonpnlamt": -750000,
+    "vmamt": -750000,
+    "vmnetamt": -917875,
+    "nav": 957638321,
+    "imnoncashdta": 0,
+    "imnoncashdma": 0
+  }
+}
+```
+
+> Thay `BASE_URL`, `ACCOUNT_ID`, và `ACCESS_TOKEN` bằng giá trị của bạn.

@@ -1,0 +1,152 @@
+---
+title: "Order History"
+description: "Returns underlying order report rows for an account and date range."
+---
+
+## Endpoint
+
+```text
+GET /oapi/accounts/:accountId/underlying/orderReport
+```
+
+Returns underlying order report rows for an account and date range.
+
+### Required path parameters
+
+- `accountId` — Trading account ID.
+
+### Supported query parameters
+
+- `fromDate` — Start date in `DD/MM/YYYY` format. Example: `16/03/2026`.
+- `toDate` — End date in `DD/MM/YYYY` format. Example: `20/03/2026`.
+- `symbol` — Symbol filter. Example: `ACB`.
+
+### Response fields
+
+- `s` (`string`) — Request status. Example: `ok`.
+- `d` (`array`) — Order report rows.
+
+## Report fields
+
+- `custodycd` (`string`) — Account number.
+- `fullname` (`string`) — Customer full name.
+- `afacctno` (`string`) — Sub-account number.
+- `orderid` (`string`) — Order ID.
+- `txdate` (`string`) — Trading date.
+- `txnum` (`string`) — Transaction number.
+- `symbol` (`string`) — Symbol code.
+- `tradeplace` (`string`) — Trading venue.
+- `via` (`string`) — Order channel.
+- `viafo` (`string`) — Order channel code.
+- `orderprice` (`number`) — Order price.
+- `exectype` (`string`) — Side. Example: `Buy`.
+- `exectypecode` (`string`) — Side code. Example: `NB`.
+- `orderqtty` (`number`) — Order quantity.
+- `quoteprice` (`string`) — Quoted price.
+- `execqtty` (`number`) — Matched quantity.
+- `execprice` (`number`) — Average matched price.
+- `execamt` (`number`) — Matched value.
+- `orstatus` (`string`) — Order status.
+- `orstatusvalue` (`string`) — Order status code.
+- `matchtype` (`string`) — Match type.
+- `feeacr` (`number`) — Fee amount.
+- `cmsfee` (`number | null`) — Additional fee value.
+- `selltaxamt` (`number`) — Securities sell tax.
+- `feerate` (`number`) — Fee rate in percent.
+- `quoteqtty` (`number`) — Quoted quantity.
+- `confirmed` (`string`) — Confirmation flag.
+- `aright` (`number`) — Stock dividend tax.
+- `totalorder` (`number`) — Total orders in the result set.
+- `totalbuy` (`number`) — Total buy orders.
+- `totalsell` (`number`) — Total sell orders.
+- `totalvolbuy` (`number`) — Total buy volume.
+- `totalvalbuy` (`number`) — Total buy value.
+- `totalvolsell` (`number`) — Total sell volume.
+- `totalvalsell` (`number`) — Total sell value.
+- `totalvolselltt` (`number`) — Total matched sell volume.
+- `totalvalselltt` (`number`) — Total matched sell value.
+- `totalvolbuytt` (`number`) — Total matched buy volume.
+- `totalvalbuytt` (`number`) — Total matched buy value.
+- `totalcancel` (`number`) — Total cancelled orders.
+- `totalremove` (`number`) — Total removed orders.
+
+## cURL
+
+```bash
+curl -G "$BASE_URL/oapi/accounts/$ACCOUNT_ID/underlying/orderReport" \
+  -H "Authorization: Bearer $ACCESS_TOKEN" \
+  --data-urlencode "fromDate=16/03/2026" \
+  --data-urlencode "toDate=20/03/2026" \
+  --data-urlencode "symbol=ACB"
+```
+
+## Example response
+
+```json
+{
+    "s": "ok",
+    "d": [
+        {
+            "custodycd": "022C099995",
+            "fullname": "ĐOÀN XUÂN DƯƠNG",
+            "afacctno": "0301001425",
+            "orderid": "8000180326000188",
+            "txdate": "2026-03-18T00:00:00.000Z",
+            "txnum": "8013764654",
+            "symbol": "ACB",
+            "tradeplace": "HOSE",
+            "via": "MTS Trading",
+            "viafo": "R",
+            "orderprice": 22100,
+            "exectype": "Buy",
+            "exectypecode": "NB",
+            "orderqtty": 100,
+            "quoteprice": "22100",
+            "execqtty": 0,
+            "execprice": 0,
+            "execamt": 0,
+            "orstatus": "Chờ gửi",
+            "orstatusvalue": "8",
+            "matchtype": "N",
+            "feeacr": 3315,
+            "cmsfee": null,
+            "selltaxamt": 0,
+            "feerate": 0.15,
+            "quoteqtty": 0,
+            "confirmed": "N",
+            "aright": 0,
+            "totalorder": 1,
+            "totalbuy": 1,
+            "totalsell": 0,
+            "totalvolbuy": 100,
+            "totalvalbuy": 2210000,
+            "totalvolsell": 0,
+            "totalvalsell": 0,
+            "totalvolselltt": 0,
+            "totalvalselltt": 0,
+            "totalvolbuytt": 0,
+            "totalvalbuytt": 0,
+            "totalcancel": 0,
+            "totalremove": 0
+        }
+    ]
+}
+```
+
+> Replace `BASE_URL`, `ACCOUNT_ID`, and `ACCESS_TOKEN` with your values.
+
+---
+
+# Agent Instructions: Querying This Documentation
+
+If you need additional information that is not directly available in this page, you can query the documentation dynamically by asking a question.
+
+Perform an HTTP GET request on the current page URL with the `ask` query parameter:
+
+```text
+GET https://phs-3.gitbook.io/phs-openapi-documents/trading/order-history/underlying/order-report.md?ask=<question>
+```
+
+The question should be specific, self-contained, and written in natural language. The response will contain a direct answer to the question and relevant excerpts and sources from the documentation.
+
+Use this mechanism when the answer is not explicitly present on this page, you need clarification or additional context, or you want to retrieve related documentation sections.

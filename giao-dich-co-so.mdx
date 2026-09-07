@@ -1,0 +1,207 @@
+---
+title: "Nhóm API Giao dịch - Cơ sở (Chứng khoán)"
+description: "Đặt lệnh, sửa lệnh và hủy lệnh chứng khoán qua API Flash. Cần access_token từ B1, kèm x-otp-token cho các lệnh POST/PUT/DELETE."
+---
+
+# Nhóm API Giao dịch - Cơ sở (Chứng khoán)
+
+> Đặt lệnh, sửa lệnh và hủy lệnh chứng khoán. Mọi lệnh gọi đều cần `access_token` lấy từ **B1 (Xác thực - Cơ sở)**.
+
+## Mục lục
+
+| Mã | API | Method | Endpoint |
+| :-: | :-- | :-: | :-- |
+| C1 | Đặt lệnh | `POST` | `/accounts/:accountId/orders/underlying` |
+| C2 | Sửa lệnh | `PUT` | `/accounts/:accountId/orders/underlying/:orderId` |
+| C3 | Hủy lệnh | `DELETE` | `/accounts/:accountId/orders/underlying/:orderId` |
+| C4 | Lấy sức mua | `GET` | `/accounts/:accountId/underlying/buyingPower` |
+
+---
+
+## Xác thực
+
+Yêu cầu header `Authorization: Bearer <access_token>` lấy từ **B1 (Xác thực - Cơ sở)** cho mọi lệnh gọi.
+
+Các lệnh gọi `POST` / `PUT` / `DELETE` còn cần thêm các header sau:
+
+| Header | Giá trị | Ghi chú |
+| :-- | :-- | :-- |
+| `x-otp-token` | `552066a35eb30a9815afc952b14287a8` | Mã OTP mẫu của Sandbox |
+| `x-lang` | `vi` | Ngôn ngữ phản hồi |
+| `x-via` | `K` | Kênh gọi API |
+
+> `GET` (như C4) **không** cần `x-otp-token`.
+
+---
+
+## C1. Đặt lệnh (Cơ sở)
+
+Gửi một lệnh chứng khoán mới cho tiểu khoản giao dịch.
+
+| Thuộc tính | Giá trị |
+| :-- | :-- |
+| Method | `POST` |
+| Endpoint | `/accounts/:accountId/orders/underlying` |
+| URL Sandbox | `https://flashapi.phs.vn/sandbox/oapi/accounts/:accountId/orders/underlying` |
+
+### Tham số
+
+| Vị trí | Tên | Bắt buộc | Mô tả |
+| :-- | :-- | :-: | :-- |
+| `path` | `accountId` | Có | Số tiểu khoản giao dịch. |
+| `body` | `instrument` | Có | Mã chứng khoán. Ví dụ: `ACB` |
+| `body` | `qty` | Có | Khối lượng đặt lệnh. Ví dụ: `1` |
+| `body` | `side` | Có | Chiều lệnh (mua/bán). Ví dụ: `buy` |
+| `body` | `type` | Có | Loại lệnh. Ví dụ: `LO` |
+| `body` | `limitPrice` | Có | Giá đặt lệnh (giá giới hạn). Ví dụ: `23000` |
+| `body` | `timetype` | Có | Loại hiệu lực lệnh (time-in-force). Ví dụ: `T` |
+
+### Ví dụ yêu cầu
+
+```bash
+curl -X POST "https://flashapi.phs.vn/sandbox/oapi/accounts/$ACCOUNT_ID/orders/underlying" \
+  -H "Authorization: Bearer $ACCESS_TOKEN" \
+  -H "Content-Type: application/json" \
+  -H "x-lang: vi" -H "x-via: K" \
+  -H "x-otp-token: 552066a35eb30a9815afc952b14287a8" \
+  -d '{
+        "instrument": "ACB",
+        "qty": 1,
+        "side": "buy",
+        "type": "LO",
+        "limitPrice": 23000,
+        "timetype": "T"
+      }'
+```
+
+### Ví dụ phản hồi
+
+```json
+{
+  "s": "ok",
+  "d": { "orderid": "8000180326000219" }
+}
+```
+
+> **Hành vi trên Sandbox:** Sandbox vẫn kiểm tra đầy đủ các trường bắt buộc và đúng kiểu dữ liệu, đồng thời yêu cầu các header giống như Production, nhưng không có lệnh nào thực sự được gửi đến sàn giao dịch. Mỗi lệnh gọi thành công sẽ trả về một mã lệnh (order ID) mẫu cố định. Thay vì mã OTP thật gửi về điện thoại, Sandbox chấp nhận mã OTP mẫu cố định ghi chú ở mục **Xác thực** - hãy gửi đúng chuỗi đó trong header `x-otp-token`.
+
+---
+
+## C2. Sửa lệnh (Cơ sở)
+
+Sửa khối lượng và/hoặc giá của một lệnh chứng khoán đang tồn tại và còn đủ điều kiện sửa.
+
+| Thuộc tính | Giá trị |
+| :-- | :-- |
+| Method | `PUT` |
+| Endpoint | `/accounts/:accountId/orders/underlying/:orderId` |
+| URL Sandbox | `https://flashapi.phs.vn/sandbox/oapi/accounts/:accountId/orders/underlying/:orderId` |
+
+### Tham số
+
+| Vị trí | Tên | Bắt buộc | Mô tả |
+| :-- | :-- | :-: | :-- |
+| `path` | `accountId` | Có | Số tiểu khoản giao dịch. |
+| `path` | `orderId` | Có | Mã lệnh cần sửa. |
+| `body` | `qty` | Có | Khối lượng mới. |
+| `body` | `limitPrice` | Có | Giá đặt lệnh mới. |
+
+### Ví dụ yêu cầu
+
+```bash
+curl -X PUT "https://flashapi.phs.vn/sandbox/oapi/accounts/$ACCOUNT_ID/orders/underlying/$ORDER_ID" \
+  -H "Authorization: Bearer $ACCESS_TOKEN" \
+  -H "Content-Type: application/json" \
+  -H "x-lang: vi" -H "x-via: K" \
+  -H "x-otp-token: 552066a35eb30a9815afc952b14287a8" \
+  -d '{
+        "qty": 1,
+        "limitPrice": 23000
+      }'
+```
+
+### Ví dụ phản hồi
+
+```json
+{ "s": "ok" }
+```
+
+> **Hành vi trên Sandbox:** Sandbox vẫn kiểm tra đầy đủ các trường bắt buộc và đúng kiểu dữ liệu, đồng thời yêu cầu các header giống như Production, nhưng không có lệnh nào thực sự được gửi đến sàn giao dịch. Mỗi lệnh gọi thành công sẽ trả về một mã lệnh (order ID) mẫu cố định. Thay vì mã OTP thật gửi về điện thoại, Sandbox chấp nhận mã OTP mẫu cố định ghi chú ở mục **Xác thực** - hãy gửi đúng chuỗi đó trong header `x-otp-token`.
+
+---
+
+## C3. Hủy lệnh (Cơ sở)
+
+Hủy một lệnh chứng khoán đang tồn tại và chưa khớp.
+
+| Thuộc tính | Giá trị |
+| :-- | :-- |
+| Method | `DELETE` |
+| Endpoint | `/accounts/:accountId/orders/underlying/:orderId` |
+| URL Sandbox | `https://flashapi.phs.vn/sandbox/oapi/accounts/:accountId/orders/underlying/:orderId?timeType=T&isbuyin=N` |
+
+### Tham số
+
+| Vị trí | Tên | Bắt buộc | Mô tả |
+| :-- | :-- | :-: | :-- |
+| `path` | `accountId` | Có | Số tiểu khoản giao dịch. |
+| `path` | `orderId` | Có | Mã lệnh cần hủy. |
+| `query` | `timetype` | Có | Loại hiệu lực lệnh. Ví dụ: `T` |
+| `query` | `isbuyin` | Có | Cờ mua trả (buy-in). Ví dụ: `N` |
+
+### Ví dụ yêu cầu
+
+```bash
+curl -X DELETE "https://flashapi.phs.vn/sandbox/oapi/accounts/$ACCOUNT_ID/orders/underlying/$ORDER_ID?timeType=T&isbuyin=N" \
+  -H "Authorization: Bearer $ACCESS_TOKEN" \
+  -H "x-lang: vi" -H "x-via: K" \
+  -H "x-otp-token: 552066a35eb30a9815afc952b14287a8"
+```
+
+### Ví dụ phản hồi
+
+```json
+{ "s": "ok" }
+```
+
+> **Hành vi trên Sandbox:** Sandbox vẫn kiểm tra đầy đủ các trường bắt buộc và đúng kiểu dữ liệu, đồng thời yêu cầu các header giống như Production, nhưng không có lệnh nào thực sự được gửi đến sàn giao dịch. Mỗi lệnh gọi thành công sẽ trả về một mã lệnh (order ID) mẫu cố định. Thay vì mã OTP thật gửi về điện thoại, Sandbox chấp nhận mã OTP mẫu cố định ghi chú ở mục **Xác thực** - hãy gửi đúng chuỗi đó trong header `x-otp-token`.
+
+---
+
+## C4. Lấy sức mua Cơ sở
+
+Trả về sức mua khả dụng cho một mã chứng khoán, dựa trên mức giá dự kiến đặt lệnh. Chỉ dùng `GET`, không cần `x-otp-token`.
+
+| Thuộc tính | Giá trị |
+| :-- | :-- |
+| Method | `GET` |
+| Endpoint | `/accounts/:accountId/underlying/buyingPower` |
+| URL Sandbox | `https://flashapi.phs.vn/sandbox/oapi/accounts/:accountId/underlying/buyingPower` |
+
+### Tham số
+
+| Vị trí | Tên | Bắt buộc | Mô tả |
+| :-- | :-- | :-: | :-- |
+| `path` | `accountId` | Có | Mã tài khoản giao dịch. |
+| `query` | `symbol` | Có | Mã chứng khoán. Ví dụ: `VIC` |
+| `query` | `quotePrice` | Có | Giá dùng để tính sức mua. Ví dụ: `222000` |
+
+### Ví dụ yêu cầu
+
+```bash
+curl "https://flashapi.phs.vn/sandbox/oapi/accounts/$ACCOUNT_ID/underlying/buyingPower?symbol=VIC&quotePrice=222000" \
+  -H "Authorization: Bearer $ACCESS_TOKEN"
+```
+
+### Ví dụ phản hồi
+
+```json
+{
+  "s": "ok",
+  "d": [
+    { "ppse": 0, "maxqty": -1, "allowance": 16, "blocked": 0 }
+  ]
+}
+```
+
+> **Hành vi trên Sandbox:** Sandbox trả về đúng một bản ghi mẫu cố định cho bất kỳ `accountId` nào bạn truyền vào, giúp bạn xác nhận tên trường và kiểu dữ liệu trước khi trỏ hệ thống của bạn sang Production, nơi dữ liệu phản ánh đúng tài khoản thật.

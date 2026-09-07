@@ -1,0 +1,147 @@
+---
+title: "Sổ lệnh trong ngày"
+description: "Trả về các lệnh cơ sở của ngày giao dịch hiện tại cho một tài khoản."
+---
+
+Lấy các lệnh underlying của ngày giao dịch hiện tại cho một tài khoản.
+
+## Endpoint
+
+```text
+GET /oapi/accounts/:accountId/underlying/dailyOrder
+```
+
+Trả về các lệnh underlying của ngày giao dịch hiện tại cho một tài khoản.
+
+### Tham số đường dẫn yêu cầu
+
+- `accountId` — Mã tài khoản giao dịch.
+
+### Trường phản hồi
+
+- `s` (`string`) — Trạng thái request. Ví dụ: `ok`.
+- `d` (`array`) — Danh sách các dòng lệnh trong ngày.
+
+## Trường đặt lệnh
+
+- `tlid` (`string`) — Mã người dùng nội bộ hoặc mã terminal.
+- `tlname` (`string`) — Tên người dùng nội bộ hoặc tên terminal.
+- `exectype` (`string`) — Mã chiều lệnh.
+- `exectypedesccode` (`string`) — Mã loại thực hiện.
+- `matchtype` (`string`) — Loại khớp lệnh.
+- `pricetype` (`string`) — Loại lệnh.
+- `custodycd` (`string`) — Số tài khoản.
+- `afacctno` (`string`) — Số tiểu khoản.
+- `symbol` (`string`) — Mã chứng khoán.
+- `orderqtty` (`number`) — Số lượng đặt lệnh.
+- `quoteprice` (`number`) — Giá lệnh.
+- `qttyimplement` (`string | null`) — Giá trị số lượng đã thực hiện.
+- `orstatusfo` (`string`) — Mã trạng thái lệnh nội bộ.
+- `orstatuscode` (`string`) — Mã trạng thái lệnh.
+- `status` (`string`) — Nội dung trạng thái lệnh.
+- `orderid` (`string`) — Mã lệnh.
+- `hosesession` (`string | null`) — Giá trị phiên HOSE.
+- `lastchange` (`string | null`) — Thời gian khớp gần nhất.
+- `remainqtty` (`number`) — Số lượng còn lại.
+- `cancelqtty` (`number`) — Số lượng đã hủy.
+- `adjustqtty` (`number`) — Số lượng đã sửa.
+- `tradeplace` (`string`) — Sàn giao dịch.
+- `descexectype` (`string`) — Mô tả chiều lệnh.
+- `iscancel` (`string`) — Cờ cho phép hủy.
+- `isadmend` (`string`) — Cờ cho phép sửa.
+- `isdisposal` (`string`) — Cờ bán giải chấp.
+- `foacctno` (`string`) — Số tham chiếu front-office.
+- `odtimestamp` (`string`) — Thời gian đặt lệnh.
+- `orstatusvalue` (`string`) — Giá trị trạng thái lệnh.
+- `limitprice` (`number`) — Giá giới hạn.
+- `quoteqtty` (`number`) — Khối lượng báo giá.
+- `confirmed` (`string`) — Cờ xác nhận.
+- `execqtty` (`number`) — Khối lượng đã khớp.
+- `execamt` (`number`) — Giá trị đã khớp.
+- `orstatus` (`string`) — Trạng thái lệnh bằng tiếng Anh.
+- `execprice` (`number`) — Giá khớp bình quân.
+- `txtime` (`string`) — Thời gian lệnh.
+- `username` (`string`) — Mã người dùng.
+- `txdate` (`string`) — Ngày giao dịch.
+- `viafo` (`string`) — Mã kênh đặt lệnh.
+- `via` (`string`) — Kênh đặt lệnh.
+- `feedbackmsg` (`string`) — Thông báo phản hồi.
+- `timetype` (`string`) — Khóa kiểu hiệu lực thời gian.
+- `timetypevalue` (`string`) — Giá trị kiểu hiệu lực thời gian.
+- `remainamt` (`number`) — Giá trị còn lại.
+- `rootorderid` (`string`) — Mã lệnh gốc.
+- `reforderid` (`string | null`) — Mã lệnh tham chiếu.
+- `timetypecode` (`string`) — Mã kiểu hiệu lực thời gian.
+- `isbuyin` (`string`) — Cờ buy-in.
+- `exectypedesc` (`string`) — Mô tả chiều lệnh. Ví dụ: `Buy`.
+
+## cURL
+
+```bash
+curl "$BASE_URL/oapi/accounts/$ACCOUNT_ID/underlying/dailyOrder" \
+  -H "Authorization: Bearer $ACCESS_TOKEN"
+```
+
+## Ví dụ phản hồi
+
+```json
+{
+    "s": "ok",
+    "d": [
+        {
+            "tlid": "7878",
+            "tlname": "MTSTRADING",
+            "exectype": "NB",
+            "exectypedesccode": "NB",
+            "matchtype": "NB",
+            "pricetype": "LO",
+            "custodycd": "022C099995",
+            "afacctno": "0301001425",
+            "symbol": "ACB",
+            "orderqtty": 100,
+            "quoteprice": 22100,
+            "qttyimplement": null,
+            "orstatusfo": "OD_ORSTATUS_8",
+            "orstatuscode": "8",
+            "status": "Chờ gửi",
+            "orderid": "8000180326000188",
+            "hosesession": null,
+            "lastchange": null,
+            "remainqtty": 100,
+            "cancelqtty": 0,
+            "adjustqtty": 0,
+            "tradeplace": "HOSE",
+            "descexectype": "Mua thông thường",
+            "iscancel": "Y",
+            "isadmend": "Y",
+            "isdisposal": "N",
+            "foacctno": "18/03/20260023406868",
+            "odtimestamp": "2026/03/19 14:33:42.807145000",
+            "orstatusvalue": "8",
+            "limitprice": 22100,
+            "quoteqtty": 0,
+            "confirmed": "N",
+            "execqtty": 0,
+            "execamt": 0,
+            "orstatus": "Sending pending",
+            "execprice": 0,
+            "txtime": "14:33:42",
+            "username": "0301001024",
+            "txdate": "2026-03-18T00:00:00.000Z",
+            "viafo": "R",
+            "via": "MTS Trading",
+            "feedbackmsg": "Chờ gửi",
+            "timetype": "SATIMETYPE_T",
+            "timetypevalue": "T",
+            "remainamt": 2210000,
+            "rootorderid": "8000180326000188",
+            "reforderid": null,
+            "timetypecode": "T",
+            "isbuyin": "N",
+            "exectypedesc": "Buy"
+        }
+    ]
+}
+```
+
+> Thay `BASE_URL`, `ACCOUNT_ID`, và `ACCESS_TOKEN` bằng giá trị của bạn.

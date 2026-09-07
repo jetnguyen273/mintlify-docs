@@ -1,0 +1,65 @@
+---
+title: "Closed Positions"
+description: "Returns closed derivative positions for an account."
+---
+
+## Endpoint
+
+```text
+GET /oapi/accounts/:accountId/derivative/closedPositions
+```
+
+Returns closed derivative positions for an account.
+
+### Required path parameters
+
+- `accountId` — Trading account ID.
+
+### Response fields
+
+- `s` (`string`) — Request status. Always returns `ok`.
+- `d` (`array`) — Closed position rows.
+
+## Closed position fields
+
+- `numofrow` (`number`) — Row number.
+- `dmacctno` (`string`) — Margin account.
+- `dtacctno` (`string`) — Trading account.
+- `qtty` (`number`) — Quantity.
+- `symbol` (`string`) — Instrument symbol.
+- `vwap` (`number`) — Long average cost price.
+- `svwap` (`number`) — Short average cost price.
+- `diff` (`number`) — Difference value.
+- `nvalue` (`number`) — Contract multiplier.
+- `vrdebtvmamt` (`number`) — VM profit or loss.
+
+## cURL
+
+```bash
+curl "$BASE_URL/oapi/accounts/$ACCOUNT_ID/derivative/closedPositions" \
+  -H "Authorization: Bearer $ACCESS_TOKEN"
+```
+
+## Example response
+
+```json
+{
+  "s": "ok",
+  "d": [
+    {
+      "numofrow": 1,
+      "dmacctno": "022C979999",
+      "dtacctno": "0104005401",
+      "qtty": 1,
+      "symbol": "41I1G6000",
+      "vwap": 1785,
+      "svwap": 1785,
+      "diff": 0,
+      "nvalue": 100000,
+      "vrdebtvmamt": 0
+    }
+  ]
+}
+```
+
+> Replace `BASE_URL`, `ACCOUNT_ID`, and `ACCESS_TOKEN` with your values.

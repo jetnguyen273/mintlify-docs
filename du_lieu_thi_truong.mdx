@@ -1,0 +1,319 @@
+---
+title: "Nhóm API Dữ liệu thị trường"
+description: "Các API Dữ liệu thị trường công khai, không yêu cầu đăng nhập"
+---
+
+<Info>
+  **Xác thực:** Không yêu cầu xác thực. Tất cả API trong nhóm này có thể gọi trực tiếp bằng HTTP `GET`.
+</Info>
+
+## A1. Lấy dữ liệu mới nhất theo mã
+
+Trả về dữ liệu thị trường mới nhất cho một hoặc nhiều mã, bao gồm giá, khối lượng, sổ lệnh và giao dịch khối ngoại.
+
+`GET` `/priceboard/symbol-latest-data`
+
+**URL Sandbox**
+
+```text
+https://flashapi.phs.vn/sandbox/oapi/priceboard/symbol-latest-data
+```
+
+### Tham số
+
+<ParamField query="symbolList" type="string" required>
+  Danh sách mã, phân tách bằng dấu phẩy. Ví dụ: `ACB,FPT,VIC`
+</ParamField>
+
+<ParamField query="fields" type="string" required>
+  Các trường dữ liệu cần trả về. Ví dụ: `marketId,o,h,l,c,vo`
+</ParamField>
+
+<CodeGroup>
+
+```bash cURL
+curl -G "https://flashapi.phs.vn/sandbox/oapi/priceboard/symbol-latest-data" \
+  --data-urlencode "symbolList=ACB,FPT,VIC" \
+  --data-urlencode "fields=marketId,o,h,l,c,vo"
+```
+
+</CodeGroup>
+
+<ResponseExample>
+
+```json 200
+[
+  {
+    "s": "ACB",
+    "o": 23400,
+    "h": 23500,
+    "l": 23000,
+    "c": 23000,
+    "ch": -600,
+    "r": -2.54,
+    "vo": 13775200,
+    "va": 319093870000,
+    "ce": 25250,
+    "fl": 21950,
+    "marketId": "STO",
+    "m": "HOSE",
+    "n1": "Ngân hàng TMCP Á Châu",
+    "n2": "Asia Commercial JS Bank"
+  }
+]
+```
+
+</ResponseExample>
+
+<Note>
+  **Sandbox:** Sandbox luôn trả về cùng một bộ dữ liệu mẫu. Tham số request vẫn được kiểm tra về tính đầy đủ và định dạng, nhưng thay đổi mã hoặc `fields` không làm thay đổi dữ liệu mẫu.
+</Note>
+
+---
+
+## A2. Lấy dữ liệu thống kê khớp lệnh theo mã
+
+Trả về thống kê khớp lệnh theo từng bước giá, bao gồm khối lượng và tỷ lệ mua/bán.
+
+`GET` `/priceboard/symbol-statics-data`
+
+**URL Sandbox**
+
+```text
+https://flashapi.phs.vn/sandbox/oapi/priceboard/symbol-statics-data
+```
+
+### Tham số
+
+<ParamField query="symbol" type="string" required>
+  Mã chứng khoán. Ví dụ: `ACB`
+</ParamField>
+
+<ParamField query="fetchCount" type="integer" required>
+  Số bước giá cần trả về. Ví dụ: `10`
+</ParamField>
+
+<CodeGroup>
+
+```bash cURL
+curl -G "https://flashapi.phs.vn/sandbox/oapi/priceboard/symbol-statics-data" \
+  --data-urlencode "symbol=ACB" \
+  --data-urlencode "fetchCount=10"
+```
+
+</CodeGroup>
+
+<ResponseExample>
+
+```json 200
+[
+  {
+    "price": 23500,
+    "volume": 2400,
+    "buyVolume": 2400,
+    "sellVolume": 0,
+    "buyRate": 1,
+    "sellRate": 0,
+    "rate": 0.0002
+  },
+  {
+    "price": 23450,
+    "volume": 5000,
+    "buyVolume": 100,
+    "sellVolume": 4900,
+    "buyRate": 0.02,
+    "sellRate": 0.98,
+    "rate": 0.0004
+  }
+]
+```
+
+</ResponseExample>
+
+<Note>
+  **Sandbox:** Sandbox luôn trả về cùng một bộ dữ liệu mẫu. Tham số request được kiểm tra nhưng không làm thay đổi dữ liệu mẫu trả về.
+</Note>
+
+---
+
+## A3. Lấy dữ liệu khớp lệnh theo mã
+
+Trả về các giao dịch khớp lệnh riêng lẻ (**tick data**) của một mã.
+
+`GET` `/priceboard/symbol-matching-data`
+
+**URL Sandbox**
+
+```text
+https://flashapi.phs.vn/sandbox/oapi/priceboard/symbol-matching-data
+```
+
+### Tham số
+
+<ParamField query="symbol" type="string" required>
+  Mã chứng khoán. Ví dụ: `ACB`
+</ParamField>
+
+<ParamField query="fetchCount" type="integer" required>
+  Số bản ghi cần trả về. Ví dụ: `10`
+</ParamField>
+
+<CodeGroup>
+
+```bash cURL
+curl -G "https://flashapi.phs.vn/sandbox/oapi/priceboard/symbol-matching-data" \
+  --data-urlencode "symbol=ACB" \
+  --data-urlencode "fetchCount=10"
+```
+
+</CodeGroup>
+
+<ResponseExample>
+
+```json 200
+{
+  "fromIndex": 13745600,
+  "toIndex": 13775200,
+  "data": [
+    {
+      "ti": 1773992700007,
+      "c": 23000,
+      "ch": -600,
+      "h": 23500,
+      "l": 23000,
+      "mb": "SELL",
+      "mv": 6400,
+      "r": -2.54,
+      "va": 319093870000,
+      "vo": 13775200
+    }
+  ]
+}
+```
+
+</ResponseExample>
+
+<Note>
+  **Sandbox:** Sandbox luôn trả về cùng một bộ dữ liệu mẫu. Thay đổi `symbol` hoặc `fetchCount` không làm thay đổi dữ liệu mẫu.
+</Note>
+
+---
+
+## A4. Lấy danh sách toàn bộ mã
+
+Trả về thông tin cơ bản của các mã **cơ sở, phái sinh, chứng quyền (CW) và chỉ số**, bao gồm mã, tên, sàn và loại công cụ.
+
+<Tip>
+  Endpoint này phù hợp để xây dựng **danh sách chọn mã** hoặc **instrument master**.
+</Tip>
+
+`GET` `/priceboard/all-stocks`
+
+**URL Sandbox**
+
+```text
+https://flashapi.phs.vn/sandbox/oapi/priceboard/all-stocks
+```
+
+### Tham số
+
+Không yêu cầu tham số.
+
+<CodeGroup>
+
+```bash cURL
+curl "https://flashapi.phs.vn/sandbox/oapi/priceboard/all-stocks"
+```
+
+</CodeGroup>
+
+<ResponseExample>
+
+```json 200
+[
+  {
+    "s": "ACB",
+    "ti": 1774332196854,
+    "t": "STOCK",
+    "n1": "Ngân hàng TMCP Á Châu",
+    "n2": "Asia Commercial JS Bank",
+    "marketId": "STO",
+    "m": "HOSE"
+  }
+]
+```
+
+</ResponseExample>
+
+<Note>
+  **Sandbox:** Endpoint luôn trả về cùng một bộ dữ liệu mẫu.
+</Note>
+
+---
+
+## A5. Lấy dữ liệu nến (Candlestick)
+
+Trả về dữ liệu **OHLCV** dùng cho biểu đồ.
+
+<Info>
+  Các khung thời gian được hỗ trợ: `1`, `5`, `15`, `30`, `60`, `120`, `1D`, `1W`, `1M`. Trong đó các giá trị số tính theo phút; `D`, `W`, `M` tương ứng với ngày, tuần và tháng.
+</Info>
+
+`GET` `/priceboard/candlestick-data`
+
+**URL Sandbox**
+
+```text
+https://flashapi.phs.vn/sandbox/oapi/priceboard/candlestick-data
+```
+
+### Tham số
+
+<ParamField query="symbol" type="string" required>
+  Mã chứng khoán. Ví dụ: `ACB`
+</ParamField>
+
+<ParamField query="resolution" type="string" required>
+  Khung thời gian. Ví dụ: `1D`
+</ParamField>
+
+<ParamField query="from" type="integer" required>
+  Thời gian bắt đầu, Unix timestamp. Ví dụ: `1735257600`
+</ParamField>
+
+<ParamField query="to" type="integer" required>
+  Thời gian kết thúc, Unix timestamp. Ví dụ: `1774051200`
+</ParamField>
+
+<CodeGroup>
+
+```bash cURL
+curl -G "https://flashapi.phs.vn/sandbox/oapi/priceboard/candlestick-data" \
+  --data-urlencode "symbol=ACB" \
+  --data-urlencode "resolution=1D" \
+  --data-urlencode "from=1735257600" \
+  --data-urlencode "to=1774051200"
+```
+
+</CodeGroup>
+
+<ResponseExample>
+
+```json 200
+{
+  "t": [1735278140, 1735536640],
+  "o": [25600, 25350],
+  "h": [25700, 25650],
+  "l": [25500, 25350],
+  "c": [25550, 25400],
+  "v": [7689900, 5000400],
+  "s": "ok",
+  "nextTime": null
+}
+```
+
+</ResponseExample>
+
+<Note>
+  **Sandbox:** Sandbox luôn trả về cùng một bộ dữ liệu mẫu. Các tham số `symbol`, `resolution`, `from` và `to` được kiểm tra nhưng không làm thay đổi dữ liệu mẫu trả về.
+</Note>

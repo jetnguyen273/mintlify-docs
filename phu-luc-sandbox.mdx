@@ -1,0 +1,43 @@
+---
+title: "Phụ lục"
+---
+
+## Tham chiếu nhanh toàn bộ endpoint
+
+| **API** | **Phương thức** | **Đường dẫn (nối vào base URL)** |
+| :-- | :-- | :-- |
+| A1. Lấy dữ liệu mới nhất của mã chứng khoán | GET | /priceboard/symbol-latest-data |
+| A2. Lấy dữ liệu thống kê của mã chứng khoán | GET | /priceboard/symbol-statics-data |
+| A3. Lấy dữ liệu khớp lệnh của mã chứng khoán | GET | /priceboard/symbol-matching-data |
+| A4. Lấy danh sách tất cả mã chứng khoán | GET | /priceboard/all-stocks |
+| A5. Lấy dữ liệu nến | GET | /priceboard/candlestick-data |
+| B1. Xác thực — Cổ phiếu | POST | /auth/gen-secret-key/underlying |
+| B2. Xác thực — Phái sinh | POST | /auth/gen-secret-key/derivative |
+| C1. Đặt lệnh (Cổ phiếu) | POST | /accounts/:accountId/orders/underlying |
+| C2. Sửa lệnh (Cổ phiếu) | PUT | /accounts/:accountId/orders/underlying/:orderId |
+| C3. Hủy lệnh (Cổ phiếu) | DELETE | /accounts/:accountId/orders/underlying/:orderId |
+| C4. Lấy sức mua cổ phiếu | GET | /accounts/:accountId/underlying/buyingPower |
+| D1. Đặt lệnh (Phái sinh) | POST | /accounts/:accountId/orders/derivative |
+| D2. Sửa lệnh (Phái sinh) | PUT | /accounts/:accountId/orders/derivative/:orderId |
+| D3. Hủy lệnh (Phái sinh) | DELETE | /accounts/:accountId/orders/derivative/:orderId |
+| D4. Lấy sức mua phái sinh | GET | /accounts/:accountId/derivative/buyingPower |
+| E1. Danh mục (Cổ phiếu) | GET | /accounts/:accountId/underlying/portfolio |
+| E2. Lệnh trong ngày (Cổ phiếu) | GET | /accounts/:accountId/underlying/dailyOrder |
+| E3. Báo cáo lệnh (Cổ phiếu) | GET | /accounts/:accountId/underlying/orderReport |
+| E4. Số dư / Tài sản (Cổ phiếu) | GET | /accounts/:accountId/underlying/assets |
+| F1. Vị thế mở (Phái sinh) | GET | /accounts/:accountId/derivative/openPositions |
+| F2. Vị thế đã đóng (Phái sinh) | GET | /accounts/:accountId/derivative/closedPositions |
+| F3. Lệnh trong ngày (Phái sinh) | GET | /accounts/:accountId/derivative/dailyOrder |
+| F4. Báo cáo lệnh / Lịch sử lệnh (Phái sinh) | GET | /accounts/:accountId/derivative/orderHistory |
+| F5. Số dư / Tài sản (Phái sinh) | GET | /accounts/:accountId/derivative/assets |
+
+## 12.2 Biến môi trường Postman
+
+| **Biến** | **Giá trị ví dụ** | **Được thiết lập bởi** |
+| :-- | :-- | :-- |
+| base\_url | [https://flashapi.phs.vn/sandbox/oapi](https://flashapi.phs.vn/sandbox/oapi) | Bạn (đã điền sẵn trong environment đính kèm) |
+| username / password | thông tin demo sandbox của bạn | Bạn |
+| access\_token | (tự động điền) | Test script của request xác thực |
+| otp\_token | (tự động điền) | Test script của request xác thực |
+| account\_id | mã tài khoản test sandbox của bạn | Bạn |
+| order\_id | (tự động điền từ response đặt lệnh) | Test script của request đặt lệnh |

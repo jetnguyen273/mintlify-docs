@@ -1,0 +1,116 @@
+---
+title: "Introduction"
+description: "A first-time guide to the FlashAPI Sandbox environment"
+---
+
+## Who Is This Guide For?
+
+This guide is designed for anyone using **FlashAPI** for the first time.
+
+The guide focuses on the **Sandbox environment** and explains:
+
+- How the Sandbox works
+- How Sandbox behavior differs from Production
+- How to test APIs directly from the documentation
+- How to test APIs using Postman or your own application
+
+## What Is the Sandbox?
+
+The **Sandbox** is a safe, no-risk testing environment for FlashAPI.
+
+It follows the same API structure as Production, including the same:
+
+- API paths
+- Request parameters
+- Authentication flow
+- Response structures
+
+However, Sandbox data and transactions are isolated from the real trading environment.
+
+### Sandbox Behavior
+
+| API Type | Sandbox Behavior |
+| --- | --- |
+| **Market Data** | Returns a fixed, realistic example dataset regardless of the symbol or fields requested. |
+| **Trading** | Fully validates requests but does not send orders to the real exchange. No real order is created and no money is moved. |
+| **Authentication** | Accepts Sandbox demo credentials and returns fixed authentication tokens, including a fixed OTP token. |
+
+## What Can You Do in the Sandbox?
+
+Use the Sandbox to safely:
+
+- Learn the API structure and request/response format
+- Test authentication and token handling
+- Build and debug your integration
+- Validate API request parameters
+- Test trading workflows without financial risk
+- Demonstrate an end-to-end trading flow
+
+### Example Workflow
+
+A typical Sandbox workflow is:
+
+```text
+1. Login
+   ↓
+2. Get market data / quote
+   ↓
+3. Check account information
+   ↓
+4. Place an order
+   ↓
+5. Check order status
+```
+
+All trading operations in this workflow are simulated and do not reach the real exchange.
+
+<Note>
+  The Sandbox is intended for development, testing, and integration validation. It should not be used as a source of live market data or real trading results.
+</Note>
+
+## Sandbox vs Production
+
+The Sandbox and Production environments use the same API structure, but their purposes are different.
+
+|  | Sandbox | Production |
+| --- | --- | --- |
+| **Purpose** | Development & testing | Real trading |
+| **Market Data** | Fixed sample data | Live market data |
+| **Trading Orders** | Simulated | Real orders |
+| **Money Movement** | No | Yes, where applicable |
+| **Authentication** | Sandbox credentials | Production credentials |
+| **OTP** | Fixed Sandbox OTP | Real OTP / Production authentication |
+| **Risk** | No financial risk | Real financial impact |
+
+<Warning>
+  Do not use Production credentials or real trading accounts for development and testing. Complete your integration testing in the Sandbox before switching to Production.
+</Warning>
+
+## Getting Started
+
+For a typical first-time integration, follow this sequence:
+
+<Steps>
+  <Step title="Authenticate">
+    Authenticate using the appropriate account type.
+  </Step>
+  <Step title="Retrieve market data">
+    Retrieve market data to verify the connection.
+  </Step>
+  <Step title="Query account information">
+    Query account and portfolio information.
+  </Step>
+  <Step title="Test order placement">
+    Test order placement in the Sandbox.
+  </Step>
+  <Step title="Validate the workflow">
+    Validate the complete workflow.
+  </Step>
+  <Step title="Switch to Production">
+    Switch to Production after testing is completed and your OpenAPI access has been approved.
+  </Step>
+</Steps>
+
+<Note>
+  Production access requires the appropriate OpenAPI permissions and approval from PHS.
+</Note>

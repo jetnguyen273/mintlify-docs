@@ -1,0 +1,215 @@
+---
+title: "Socket.IO-connection"
+---
+
+## Overview
+
+Instead of repeatedly calling the REST API to check for updates, you can open a **Socket.IO connection** and have PHS push data to you the moment it changes. This is the recommended way to build:
+
+- A live-updating priceboard
+- Real-time order status tracking (placed / matched / cancelled / amended)
+- Live buying power and portfolio updates
+
+There are **two separate socket connections** — they are not combined into one:
+
+| Connection | Purpose | Requires login token? |
+| --- | --- | --- |
+| **Market Data** | Live prices for any symbol | No |
+| **Order / Asset** | Your own orders, buying power, and portfolio changes | Yes |
+
+<Note>
+  These two connections use different hosts, paths, and message formats. Mixing them up is the most common integration mistake — see [Troubleshooting](#troubleshooting) below.
+</Note>
+
+---
+
+## Prerequisites
+
+- A Socket.IO client library. The examples below use `socket.io-client` for Node.js.
+- For the **Order / Asset** connection, an `access_token` from [the login endpoint](/authentication/underlying).
+- Your trading sub-account number, for subscribing to your own order/asset updates.
+
+---
+
+## Connection 1: Market Data
+
+Connects to PHS's market data gateway and streams live price ticks for any symbol you subscribe to. No authentication required.
+
+<CodeGroup>
+
+```js Node.js
+const io = require("socket.io-client");
+
+const socket = io("http://<host>:<port>", {
+  path: "/ws/socket.io",
+  transports: ["websocket"],
+});
+
+socket.on("connect", () => {
+  console.log("connected", socket.id);
+  socket.emit("subscribe", "market.quoteKrx.ACB");     // price updates for ACB
+  socket.emit("subscribe", "market.bidofferKrx.ACB");  // bid/offer updates for ACB
+});
+
+socket.on("publish", (data) => {
+  console.log(data);
+});
+
+socket.on("disconnect", (reason) => console.log("disconnect", reason));
+```
+
+</CodeGroup>
+
+To watch another symbol, call `socket.emit("subscribe", ...)` again with a different symbol in the topic string. To stop watching a symbol, use the same topic string with `socket.emit("unsubscribe", ...)`.
+
+---
+
+## Connection 2: Order / Asset
+
+Connects to PHS's account gateway and streams updates about your own orders, buying power, and portfolio. Requires your `access_token`.
+
+<CodeGroup>
+
+```js Node.js
+const io = require("socket.io-client");
+
+const SUB_ACCOUNT = "0104006592";           // your sub-trading-account number
+const token = "022Cxxxx||xxxx||xxxxxxxx";    // access_token from the login API
+
+const socket = io("http://<host>:<port>", {
+  // use /realtime/eqt/socket.io for underlying (cash) accounts,
+  // or /realtime/fno/socket.io for derivatives accounts
+  path: "/realtime/eqt/socket.io",
+  transports: ["websocket"],
+});
+
+socket.on("connect_error", (err) => {
+  console.error("connect_error:", err?.message || err);
+});
+
+socket.on("connect", () => {
+  console.log("connected - socket.id =", socket.id);
+
+  socket.emit("get", {
+    data: {
+      args: [`account:${SUB_ACCOUNT}`],
+      op: "subscribe",
+      token,
+    },
+    method: "get",
+    url: "/client/send",
+  });
+});
+
+socket.on("instrument", (data) => console.log("instrument", data));
+socket.on("trade", (data) => console.log("trade", data));
+socket.on("account", (data) => console.log("account", data));
+socket.on("disconnect", (reason) => console.log("disconnect", reason));
+```
+
+</CodeGroup>
+
+<Warning>
+  Choose the correct `path` for your account type. `/realtime/eqt/socket.io` (underlying/cash) and `/realtime/fno/socket.io` (derivatives) are not interchangeable — subscribing on the wrong path will silently return nothing.
+</Warning>
+
+---
+
+## Understanding `account` events
+
+All account-related updates — order changes, buying power changes, and portfolio changes — arrive through the **same** `account` event. There is no separate `OM`, `CI`, or `SE` event name. Instead, look at the `eventtype` field **inside** the payload to know what kind of update you received:
+
+| `eventtype` | Meaning | Applies to |
+| --- | --- | --- |
+| `OO` | Order changed (placed / matched / cancelled / amended) | Derivatives accounts |
+| `OM` | Order changed (placed / matched / cancelled / amended) | Underlying (cash) accounts |
+| `CI` | Buying power / cash changed | Both |
+| `SE` | Portfolio changed | Both |
+
+```js
+socket.on("account", (data) => {
+  const record = Array.isArray(data.data) ? data.data[0] : data;
+
+  switch (record.eventtype) {
+    case "OO":
+    case "OM":
+      console.log("Order update:", record);
+      break;
+    case "CI":
+      console.log("Buying power update:", record);
+      break;
+    case "SE":
+      console.log("Portfolio update:", record);
+      break;
+    default:
+      console.log("Other event:", record);
+  }
+});
+```
+
+<Tip>
+  A very common mistake is writing `socket.on("OM", ...)` expecting it to fire directly. It never will — always listen on `socket.on("account", ...)` and branch on `eventtype` inside the payload.
+</Tip>
+
+---
+
+## Field reference
+
+The tables below cover the most commonly used fields. Field names are intentionally short (legacy naming) — this is your lookup table.
+
+### `instrument` fields (market data)
+
+| Field | Meaning | Field | Meaning |
+| --- | --- | --- | --- |
+| `SB` | Symbol | `CL` | Ceiling price |
+| `FN` | Full name | `FL` | Floor price |
+| `RE` | Reference price | `CP` | Last matched price |
+| `CH` | Change vs. reference | `CV` | Last matched volume |
+| `TT` | Total traded volume | `TV` | Total traded value |
+| `OP` | Open price | `HI` | High price |
+| `LO` | Low price | `AP` | Average price |
+| `B1` / `V1` | Bid price / volume, level 1 | `S1` / `U1` | Offer price / volume, level 1 |
+| `FB` / `FS` | Foreign buy / sell volume | `FO` | Foreign room |
+
+### `trade` fields (matched trades)
+
+| Field | Meaning | Field | Meaning |
+| --- | --- | --- | --- |
+| `SB` | Symbol | `FT` | Match time |
+| `FMP` | Matched price | `FV` | Matched volume |
+| `FCV` | Price change | `AVO` / `AVA` | Total traded volume / value |
+
+### `account` fields when `eventtype = OM` (underlying) or `OO` (derivatives)
+
+| Field | Meaning | Field | Meaning |
+| --- | --- | --- | --- |
+| `orderid` | Order number | `symbol` / `code` | Symbol |
+| `order_side` / `subside` | Buy (`NB`) / Sell (`NS`) | `order_status` / `status` | Order status code |
+| `order_price` / `orderprice` | Order price | `order_quantity` / `orderqtty` | Order quantity |
+| `matched_price` / `matchprice` | Matched price | `matched_quantity` / `matchqtty` | Matched quantity |
+| `remain_quantity` / `remain_qtty` | Remaining unfilled quantity | `cancel_quantity` / `cancel_qtty` | Cancelled quantity |
+
+<Note>
+  Underlying (FLEX) and derivatives (FDS) accounts use slightly different field names for the same concept (e.g. `orderprice` vs. `order_price`). Match the field names to your account type.
+</Note>
+
+---
+
+## Troubleshooting
+
+| Symptom | Likely cause |
+| --- | --- |
+| `connect_error` immediately on connect | Wrong host/port, or that host isn't reachable from your network |
+| Connected, but `account` never fires | Missing or expired `token`, or wrong sub-account number |
+| `socket.on("OM", ...)` never fires | `OM` is a data field, not an event name — listen on `account` instead (see above) |
+| No data after subscribing | Wrong `path` for your account type (underlying vs. derivatives) |
+| Repeated connect/disconnect loop | Check that your token hasn't expired and your sub-account format is correct |
+
+---
+
+## Best practices
+
+- Keep `access_token` and any client secrets on your **server**, never in browser-side JavaScript.
+- Call `unsubscribe` for symbols or accounts you no longer need to reduce unnecessary traffic.
+- Use a single connection per gateway and subscribe to multiple topics on it, rather than opening a new connection per symbol.
+- Never commit real tokens into source control — treat a leaked token the same as a leaked password.

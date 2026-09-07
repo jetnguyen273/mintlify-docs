@@ -1,0 +1,219 @@
+---
+title: "Kết nối Socket.IO"
+---
+
+## Tổng quan
+
+Thay vì liên tục gọi REST API để kiểm tra các cập nhật, bạn có thể mở một **kết nối Socket.IO** và để PHS chủ động đẩy dữ liệu đến bạn ngay khi dữ liệu thay đổi. Đây là phương thức được khuyến nghị để xây dựng:
+
+- Priceboard cập nhật theo thời gian thực
+- Theo dõi trạng thái lệnh theo thời gian thực (đặt lệnh / khớp lệnh / hủy lệnh / sửa lệnh)
+- Cập nhật sức mua và danh mục đầu tư theo thời gian thực
+
+Có **hai kết nối socket riêng biệt** — chúng không được gộp chung thành một:
+
+| Kết nối | Mục đích | Yêu cầu login token? |
+| --- | --- | --- |
+| **Market Data** | Giá theo thời gian thực cho bất kỳ mã chứng khoán nào | Không |
+| **Order / Asset** | Lệnh, sức mua và thay đổi danh mục của chính tài khoản | Có |
+
+<Note>
+  Hai kết nối này sử dụng host, path và định dạng message khác nhau. Việc nhầm lẫn giữa hai kết nối là lỗi tích hợp phổ biến nhất — xem phần [Troubleshooting](#troubleshooting) bên dưới.
+</Note>
+
+---
+
+## Điều kiện cần thiết
+
+- Thư viện Socket.IO client. Các ví dụ bên dưới sử dụng `socket.io-client` cho Node.js.
+- Đối với kết nối **Order / Asset**, cần có `access_token` từ [login endpoint](/authentication/underlying).
+- Số tài khoản giao dịch phụ để đăng ký nhận các cập nhật về lệnh và tài sản của chính tài khoản đó.
+
+---
+
+## Kết nối 1: Market Data
+
+Kết nối đến cổng dữ liệu thị trường của PHS và nhận dữ liệu giá theo thời gian thực cho bất kỳ mã chứng khoán nào mà bạn đăng ký. Không yêu cầu xác thực.
+
+<CodeGroup>
+
+```js
+const io = require("socket.io-client");
+
+const socket = io("http://<host>:<port>", {
+  path: "/ws/socket.io",
+  transports: ["websocket"],
+});
+
+socket.on("connect", () => {
+  console.log("connected", socket.id);
+  socket.emit("subscribe", "market.quoteKrx.ACB");
+  socket.emit("subscribe", "market.bidofferKrx.ACB");
+});
+
+socket.on("publish", (data) => {
+  console.log(data);
+});
+
+socket.on("disconnect", (reason) => console.log("disconnect", reason));
+```
+
+</CodeGroup>
+
+Để theo dõi một mã chứng khoán khác, gọi lại `socket.emit("subscribe", ...)` với mã chứng khoán khác trong topic.
+
+Để dừng theo dõi một mã chứng khoán, sử dụng cùng topic đó với `socket.emit("unsubscribe", ...)`.
+
+---
+
+## Kết nối 2: Order / Asset
+
+Kết nối đến cổng tài khoản của PHS và nhận các cập nhật về lệnh, sức mua và danh mục đầu tư của chính tài khoản. Yêu cầu `access_token`.
+
+<CodeGroup>
+
+```js
+const io = require("socket.io-client");
+
+const SUB_ACCOUNT = "0104006592";
+const token = "022Cxxxx||xxxx||xxxxxxxx";
+
+const socket = io("http://<host>:<port>", {
+  // Sử dụng /realtime/eqt/socket.io cho tài khoản cơ sở (tiền mặt),
+  // hoặc /realtime/fno/socket.io cho tài khoản phái sinh
+  path: "/realtime/eqt/socket.io",
+  transports: ["websocket"],
+});
+
+socket.on("connect_error", (err) => {
+  console.error("connect_error:", err?.message || err);
+});
+
+socket.on("connect", () => {
+  console.log("connected - socket.id =", socket.id);
+
+  socket.emit("get", {
+    data: {
+      args: [`account:${SUB_ACCOUNT}`],
+      op: "subscribe",
+      token,
+    },
+    method: "get",
+    url: "/client/send",
+  });
+});
+
+socket.on("instrument", (data) => console.log("instrument", data));
+socket.on("trade", (data) => console.log("trade", data));
+socket.on("account", (data) => console.log("account", data));
+socket.on("disconnect", (reason) => console.log("disconnect", reason));
+```
+
+</CodeGroup>
+
+<Warning>
+  Chọn đúng `path` tương ứng với loại tài khoản. `/realtime/eqt/socket.io` (tài khoản cơ sở/tiền mặt) và `/realtime/fno/socket.io` (tài khoản phái sinh) không thể thay thế cho nhau — đăng ký trên sai path sẽ không trả về dữ liệu.
+</Warning>
+
+---
+
+## Tìm hiểu về event `account`
+
+Tất cả các cập nhật liên quan đến tài khoản — thay đổi lệnh, thay đổi sức mua và thay đổi danh mục — đều được gửi thông qua cùng một event `account`.
+
+Không có các event riêng biệt như `OM`, `CI` hoặc `SE`. Thay vào đó, cần kiểm tra trường `eventtype` bên trong payload để xác định loại cập nhật nhận được:
+
+| `eventtype` | Ý nghĩa | Áp dụng cho |
+| --- | --- | --- |
+| `OO` | Lệnh thay đổi (đặt / khớp / hủy / sửa) | Tài khoản phái sinh |
+| `OM` | Lệnh thay đổi (đặt / khớp / hủy / sửa) | Tài khoản cơ sở |
+| `CI` | Thay đổi sức mua / tiền mặt | Cả hai |
+| `SE` | Thay đổi danh mục | Cả hai |
+
+```js
+socket.on("account", (data) => {
+  const record = Array.isArray(data.data) ? data.data[0] : data;
+
+  switch (record.eventtype) {
+    case "OO":
+    case "OM":
+      console.log("Order update:", record);
+      break;
+    case "CI":
+      console.log("Buying power update:", record);
+      break;
+    case "SE":
+      console.log("Portfolio update:", record);
+      break;
+    default:
+      console.log("Other event:", record);
+  }
+});
+```
+
+<Tip>
+  Một lỗi rất phổ biến là viết `socket.on("OM", ...)` và chờ event này được kích hoạt trực tiếp. Điều này sẽ không xảy ra — luôn lắng nghe `socket.on("account", ...)` và kiểm tra `eventtype` bên trong payload.
+</Tip>
+
+---
+
+## Tham chiếu các trường dữ liệu
+
+Các bảng bên dưới liệt kê những trường thường được sử dụng nhất. Tên trường được giữ nguyên theo cách đặt tên ngắn (legacy naming) — sử dụng phần này như bảng tra cứu.
+
+### Các trường `instrument` (Market Data)
+
+| Field | Ý nghĩa | Field | Ý nghĩa |
+| --- | --- | --- | --- |
+| `SB` | Mã chứng khoán | `CL` | Giá trần |
+| `FN` | Tên đầy đủ | `FL` | Giá sàn |
+| `RE` | Giá tham chiếu | `CP` | Giá khớp lệnh gần nhất |
+| `CH` | Mức thay đổi so với giá tham chiếu | `CV` | Khối lượng khớp lệnh gần nhất |
+| `TT` | Tổng khối lượng giao dịch | `TV` | Tổng giá trị giao dịch |
+| `OP` | Giá mở cửa | `HI` | Giá cao nhất |
+| `LO` | Giá thấp nhất | `AP` | Giá bình quân |
+| `B1` / `V1` | Giá mua / khối lượng mua, mức 1 | `S1` / `U1` | Giá bán / khối lượng bán, mức 1 |
+| `FB` / `FS` | Khối lượng mua / bán của nhà đầu tư nước ngoài | `FO` | Room nước ngoài |
+
+### Các trường `trade` (Giao dịch khớp lệnh)
+
+| Field | Ý nghĩa | Field | Ý nghĩa |
+| --- | --- | --- | --- |
+| `SB` | Mã chứng khoán | `FT` | Thời gian khớp lệnh |
+| `FMP` | Giá khớp lệnh | `FV` | Khối lượng khớp lệnh |
+| `FCV` | Mức thay đổi giá | `AVO` / `AVA` | Tổng khối lượng / giá trị giao dịch |
+
+### Các trường `account` khi `eventtype = OM` (cơ sở) hoặc `OO` (phái sinh)
+
+| Field | Ý nghĩa | Field | Ý nghĩa |
+| --- | --- | --- | --- |
+| `orderid` | Số hiệu lệnh | `symbol` / `code` | Mã chứng khoán |
+| `order_side` / `subside` | Mua (`NB`) / Bán (`NS`) | `order_status` / `status` | Mã trạng thái lệnh |
+| `order_price` / `orderprice` | Giá đặt lệnh | `order_quantity` / `orderqtty` | Khối lượng đặt lệnh |
+| `matched_price` / `matchprice` | Giá khớp lệnh | `matched_quantity` / `matchqtty` | Khối lượng khớp lệnh |
+| `remain_quantity` / `remain_qtty` | Khối lượng còn lại chưa khớp | `cancel_quantity` / `cancel_qtty` | Khối lượng đã hủy |
+
+<Note>
+  Tài khoản cơ sở (FLEX) và tài khoản phái sinh (FDS) sử dụng tên trường hơi khác nhau cho cùng một khái niệm (ví dụ: `orderprice` và `order_price`). Hãy sử dụng đúng tên trường tương ứng với loại tài khoản của bạn.
+</Note>
+
+---
+
+## Troubleshooting
+
+| Hiện tượng | Nguyên nhân có thể |
+| --- | --- |
+| `connect_error` xảy ra ngay khi kết nối | Sai host/port hoặc host không thể truy cập từ mạng của bạn |
+| Đã kết nối nhưng `account` không bao giờ được gửi | `token` bị thiếu hoặc hết hạn, hoặc số tài khoản giao dịch phụ không chính xác |
+| `socket.on("OM", ...)` không bao giờ được kích hoạt | `OM` là một trường dữ liệu, không phải tên event — hãy lắng nghe `account` |
+| Không có dữ liệu sau khi subscribe | Sai `path` tương ứng với loại tài khoản (cơ sở hoặc phái sinh) |
+| Liên tục xảy ra vòng lặp connect/disconnect | Kiểm tra token đã hết hạn hay chưa và định dạng số tài khoản giao dịch phụ có chính xác hay không |
+
+---
+
+## Thực hành tốt nhất
+
+- Lưu `access_token` và mọi client secret trên **server**, tuyệt đối không đặt trong JavaScript phía trình duyệt.
+- Gọi `unsubscribe` đối với các mã chứng khoán hoặc tài khoản mà bạn không còn cần theo dõi để giảm lưu lượng không cần thiết.
+- Sử dụng một kết nối cho mỗi gateway và subscribe nhiều topic trên cùng một kết nối, thay vì mở một kết nối mới cho từng mã chứng khoán.
+- Tuyệt đối không commit token thật vào source control — hãy coi token bị lộ giống như mật khẩu bị lộ.

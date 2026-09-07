@@ -1,0 +1,108 @@
+---
+title: "Order report"
+description: "Returns historical derivative order rows for an account and date range."
+---
+
+## Endpoint
+
+`GET /oapi/accounts/:accountId/derivative/orderHistory`
+
+Returns historical derivative order rows for an account and date range.
+
+### Required path parameters
+
+- `accountId` — Trading account ID.
+
+### Supported query parameters
+
+- `fromDate` — Start date in `DD/MM/YYYY` format. Example: `16/03/2026`.
+- `toDate` — End date in `DD/MM/YYYY` format. Example: `20/03/2026`.
+
+### Response fields
+
+- `s` (`string`) — Request status. Example: `ok`.
+- `d` (`array`) — Order report rows.
+
+## Report fields
+
+- `custodycd` (`string`) — Custody code.
+- `accountno` (`string`) — Trading account number.
+- `orderid` (`string`) — Order ID.
+- `code` (`string`) — Instrument code.
+- `lastchange` (`string`) — Last updated time.
+- `subside` (`string`) — Order side code.
+- `side_desc` (`string`) — Order side description.
+- `subtypecd` (`string`) — Price type code.
+- `ordertype_desc` (`string`) — Price type description.
+- `validity` (`string`) — Validity value.
+- `dataval` (`string`) — Data value.
+- `status` (`string`) — Order status.
+- `orderqtty` (`number`) — Ordered quantity.
+- `orderprice` (`number`) — Order price.
+- `matchprice` (`number`) — Matched price.
+- `matchqtty` (`number`) — Matched quantity.
+- `odsent` (`string`) — Order time.
+- `execamt` (`number`) — Matched value.
+- `remain_qtty` (`number`) — Remaining quantity.
+- `cancel_qtty` (`number`) — Cancelled quantity.
+- `admend_qtty` (`number`) — Amended quantity.
+- `confirmid` (`string`) — Exchange confirmation ID.
+- `originorderid` (`string`) — Original order ID.
+- `txdate` (`string`) — Request date.
+- `feeamt` (`number`) — Fee amount.
+- `tax` (`number`) — Tax amount.
+- `tradingfee` (`number`) — Fee rate in percent.
+- `via` (`string`) — Order channel.
+- `norp` (`string`) — Negotiated trade flag.
+
+## cURL
+
+```bash
+curl -G "$BASE_URL/oapi/accounts/$ACCOUNT_ID/derivative/orderHistory" \
+  -H "Authorization: Bearer $ACCESS_TOKEN" \
+  --data-urlencode "fromDate=16/03/2026" \
+  --data-urlencode "toDate=20/03/2026"
+```
+
+## Example response
+
+```json
+{
+    "s": "ok",
+    "d": [
+        {
+            "custodycd": "022C979999",
+            "accountno": "0104005401",
+            "orderid": "0001020326028362",
+            "code": "41I1G9000",
+            "lastchange": "14:56:15",
+            "subside": "NB",
+            "side_desc": "Mua",
+            "subtypecd": "LO",
+            "ordertype_desc": "LO",
+            "validity": "Y",
+            "dataval": "",
+            "status": "TS",
+            "orderqtty": 1,
+            "orderprice": 1795,
+            "matchprice": 1795,
+            "matchqtty": 1,
+            "odsent": "14:49:52",
+            "execamt": 179500000,
+            "remain_qtty": 0,
+            "cancel_qtty": 0,
+            "admend_qtty": 0,
+            "confirmid": null,
+            "originorderid": "0001020326028362",
+            "txdate": "20/03/2026",
+            "feeamt": 4500,
+            "tax": 0,
+            "tradingfee": 0.15,
+            "via": "R",
+            "norp": "N"
+        }
+    ]
+}
+```
+
+> Replace `BASE_URL`, `ACCOUNT_ID`, and `ACCESS_TOKEN` with your values.

@@ -1,0 +1,110 @@
+---
+title: "Get candlestick data"
+description: "Returns candlestick data for charting and time-series analysis."
+---
+
+## Endpoint
+
+```text
+GET /oapi/priceboard/candlestick-data
+```
+
+### Test this API in our Sandbox using simulated data.
+
+_Try the **Sandbox** to see how the API works with simulated data — no production account or live trading required._
+
+```text
+GET https://flashapi.phs.vn/sandbox/oapi/priceboard/candlestick-data
+```
+
+[**View Sandbox Guide →**](https://flashapi.phs.vn/docs/market)
+
+## Required query parameters
+
+- `symbol` — Symbol code. Example: `ACB`
+- `resolution` — Candle resolution. Example: `1D`
+- `from` — Start time as Unix timestamp. Example: `1735257600`
+- `to` — End time as Unix timestamp. Example: `1774051200`
+
+## Supported resolutions
+
+`1`, `5`, `15`, `30`, `60`, `120`, `1D`, `1W`, `1M`
+
+## Field descriptions
+
+- `t` (`number[]`) — Time values as Unix timestamps. Example: `1744685220`, `1744685280`
+- `o` (`number[]`) — Open prices. Example: `64200`, `60000`
+- `h` (`number[]`) — High prices (`giá cao nhất`). Example: `64200`, `60000`
+- `l` (`number[]`) — Low prices (`giá thấp nhất`). Example: `64200`, `60000`
+- `c` (`number[]`) — Close prices. Example: `64200`, `60000`
+- `v` (`number[]`) — Close volume (`giá khớp gần nhất`). Example: `60400`, `1200`
+- `s` (`string`) — Status. Example: `ok`
+- `nextTime` (`number | null`) — Used for the next query (`Dùng cho query next`).
+
+## cURL
+
+```bash
+curl -G "$BASE_URL/oapi/priceboard/candlestick-data" \
+  --data-urlencode "symbol=ACB" \
+  --data-urlencode "resolution=1D" \
+  --data-urlencode "from=1735257600" \
+  --data-urlencode "to=1774051200"
+```
+
+## Python
+
+```python
+import requests
+
+BASE_URL = "https://api.example.com"
+
+params = {
+    "symbol": "ACB",
+    "resolution": "1D",
+    "from": 1735257600,
+    "to": 1774051200,
+}
+
+response = requests.get(
+    f"{BASE_URL}/oapi/priceboard/candlestick-data",
+    params=params,
+)
+response.raise_for_status()
+
+print(response.json())
+```
+
+## Example response
+
+```json
+{
+    "t": [
+        1735278140,
+        1735536640
+    ],
+    "o": [
+        25600,
+        25350
+    ],
+    "h": [
+        25700,
+        25650
+    ],
+    "l": [
+        25500,
+        25350
+    ],
+    "c": [
+        25550,
+        25400
+    ],
+    "v": [
+        7689900,
+        5000400
+    ],
+    "s": "ok",
+    "nextTime": null
+}
+```
+
+> Replace `BASE_URL` with your API host.

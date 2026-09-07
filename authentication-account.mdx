@@ -1,0 +1,143 @@
+---
+title: "Authentication Account"
+---
+
+**FlashAPI** has two independent authentication flows:
+
+- **Underlying Account** — for stock trading
+- **Derivative Account** — for derivative (futures) trading
+
+These are separate because stock and derivative products have different trading permissions on a PHS account.
+
+Section B provides the complete login endpoints. This section explains how authentication connects to the other API groups.
+
+## Which API Groups Require Authentication?
+
+| API Group | Authentication Required | Description |
+| --- | --- | --- |
+| **Section A** | No | Market Data / Priceboard APIs can be called directly. |
+| **Section B** | No | Authentication APIs used to obtain access tokens. |
+| **Section C** | Yes | Trading APIs require authentication. |
+| **Section D** | Yes | Trading APIs require authentication. |
+| **Section E** | Yes | Account / Portfolio / Balance APIs require authentication. |
+| **Section F** | Yes | Account / Portfolio / Balance APIs require authentication. |
+
+> **Note:** You can call **Section A — Market Data / Priceboard** APIs without logging in. All APIs in **Sections C–F** require a valid authentication token from Section B.
+
+## Authentication Workflow
+
+Follow these steps before calling authenticated APIs.
+
+### 1. Login
+
+Call the appropriate login endpoint from Section B:
+
+**Underlying Account**
+
+```text
+/auth/gen-secret-key/underlying
+```
+
+Use this endpoint for stock trading accounts.
+
+**Derivative Account**
+
+```text
+/auth/gen-secret-key/derivative
+```
+
+Use this endpoint for derivative trading accounts.
+
+Provide the account `username` and `password` in the request.
+
+### 2. Get Authentication Tokens
+
+The login response returns the credentials required for subsequent API requests.
+
+The two main values are:
+
+```text
+access_token
+otp_token
+```
+
+Use the `access_token` for API authentication and the `otp_token` for order-related requests.
+
+### 3. Authenticate GET Requests
+
+For every **GET** request in Sections C–F, include the `access_token` in the `Authorization` header.
+
+```http
+Authorization: Bearer <access_token>
+```
+
+### 4. Authenticate Order Requests
+
+For every **POST**, **PUT**, or **DELETE** order request in Sections C and D, include the following headers:
+
+```http
+Authorization: Bearer <access_token>
+x-otp-token: <otp_token>
+x-lang: vi
+x-via: K
+```
+
+The `Authorization` header authenticates the account, while `x-otp-token` is used for order authentication.
+
+## Authentication by Request Type
+
+| Request Type | `Authorization` | `x-otp-token` | `x-lang` | `x-via` |
+| --- | --- | --- | --- | --- |
+| GET — Sections C–F | Required | Not required | Not required | Not required |
+| POST / PUT / DELETE — Orders | Required | Required | Required | Required |
+
+## Sandbox OTP
+
+In the **Sandbox**, you do not need a real OTP device or SMS.
+
+Each login flow has a **fixed Sandbox OTP token** documented on its corresponding authentication page:
+
+- **B1 — Underlying Authentication** → use the fixed underlying OTP token
+- **B2 — Derivative Authentication** → use the fixed derivative OTP token
+
+Do not generate your own OTP value.
+
+> **Note:** For Sandbox order testing, always use the fixed `x-otp-token` provided on the corresponding Section B authentication page.
+
+## Sandbox vs Production
+
+| Environment | OTP Behavior |
+| --- | --- |
+| **Sandbox** | Use the fixed OTP fixture documented for the corresponding login flow. |
+| **Production** | Use the real OTP delivered to the customer. |
+
+> **Warning:** Never use Sandbox credentials or Sandbox OTP values for Production requests. Production requires valid Production credentials and the appropriate real OTP.
+
+## Example Request Flow
+
+A typical authenticated workflow looks like this:
+
+```text
+1. Login
+   │
+   ├── Underlying Account
+   │      └── /auth/gen-secret-key/underlying
+   │
+   └── Derivative Account
+          └── /auth/gen-secret-key/derivative
+                │
+                ▼
+2. Receive access_token + otp_token
+                │
+                ▼
+3. Call Account / Portfolio / Trading APIs
+                │
+                ├── GET
+                │     └── Authorization: Bearer <access_token>
+                │
+                └── POST / PUT / DELETE
+                      ├── Authorization: Bearer <access_token>
+                      ├── x-otp-token: <otp_token>
+                      ├── x-lang: vi
+                      └── x-via: K
+```

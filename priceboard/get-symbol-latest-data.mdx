@@ -1,0 +1,362 @@
+---
+title: "Get symbol latest data"
+description: "Returns the latest available market data for a symbol"
+---
+
+## Endpoint
+
+```text
+GET /oapi/priceboard/symbol-latest-data
+```
+
+### Test this API in our Sandbox using simulated data.
+
+_Try the **Sandbox** to see how the API works with simulated data — no production account or live trading required._
+
+```text
+GET https://flashapi.phs.vn/sandbox/oapi/priceboard/symbol-latest-data
+```
+
+[**View Sandbox Guide →**](https://flashapi.phs.vn/docs/market)
+
+<br />Required query parameters
+
+- `symbolList` — Comma-separated list of symbols. Example: `ACB,FPT,VIC`
+- `fields` — Comma-separated list of response fields to return.
+
+## Available fields
+
+```text
+marketId,o,h,sessionId,l,c,ch,r,ti,a,re,vo,va,ce,fl,ep,er,ec,ev,mv,bbOd,boOd,bbBi,boBi,biC,biCh,biR,biVo,biVa,biMv,odC,odCh,odR,odVo,odVa,odMv,odH,odL,i,fsp,noFsp,ba,oi,exp,exr,ltd,is,be,c5ss,c1w,c1m,c3m,c6m,c1y,va5ss,va1w,va1m,va3m,va6m,va1y,td5ss,td1w,td3m,td6m,td1y,s,t,n1,n2,m,isin,rc,underlyingSymbol,underlyingPrice,underlyingStatus,aFrNSva6m,frSvo,aFrBvo1y,ch1y,aFrBva1w,aVa3m,r5ss,aVa1m,aFrSvo3m,aFrBva6m,aVo6m,frTr,aVa6m,aFrBvo6m,aFrNSva1w,aFrSvo1m,aFrSva3m,aFrSva1w,aFrNBva6m,aFrSvo1w,aFrBvo3m,frCr,ch5ss,aVo3m,aFrBva3m,aFrBvo1w,aVo5ss,aFrSva6m,r6m,td1m,frNBva,aVa1y,aVa5ss,r3m,aFrSva1y,r1w,aFrNBva1m,frBvo,aFrNSva3m,ch6m,aVo1m,aFrBvo1m,aFrNSva1m,frBva,aFrSvo6m,r1m,ch1m,aFrNBva3m,aVa1w,aFrBva1y,frNSva,r1y,frSva,ch3m,aFrSva1m,aFrNBva1y,aFrSvo1y,aVo1y,aVo1w,ch1w,aFrNBva1w,aFrNSva1y,aFrBva1m
+```
+
+## Field descriptions
+
+### Core market fields
+
+- `marketId` (`string`) — Market code. Example: `STO`, `STX`, `UPX`, `DVX`.
+- `s` (`string`) — Symbol.
+- `t` (`string`) — Symbol type. Example: `STOCK`, `CW`, `INDEX`.
+- `o` (`number`) — Open price (`giá mở cửa`).
+- `h` (`number`) — High price (`giá cao nhất`).
+- `l` (`number`) — Low price (`giá thấp nhất`).
+- `c` (`number`) — Latest matched price (`giá khớp gần nhất`).
+- `ch` (`number`) — Change.
+- `r` (`number`) — Rate.
+- `ti` (`number`) — Latest update time (`thời gian gần nhất mã được update`).
+- `a` (`number`) — Average price (`giá trung bình`).
+- `re` (`number`) — New reference price (`Giá tham chiếu mới`).
+- `vo` (`number`) — Trading volume.
+- `va` (`number`) — Trading value.
+- `ce` (`number`) — Ceiling price.
+- `fl` (`number`) — Floor price.
+- `ep` (`number`) — Expected price for `ATO` or `ATC`.
+- `er` (`number`) — Expected rate.
+- `ec` (`number`) — Expected change.
+- `ev` (`number`) — Expected volume.
+- `mv` (`number`) — Latest matching volume (`khối lượng khớp gần nhất`).
+- `sessionId` (`string`) — Trading session ID. Example: `99`.
+
+### Order book and buy-in
+
+- `bbOd` (`array`) — Odd-lot bid book (`dư mua lô lẻ`).
+  - `p` (`number`) — Price.
+  - `v` (`number`) — Volume.
+- `boOd` (`array`) — Odd-lot offer book (`dư bán lô lẻ`).
+  - `p` (`number`) — Price.
+  - `v` (`number`) — Volume.
+- `bbBi` (`array`) — Buy-in bid book (`dư mua BuyIn`).
+  - `p` (`number`) — Price.
+  - `v` (`number`) — Volume.
+- `boBi` (`array`) — Buy-in offer book (`dư bán BuyIn`).
+  - `p` (`number`) — Price.
+  - `v` (`number`) — Volume.
+- `biC` (`number`) — Buy-in price.
+- `biCh` (`number`) — Buy-in change.
+- `biR` (`number`) — Buy-in rate.
+- `biVo` (`number`) — Buy-in volume.
+- `biVa` (`number`) — Buy-in value.
+- `biMv` (`number`) — Buy-in matching volume.
+
+### Odd-lot fields
+
+- `odC` (`number`) — Odd-lot price.
+- `odCh` (`number`) — Odd-lot change.
+- `odR` (`number`) — Odd-lot rate.
+- `odVo` (`number`) — Odd-lot volume.
+- `odVa` (`number`) — Odd-lot value.
+- `odMv` (`number`) — Odd-lot matching volume.
+- `odH` (`number`) — Odd-lot high.
+- `odL` (`number`) — Odd-lot low.
+
+### Derivatives and CW fields
+
+- `ba` (`number`) — Basis (`độ lệch so với VN30`).
+- `oi` (`number`) — Open interest.
+- `exp` (`number`) — CW exercise price (`Giá thực hiện của chứng quyền`).
+- `exr` (`string`) — Conversion ratio (`Tỉ lệ chuyển đổi`).
+- `ltd` (`string`) — CW trading date (`ngày giao dịch chứng quyền`).
+- `is` (`string`) — CW issuer (`Tổ chức phát hành chứng quyền`).
+- `be` (`number`) — Break-even point of a CW (`điểm hòa vốn của cw`).
+- `underlyingSymbol` (`string`) — Underlying symbol (`Mã CK cơ sở`).
+- `underlyingPrice` (`number`) — Underlying symbol price.
+
+### Metadata
+
+- `n1` (`string`) — Symbol name.
+- `n2` (`string`) — English name.
+- `m` (`string`) — Exchange. Example: `HOSE`, `HNX`, `UPCOM`.
+- `isin` (`string`) — Exchange-defined symbol code.
+- `rc` (`string`) — Reference code.
+- `i` (`boolean`) — Highlight flag. Do not use.
+- `fsp` (`number`) — Do not use.
+- `noFsp` (`number`) — Do not use.
+
+### Foreign trading fields
+
+- `frBvo` (`number`) — Foreign buy volume.
+- `frSvo` (`number`) — Foreign sell volume.
+- `frBva` (`number`) — Foreign buy value.
+- `frSva` (`number`) — Foreign sell value.
+- `frTr` (`number`) — Total foreign room.
+- `frCr` (`number`) — Current foreign room.
+- `frNBva` (`number`) — Foreign net buy value.
+- `frNSva` (`number`) — Foreign net sell value.
+
+### Historical close, value, and trading-day fields
+
+- `c5ss` (`number`) — Close price 5 sessions ago.
+- `c1w` (`number`) — Close price 1 week ago.
+- `c1m` (`number`) — Close price 1 month ago.
+- `c3m` (`number`) — Close price 3 months ago.
+- `c6m` (`number`) — Close price 6 months ago.
+- `c1y` (`number`) — Close price 1 year ago.
+- `va5ss` (`number`) — Trading value 5 sessions ago.
+- `va1w` (`number`) — Trading value 1 week ago.
+- `va1m` (`number`) — Trading value 1 month ago.
+- `va3m` (`number`) — Trading value 3 months ago.
+- `va6m` (`number`) — Trading value 6 months ago.
+- `va1y` (`number`) — Trading value 1 year ago.
+- `td5ss` (`number`) — Total trading days 5 sessions ago.
+- `td1w` (`number`) — Total trading days 1 week ago.
+- `td1m` (`number`) — Total trading days 1 month ago.
+- `td3m` (`number`) — Total trading days 3 months ago.
+- `td6m` (`number`) — Total trading days 6 months ago.
+- `td1y` (`number`) — Total trading days 1 year ago.
+
+### Historical change and rate fields
+
+- `ch5ss` (`number`) — Change versus 5 sessions ago.
+- `ch1w` (`number`) — Change versus 1 week ago.
+- `ch1m` (`number`) — Change versus 1 month ago.
+- `ch3m` (`number`) — Change versus 3 months ago.
+- `ch6m` (`number`) — Change versus 6 months ago.
+- `ch1y` (`number`) — Change versus 1 year ago.
+- `r5ss` (`number`) — Rate versus 5 sessions ago.
+- `r1w` (`number`) — Rate versus 1 week ago.
+- `r1m` (`number`) — Rate versus 1 month ago.
+- `r3m` (`number`) — Rate versus 3 months ago.
+- `r6m` (`number`) — Rate versus 6 months ago.
+- `r1y` (`number`) — Rate versus 1 year ago.
+
+### Historical aggregate fields
+
+- `aVa5ss` (`number`) — Trading value 5 sessions ago.
+- `aVa1w` (`number`) — Trading value 1 week ago.
+- `aVa1m` (`number`) — Trading value 1 month ago.
+- `aVa3m` (`number`) — Trading value 3 months ago.
+- `aVa6m` (`number`) — Trading value 6 months ago.
+- `aVa1y` (`number`) — Trading value 1 year ago.
+- `aVo5ss` (`number`) — Trading volume 5 sessions ago.
+- `aVo1w` (`number`) — Trading volume 1 week ago.
+- `aVo1m` (`number`) — Trading volume 1 month ago.
+- `aVo3m` (`number`) — Trading volume 3 months ago.
+- `aVo6m` (`number`) — Trading volume 6 months ago.
+- `aVo1y` (`number`) — Trading volume 1 year ago.
+
+### Historical foreign trading fields
+
+- `aFrBvo1w` (`number`) — Foreign buy volume 1 week ago.
+- `aFrBvo1m` (`number`) — Foreign buy volume 1 month ago.
+- `aFrBvo3m` (`number`) — Foreign buy volume 3 months ago.
+- `aFrBvo6m` (`number`) — Foreign buy volume 6 months ago.
+- `aFrBvo1y` (`number`) — Foreign buy volume 1 year ago.
+- `aFrSvo1w` (`number`) — Foreign sell volume 1 week ago.
+- `aFrSvo1m` (`number`) — Foreign sell volume 1 month ago.
+- `aFrSvo3m` (`number`) — Foreign sell volume 3 months ago.
+- `aFrSvo6m` (`number`) — Foreign sell volume 6 months ago.
+- `aFrSvo1y` (`number`) — Foreign sell volume 1 year ago.
+- `aFrBva1w` (`number`) — Foreign buy value 1 week ago.
+- `aFrBva1m` (`number`) — Foreign buy value 1 month ago.
+- `aFrBva3m` (`number`) — Foreign buy value 3 months ago.
+- `aFrBva6m` (`number`) — Foreign buy value 6 months ago.
+- `aFrBva1y` (`number`) — Foreign buy value 1 year ago.
+- `aFrSva1w` (`number`) — Foreign sell value 1 week ago.
+- `aFrSva1m` (`number`) — Foreign sell value 1 month ago.
+- `aFrSva3m` (`number`) — Foreign sell value 3 months ago.
+- `aFrSva6m` (`number`) — Foreign sell value 6 months ago.
+- `aFrSva1y` (`number`) — Foreign sell value 1 year ago.
+- `aFrNBva1w` (`number`) — Foreign net buy value 1 week ago.
+- `aFrNBva1m` (`number`) — Foreign net buy value 1 month ago.
+- `aFrNBva3m` (`number`) — Foreign net buy value 3 months ago.
+- `aFrNBva6m` (`number`) — Foreign net buy value 6 months ago.
+- `aFrNBva1y` (`number`) — Foreign net buy value 1 year ago.
+- `aFrNSva1w` (`number`) — Foreign net sell value 1 week ago.
+- `aFrNSva1m` (`number`) — Foreign net sell value 1 month ago.
+- `aFrNSva3m` (`number`) — Foreign net sell value 3 months ago.
+- `aFrNSva6m` (`number`) — Foreign net sell value 6 months ago.
+- `aFrNSva1y` (`number`) — Foreign net sell value 1 year ago.
+
+## cURL
+
+```bash
+curl -G "$BASE_URL/oapi/priceboard/symbol-latest-data" \
+  --data-urlencode "symbolList=ACB,FPT,VIC" \
+  --data-urlencode "fields=marketId,o,h,l,c,vo"
+```
+
+## Python
+
+```python
+import requests
+
+BASE_URL = "https://api.example.com"
+
+params = {
+    "symbolList": "ACB,FPT,VIC",
+    "fields": "marketId,o,h,l,c,vo",
+}
+
+response = requests.get(
+    f"{BASE_URL}/oapi/priceboard/symbol-latest-data",
+    params=params,
+)
+response.raise_for_status()
+
+print(response.json())
+```
+
+## Example response
+
+```json
+[
+    {
+        "s": "ACB",
+        "o": 23400,
+        "h": 23500,
+        "ce": 25250,
+        "fl": 21950,
+        "l": 23000,
+        "c": 23000,
+        "ch": -600,
+        "r": -2.54,
+        "vo": 13775200,
+        "va": 319093870000,
+        "a": null,
+        "re": 23600,
+        "ti": 1773992705686,
+        "mv": 6400,
+        "bbOd": [
+            {
+                "p": 23200,
+                "v": 103
+            },
+            {
+                "p": 23150,
+                "v": 1673
+            },
+            {
+                "p": 23100,
+                "v": 1312
+            }
+        ],
+        "boOd": [
+            {
+                "p": 23250,
+                "v": 92
+            },
+            {
+                "p": 23300,
+                "v": 161
+            },
+            {
+                "p": 23350,
+                "v": 30
+            }
+        ],
+        "bbBi": [
+            {
+                "p": 0,
+                "v": 0
+            },
+            {
+                "p": 0,
+                "v": 0
+            },
+            {
+                "p": 0,
+                "v": 0
+            }
+        ],
+        "boBi": [
+            {
+                "p": 0,
+                "v": 0
+            },
+            {
+                "p": 0,
+                "v": 0
+            },
+            {
+                "p": 0,
+                "v": 0
+            }
+        ],
+        "fsp": null,
+        "noFsp": null,
+        "t": "STOCK",
+        "n1": "Ngân hàng Thương mại Cổ phần Á Châu",
+        "n2": "Asia Commercial Joint Stock Bank",
+        "marketId": "STO",
+        "m": "HOSE",
+        "isin": "VN000000ACB8",
+        "rc": "ACB",
+        "odH": 23600,
+        "odL": 23200,
+        "odC": 23200,
+        "odCh": -400,
+        "odR": -1.69,
+        "odMv": 2,
+        "odVo": 10634,
+        "odVa": 247743450,
+        "biC": null,
+        "biCh": null,
+        "biR": null,
+        "biVo": null,
+        "biVa": null,
+        "biMv": null,
+        "frBvo": 1729501,
+        "frSvo": 7552813,
+        "is": null,
+        "exr": null,
+        "ltd": null,
+        "underlyingSymbol": null,
+        "frBva": 40070453250,
+        "frSva": 175015403600,
+        "frTr": 1540996979,
+        "frCr": 130293727,
+        "frNBva": -134944950350,
+        "frNSva": 134944950350,
+        "ep": 0,
+        "ec": 0,
+        "er": 0,
+        "ev": 0,
+        "be": null,
+        "ba": null,
+        "oi": null,
+        "i": false
+    }
+]
+```
+
+> Replace `BASE_URL` with your API host. Replace the sample symbols and fields as needed.
