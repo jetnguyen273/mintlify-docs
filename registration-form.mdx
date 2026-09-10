@@ -8,233 +8,233 @@ description: "Please complete the registration form below to request access to P
   noValidate
   id="oapi-registration-form"
   onSubmit={async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    const formElement = e.currentTarget;
-    const btn = e.currentTarget.querySelector('button[type="submit"]');
-    const msgBox = document.getElementById("form-status-msg");
+  const formElement = e.currentTarget;
+  const btn = e.currentTarget.querySelector('button[type="submit"]');
+  const msgBox = document.getElementById("form-status-msg");
 
-    const showError = (message, step = null, fieldName = null) => {
-        const banner = document.getElementById("form-error-banner");
-        const bannerText = document.getElementById("form-error-banner-text");
+  const showError = (message, step = null, fieldName = null) => {
+      const banner = document.getElementById("form-error-banner");
+      const bannerText = document.getElementById("form-error-banner-text");
 
-        if (banner && bannerText) {
-            bannerText.innerText = message;
-            banner.style.display = "flex";
-            document.getElementById("oapi-registration-form")?.scrollIntoView({ behavior: "smooth", block: "nearest" });
-        }
+      if (banner && bannerText) {
+          bannerText.innerText = message;
+          banner.style.display = "flex";
+          document.getElementById("oapi-registration-form")?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      }
 
-        if (step) {
-            const tabBtn =
-                document.getElementById(`desktop-tab-btn-${step}`) ||
-                document.getElementById(`mobile-tab-btn-${step}`);
-            if (tabBtn) tabBtn.click();
-        }
+      if (step) {
+          const tabBtn =
+              document.getElementById(`desktop-tab-btn-${step}`) ||
+              document.getElementById(`mobile-tab-btn-${step}`);
+          if (tabBtn) tabBtn.click();
+      }
 
-        if (fieldName) {
-            setTimeout(() => {
-                const input = formElement[fieldName];
-                if (input) {
-                    const scrollBox = input.closest('.step-scroll-box');
-                    if (scrollBox) {
-                        const scrollBoxRect = scrollBox.getBoundingClientRect();
-                        const inputRect = input.getBoundingClientRect();
-                        if (inputRect.top < scrollBoxRect.top || inputRect.bottom > scrollBoxRect.bottom) {
-                            scrollBox.scrollBy({ top: inputRect.top - scrollBoxRect.top - 20, behavior: "smooth" });
-                        }
-                    }
-                    input.focus({ preventScroll: true });
-                }
-            }, 100);
-        }
-    };
+      if (fieldName) {
+          setTimeout(() => {
+              const input = formElement[fieldName];
+              if (input) {
+                  const scrollBox = input.closest('.step-scroll-box');
+                  if (scrollBox) {
+                      const scrollBoxRect = scrollBox.getBoundingClientRect();
+                      const inputRect = input.getBoundingClientRect();
+                      if (inputRect.top < scrollBoxRect.top || inputRect.bottom > scrollBoxRect.bottom) {
+                          scrollBox.scrollBy({ top: inputRect.top - scrollBoxRect.top - 20, behavior: "smooth" });
+                      }
+                  }
+                  input.focus({ preventScroll: true });
+              }
+          }, 100);
+      }
+  };
 
-    const hideError = () => {
-        const errorBanner = document.getElementById("form-error-banner");
-        if (errorBanner) errorBanner.style.display = "none";
-    };
+  const hideError = () => {
+      const errorBanner = document.getElementById("form-error-banner");
+      if (errorBanner) errorBanner.style.display = "none";
+  };
 
-    const getValue = (name) => (formElement[name]?.value ?? "").trim();
+  const getValue = (name) => (formElement[name]?.value ?? "").trim();
 
-    const isValidEmail = (value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+  const isValidEmail = (value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
 
-    const isValidPhone = (value) => /^\d{9,15}$/.test(value);
-
-
-    hideError();
-
-    const customerName = getValue("customerName");
-    const identityNumber = getValue("identityNumber");
-    const phsCustCode = getValue("phsCustCode");
-    const accountBasic = getValue("accountBasic");
-    const notificationEmail = getValue("notificationEmail");
-    const alertPhoneNumber = getValue("alertPhoneNumber");
-    const technicalContactName = getValue("technicalContactName");
-    const technicalContactInfo = getValue("technicalContactInfo");
-
-    const ipWhitelist = getValue("ipWhitelist");
-    const appName = getValue("appName");
-    const techStack = getValue("techStack");
-    const keySecurityMechanism = getValue("keySecurityMechanism");
-    const rateLimitMechanism = getValue("rateLimitMechanism");
-    const testingPlan = getValue("testingPlan");
-    const goLiveDate = getValue("goLiveDate");
-    const devUnit = getValue("devUnit");
-    const thirdPartyName = getValue("thirdPartyName");
-
-    // STEP 1 validation
-    if (customerName.length < 2) {
-        showError("Client / Organization name must be at least 2 characters.", 1, "customerName");
-        return;
-    }
+  const isValidPhone = (value) => /^\d{9,15}$/.test(value);
 
 
-    if (!phsCustCode) {
-        showError("Account number / Client code at PHS is required.", 1, "phsCustCode");
-        return;
-    }
+  hideError();
 
-    if (!accountBasic) {
-        showError("Underlying securities account/sub-account is required.", 1, "accountBasic");
-        return;
-    }
+  const customerName = getValue("customerName");
+  const identityNumber = getValue("identityNumber");
+  const phsCustCode = getValue("phsCustCode");
+  const accountBasic = getValue("accountBasic");
+  const notificationEmail = getValue("notificationEmail");
+  const alertPhoneNumber = getValue("alertPhoneNumber");
+  const technicalContactName = getValue("technicalContactName");
+  const technicalContactInfo = getValue("technicalContactInfo");
 
-    if (!isValidEmail(notificationEmail)) {
-        showError("Email for API notices must be a valid email address (e.g. name@example.com).", 1, "notificationEmail");
-        return;
-    }
+  const ipWhitelist = getValue("ipWhitelist");
+  const appName = getValue("appName");
+  const techStack = getValue("techStack");
+  const keySecurityMechanism = getValue("keySecurityMechanism");
+  const rateLimitMechanism = getValue("rateLimitMechanism");
+  const testingPlan = getValue("testingPlan");
+  const goLiveDate = getValue("goLiveDate");
+  const devUnit = getValue("devUnit");
+  const thirdPartyName = getValue("thirdPartyName");
 
-    if (!isValidPhone(alertPhoneNumber)) {
-        showError("Phone for OTP/alerts must contain only digits and be 9–15 digits long.", 1, "alertPhoneNumber");
-        return;
-    }
+  // STEP 1 validation
+  if (customerName.length < 2) {
+      showError("Client / Organization name must be at least 2 characters.", 1, "customerName");
+      return;
+  }
 
 
-    // STEP 2 validation
-    const apiScopesCheck = e.currentTarget.querySelectorAll('input[name="apiScope"]:checked');
-    if (apiScopesCheck.length < 1) {
-        showError("Please select at least one API scope.", 2);
-        return;
-    }
+  if (!phsCustCode) {
+      showError("Account number / Client code at PHS is required.", 1, "phsCustCode");
+      return;
+  }
 
-    // STEP 3 validation
-    if (!ipWhitelist) {
-        showError("Registered WAN IP / IP whitelist is required.", 3, "ipWhitelist");
-        return;
-    }
+  if (!accountBasic) {
+      showError("Underlying securities account/sub-account is required.", 1, "accountBasic");
+      return;
+  }
 
-    // STEP 4 validation
-    const terms = e.currentTarget.querySelectorAll('input[name="commitments"]:checked');
-    if (terms.length < 5) {
-        showError("Please agree to all 5 commitment terms in Step 4!", 4);
-        return;
-    }
+  if (!isValidEmail(notificationEmail)) {
+      showError("Email for API notices must be a valid email address (e.g. name@example.com).", 1, "notificationEmail");
+      return;
+  }
 
-    if (btn) {
-        btn.disabled = true;
-        btn.innerText = "Submitting registration form...";
-    }
+  if (!isValidPhone(alertPhoneNumber)) {
+      showError("Phone for OTP/alerts must contain only digits and be 9–15 digits long.", 1, "alertPhoneNumber");
+      return;
+  }
 
-    const apiScopes = Array.from(
-        e.currentTarget.querySelectorAll('input[name="apiScope"]:checked'),
-    ).map((cb) => cb.value);
 
-    const formData = {
-        customerName: getValue("customerName"),
-        identityNumber: getValue("identityNumber"),
-        phsCustCode: getValue("phsCustCode"),
-        accountBasic: getValue("accountBasic"),
-        accountDerivatives: getValue("accountDerivatives"),
-        marginProfile: getValue("marginProfile"),
-        notificationEmail: getValue("notificationEmail"),
-        alertPhoneNumber: getValue("alertPhoneNumber"),
-        technicalContactName: getValue("technicalContactName"),
-        technicalContactInfo: getValue("technicalContactInfo"),
-        apiScopes: apiScopes,
-        apiScopeNote: getValue("apiScopeNote"),
-        environment: "Production",
-        ipWhitelist: getValue("ipWhitelist"),
-        appName: getValue("appName"),
-        devUnit:
-            getValue("devUnit") === "third_party"
-                ? `Thuê bên thứ ba: ${getValue("thirdPartyName")}`
-                : "Tự phát triển",
-        techStack: getValue("techStack"),
-        keySecurityMechanism: getValue("keySecurityMechanism"),
-        rateLimitMechanism: getValue("rateLimitMechanism"),
-        testingPlan: getValue("testingPlan"),
-        goLiveDate: getValue("goLiveDate"),
-    };
+  // STEP 2 validation
+  const apiScopesCheck = e.currentTarget.querySelectorAll('input[name="apiScope"]:checked');
+  if (apiScopesCheck.length < 1) {
+      showError("Please select at least one API scope.", 2);
+      return;
+  }
 
-    try {
-        const response = await fetch('/api/api-onboarding', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer LILQYb7bfKfF05auHyYEiCM9b9z-KtV4tcqrU0VzT_eqkX0aXMVV-J84q1Dw98Ot'
-            },
-            body: JSON.stringify(formData)
-        });
+  // STEP 3 validation
+  if (!ipWhitelist) {
+      showError("Registered WAN IP / IP whitelist is required.", 3, "ipWhitelist");
+      return;
+  }
 
-        if (response.ok) {
-            if (msgBox) {
-                msgBox.style.display = "block";
-                msgBox.style.backgroundColor = "#e6fffa";
-                msgBox.style.color = "#234e52";
-                msgBox.style.border = "1px solid #319795";
-                msgBox.innerText =
-                    "Registration successful! PHS will review your application and contact you to activate the API as soon as possible.";
-            }
-            formElement.reset();
-        } else {
-            throw new Error("Error submitting application");
-        }
-    } catch (err) {
-        if (msgBox) {
-            msgBox.style.display = "block";
-            msgBox.style.backgroundColor = "#fff5f5";
-            msgBox.style.color = "#c53030";
-            msgBox.style.border = "1px solid #feb2b2";
-            msgBox.innerText =
-                "An error occurred or could not connect to the server. Please try again!";
-        }
-    } finally {
-        if (btn) {
-            btn.disabled = false;
-            btn.innerText = "Submit Application";
-        }
-    }
+  // STEP 4 validation
+  const terms = e.currentTarget.querySelectorAll('input[name="commitments"]:checked');
+  if (terms.length < 5) {
+      showError("Please agree to all 5 commitment terms in Step 4!", 4);
+      return;
+  }
+
+  if (btn) {
+      btn.disabled = true;
+      btn.innerText = "Submitting registration form...";
+  }
+
+  const apiScopes = Array.from(
+      e.currentTarget.querySelectorAll('input[name="apiScope"]:checked'),
+  ).map((cb) => cb.value);
+
+  const formData = {
+      customerName: getValue("customerName"),
+      identityNumber: getValue("identityNumber"),
+      phsCustCode: getValue("phsCustCode"),
+      accountBasic: getValue("accountBasic"),
+      accountDerivatives: getValue("accountDerivatives"),
+      marginProfile: getValue("marginProfile"),
+      notificationEmail: getValue("notificationEmail"),
+      alertPhoneNumber: getValue("alertPhoneNumber"),
+      technicalContactName: getValue("technicalContactName"),
+      technicalContactInfo: getValue("technicalContactInfo"),
+      apiScopes: apiScopes,
+      apiScopeNote: getValue("apiScopeNote"),
+      environment: "Production",
+      ipWhitelist: getValue("ipWhitelist"),
+      appName: getValue("appName"),
+      devUnit:
+          getValue("devUnit") === "third_party"
+              ? `Thuê bên thứ ba: ${getValue("thirdPartyName")}`
+              : "Tự phát triển",
+      techStack: getValue("techStack"),
+      keySecurityMechanism: getValue("keySecurityMechanism"),
+      rateLimitMechanism: getValue("rateLimitMechanism"),
+      testingPlan: getValue("testingPlan"),
+      goLiveDate: getValue("goLiveDate"),
+  };
+
+  try {
+      const response = await fetch('/api/api-onboarding', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer LILQYb7bfKfF05auHyYEiCM9b9z-KtV4tcqrU0VzT_eqkX0aXMVV-J84q1Dw98Ot'
+          },
+          body: JSON.stringify(formData)
+      });
+
+      if (response.ok) {
+          if (msgBox) {
+              msgBox.style.display = "block";
+              msgBox.style.backgroundColor = "#e6fffa";
+              msgBox.style.color = "#234e52";
+              msgBox.style.border = "1px solid #319795";
+              msgBox.innerText =
+                  "Registration successful! PHS will review your application and contact you to activate the API as soon as possible.";
+          }
+          formElement.reset();
+      } else {
+          throw new Error("Error submitting application");
+      }
+  } catch (err) {
+      if (msgBox) {
+          msgBox.style.display = "block";
+          msgBox.style.backgroundColor = "#fff5f5";
+          msgBox.style.color = "#c53030";
+          msgBox.style.border = "1px solid #feb2b2";
+          msgBox.innerText =
+              "An error occurred or could not connect to the server. Please try again!";
+      }
+  } finally {
+      if (btn) {
+          btn.disabled = false;
+          btn.innerText = "Submit Application";
+      }
+  }
 }}
   style={{
-    display: "flex",
-    flexDirection: "column",
-    gap: "20px",
-    marginTop: "20px",
-    maxWidth: "750px",
-    width: "100%",
-    height: "65vh",
-    minHeight: "450px",
-    boxSizing: "border-box",
-    border: "1px solid rgba(0,0,0,0.1)",
-    borderRadius: "8px",
-    padding: "20px",
-    overflow: "hidden",
+  display: "flex",
+  flexDirection: "column",
+  gap: "20px",
+  marginTop: "20px",
+  maxWidth: "750px",
+  width: "100%",
+  height: "65vh",
+  minHeight: "450px",
+  boxSizing: "border-box",
+  border: "1px solid rgba(0,0,0,0.1)",
+  borderRadius: "8px",
+  padding: "20px",
+  overflow: "hidden",
 }}
 >
   <div
     id="form-error-banner"
     style={{
-        display: 'none',
-        padding: '14px 18px',
-        borderRadius: '8px',
-        backgroundColor: 'rgba(239, 68, 68, 0.1)',
-        border: '1px solid #ef4444',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        gap: '12px',
-        boxSizing: 'border-box',
-        marginBottom: '16px'
-    }}
+      display: 'none',
+      padding: '14px 18px',
+      borderRadius: '8px',
+      backgroundColor: 'rgba(239, 68, 68, 0.1)',
+      border: '1px solid #ef4444',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      gap: '12px',
+      boxSizing: 'border-box',
+      marginBottom: '16px'
+  }}
   >
     <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
       <span style={{ fontSize: '18px', color: '#ef4444', flexShrink: 0 }}>⚠️</span>
@@ -247,18 +247,18 @@ description: "Please complete the registration form below to request access to P
     <button
       type="button"
       onClick={() => {
-            const banner = document.getElementById('form-error-banner');
-            if (banner) banner.style.display = 'none';
-        }}
+          const banner = document.getElementById('form-error-banner');
+          if (banner) banner.style.display = 'none';
+      }}
       style={{
-            background: 'transparent',
-            border: 'none',
-            color: '#ef4444',
-            fontSize: '18px',
-            cursor: 'pointer',
-            padding: '0 4px',
-            lineHeight: 1
-        }}
+          background: 'transparent',
+          border: 'none',
+          color: '#ef4444',
+          fontSize: '18px',
+          cursor: 'pointer',
+          padding: '0 4px',
+          lineHeight: 1
+      }}
     >
       ✕
     </button>
@@ -269,89 +269,89 @@ description: "Please complete the registration form below to request access to P
   <div className="block sm:hidden" style={{ marginBottom: "12px" }}>
     <div
       style={{
-            display: "flex",
-            flexWrap: "wrap",
-            gap: "8px",
-            width: "100%",
-            borderBottom: "1px solid currentColor",
-            opacity: 0.2,
-            paddingBottom: "12px",
-        }}
+          display: "flex",
+          flexWrap: "wrap",
+          gap: "8px",
+          width: "100%",
+          borderBottom: "1px solid currentColor",
+          opacity: 0.2,
+          paddingBottom: "12px",
+      }}
     >
       {[1, 2, 3, 4].map((num) => {
-                          const titles = [
-                              "1. Client information",
-                              "2. Requested API scope",
-                              "3. Registered technical information",
-                              "4. Client undertakings",
-                          ];
-                          return (
-                              <button
-                                  key={`mobile-${num}`}
-                                  type="button"
-                                  id={`mobile-tab-btn-${num}`}
-                                  onClick={() => {
-                                      [1, 2, 3, 4].forEach((n) => {
-                                          if (document.getElementById(`step-${n}`))
-                                              document.getElementById(`step-${n}`).style.display = "none";
-                                          const mBtn = document.getElementById(`mobile-tab-btn-${n}`);
-                                          const dBtn = document.getElementById(`desktop-tab-btn-${n}`);
-                                          if (mBtn) {
-                                              mBtn.style.backgroundColor = "transparent";
-                                              mBtn.style.color = "inherit";
-                                              mBtn.style.borderColor = "currentColor";
+                              const titles = [
+                                  "1. Client information",
+                                  "2. Requested API scope",
+                                  "3. Registered technical information",
+                                  "4. Client undertakings",
+                              ];
+                              return (
+                                  <button
+                                      key={`mobile-${num}`}
+                                      type="button"
+                                      id={`mobile-tab-btn-${num}`}
+                                      onClick={() => {
+                                          [1, 2, 3, 4].forEach((n) => {
+                                              if (document.getElementById(`step-${n}`))
+                                                  document.getElementById(`step-${n}`).style.display = "none";
+                                              const mBtn = document.getElementById(`mobile-tab-btn-${n}`);
+                                              const dBtn = document.getElementById(`desktop-tab-btn-${n}`);
+                                              if (mBtn) {
+                                                  mBtn.style.backgroundColor = "transparent";
+                                                  mBtn.style.color = "inherit";
+                                                  mBtn.style.borderColor = "currentColor";
+                                              }
+                                              if (dBtn) {
+                                                  dBtn.style.backgroundColor = "transparent";
+                                                  dBtn.style.color = "inherit";
+                                                  dBtn.style.borderColor = "currentColor";
+                                              }
+                                          });
+
+                                          document.getElementById(`step-${num}`).style.display = "flex";
+                                          const curM = document.getElementById(`mobile-tab-btn-${num}`);
+                                          const curD = document.getElementById(`desktop-tab-btn-${num}`);
+                                          if (curM) {
+                                              curM.style.backgroundColor = "#15803d";
+                                              curM.style.color = "#ffffff";
+                                              curM.style.borderColor = "#15803d";
                                           }
-                                          if (dBtn) {
-                                              dBtn.style.backgroundColor = "transparent";
-                                              dBtn.style.color = "inherit";
-                                              dBtn.style.borderColor = "currentColor";
+                                          if (curD) {
+                                              curD.style.backgroundColor = "#15803d";
+                                              curD.style.color = "#ffffff";
+                                              curD.style.borderColor = "#15803d";
                                           }
-                                      });
 
-                                      document.getElementById(`step-${num}`).style.display = "flex";
-                                      const curM = document.getElementById(`mobile-tab-btn-${num}`);
-                                      const curD = document.getElementById(`desktop-tab-btn-${num}`);
-                                      if (curM) {
-                                          curM.style.backgroundColor = "#15803d";
-                                          curM.style.color = "#ffffff";
-                                          curM.style.borderColor = "#15803d";
-                                      }
-                                      if (curD) {
-                                          curD.style.backgroundColor = "#15803d";
-                                          curD.style.color = "#ffffff";
-                                          curD.style.borderColor = "#15803d";
-                                      }
+                                          document.getElementById('oapi-registration-form')?.scrollIntoView({
+                                              behavior: 'smooth',
+                                              block: 'start'
+                                          });
 
-                                      document.getElementById('oapi-registration-form')?.scrollIntoView({
-                                          behavior: 'smooth',
-                                          block: 'start'
-                                      });
-
-                                      if (num === 1) {
-                                          setTimeout(() => document.querySelector('input[name="customerName"]')?.focus(), 50);
-                                      } else if (num === 3) {
-                                          setTimeout(() => document.querySelector('input[name="ipWhitelist"]')?.focus(), 50);
-                                      }
-                                  }}
-                                  style={{
-                                      flex: "1 1 45%",
-                                      minWidth: "140px",
-                                      padding: "10px 8px",
-                                      borderRadius: "6px",
-                                      fontSize: "13px",
-                                      fontWeight: "bold",
-                                      border: num === 1 ? "1px solid #15803d" : "1px solid currentColor",
-                                      cursor: "pointer",
-                                      backgroundColor: num === 1 ? "#15803d" : "transparent",
-                                      color: num === 1 ? "#ffffff" : "inherit",
-                                      textAlign: "center",
-                                      boxSizing: "border-box",
-                                  }}
-                              >
-                                  {titles[num - 1]}
-                              </button>
-                          );
-                      })}
+                                          if (num === 1) {
+                                              setTimeout(() => document.querySelector('input[name="customerName"]')?.focus(), 50);
+                                          } else if (num === 3) {
+                                              setTimeout(() => document.querySelector('input[name="ipWhitelist"]')?.focus(), 50);
+                                          }
+                                      }}
+                                      style={{
+                                          flex: "1 1 45%",
+                                          minWidth: "140px",
+                                          padding: "10px 8px",
+                                          borderRadius: "6px",
+                                          fontSize: "13px",
+                                          fontWeight: "bold",
+                                          border: num === 1 ? "1px solid #15803d" : "1px solid currentColor",
+                                          cursor: "pointer",
+                                          backgroundColor: num === 1 ? "#15803d" : "transparent",
+                                          color: num === 1 ? "#ffffff" : "inherit",
+                                          textAlign: "center",
+                                          boxSizing: "border-box",
+                                      }}
+                                  >
+                                      {titles[num - 1]}
+                                  </button>
+                              );
+                          })}
     </div>
   </div>
 
@@ -360,87 +360,87 @@ description: "Please complete the registration form below to request access to P
   <div
     className="hidden sm:flex"
     style={{
-        borderBottom: "1px solid currentColor",
-        opacity: 0.8,
-        gap: "8px",
-        paddingBottom: "10px",
-        width: "100%",
-    }}
+      borderBottom: "1px solid currentColor",
+      opacity: 0.8,
+      gap: "8px",
+      paddingBottom: "10px",
+      width: "100%",
+  }}
   >
     {[1, 2, 3, 4].map((num) => {
-                  const titles = [
-                      "1. Client information",
-                      "2. Requested API scope",
-                      "3. Registered technical information",
-                      "4. Client undertakings",
-                  ];
-                  return (
-                      <button
-                          key={`desktop-${num}`}
-                          type="button"
-                          id={`desktop-tab-btn-${num}`}
-                          onClick={() => {
-                              [1, 2, 3, 4].forEach((n) => {
-                                  if (document.getElementById(`step-${n}`))
-                                      document.getElementById(`step-${n}`).style.display = "none";
-                                  const mBtn = document.getElementById(`mobile-tab-btn-${n}`);
-                                  const dBtn = document.getElementById(`desktop-tab-btn-${n}`);
-                                  if (mBtn) {
-                                      mBtn.style.backgroundColor = "transparent";
-                                      mBtn.style.color = "inherit";
-                                      mBtn.style.borderColor = "currentColor";
-                                  }
-                                  if (dBtn) {
-                                      dBtn.style.backgroundColor = "transparent";
-                                      dBtn.style.color = "inherit";
-                                      dBtn.style.borderColor = "currentColor";
-                                  }
-                              });
+                    const titles = [
+                        "1. Client information",
+                        "2. Requested API scope",
+                        "3. Registered technical information",
+                        "4. Client undertakings",
+                    ];
+                    return (
+                        <button
+                            key={`desktop-${num}`}
+                            type="button"
+                            id={`desktop-tab-btn-${num}`}
+                            onClick={() => {
+                                [1, 2, 3, 4].forEach((n) => {
+                                    if (document.getElementById(`step-${n}`))
+                                        document.getElementById(`step-${n}`).style.display = "none";
+                                    const mBtn = document.getElementById(`mobile-tab-btn-${n}`);
+                                    const dBtn = document.getElementById(`desktop-tab-btn-${n}`);
+                                    if (mBtn) {
+                                        mBtn.style.backgroundColor = "transparent";
+                                        mBtn.style.color = "inherit";
+                                        mBtn.style.borderColor = "currentColor";
+                                    }
+                                    if (dBtn) {
+                                        dBtn.style.backgroundColor = "transparent";
+                                        dBtn.style.color = "inherit";
+                                        dBtn.style.borderColor = "currentColor";
+                                    }
+                                });
 
-                              document.getElementById(`step-${num}`).style.display = "flex";
-                              const curM = document.getElementById(`mobile-tab-btn-${num}`);
-                              const curD = document.getElementById(`desktop-tab-btn-${num}`);
-                              if (curM) {
-                                  curM.style.backgroundColor = "#15803d";
-                                  curM.style.color = "#ffffff";
-                                  curM.style.borderColor = "#15803d";
-                              }
-                              if (curD) {
-                                  curD.style.backgroundColor = "#15803d";
-                                  curD.style.color = "#ffffff";
-                                  curD.style.borderColor = "#15803d";
-                              }
+                                document.getElementById(`step-${num}`).style.display = "flex";
+                                const curM = document.getElementById(`mobile-tab-btn-${num}`);
+                                const curD = document.getElementById(`desktop-tab-btn-${num}`);
+                                if (curM) {
+                                    curM.style.backgroundColor = "#15803d";
+                                    curM.style.color = "#ffffff";
+                                    curM.style.borderColor = "#15803d";
+                                }
+                                if (curD) {
+                                    curD.style.backgroundColor = "#15803d";
+                                    curD.style.color = "#ffffff";
+                                    curD.style.borderColor = "#15803d";
+                                }
 
-                              document.getElementById('oapi-registration-form')?.scrollIntoView({
-                                  behavior: 'smooth',
-                                  block: 'start'
-                              });
+                                document.getElementById('oapi-registration-form')?.scrollIntoView({
+                                    behavior: 'smooth',
+                                    block: 'start'
+                                });
 
-                              if (num === 1) {
-                                  setTimeout(() => document.querySelector('input[name="customerName"]')?.focus(), 50);
-                              } else if (num === 3) {
-                                  setTimeout(() => document.querySelector('input[name="ipWhitelist"]')?.focus(), 50);
-                              }
-                          }}
-                          style={{
-                              flex: 1,
-                              padding: "4px 8px",
-                              borderRadius: "5px",
-                              fontSize: "12px",
-                              fontWeight: "bold",
-                              border: num === 1 ? "1px solid #15803d" : "1px solid currentColor",
-                              cursor: "pointer",
-                              backgroundColor: num === 1 ? "#15803d" : "transparent",
-                              color: num === 1 ? "#ffffff" : "inherit",
-                              textAlign: "center",
-                              transition: "all 0.2s",
-                              whiteSpace: "nowrap",
-                          }}
-                      >
-                          {titles[num - 1]}
-                      </button>
-                  );
-              })}
+                                if (num === 1) {
+                                    setTimeout(() => document.querySelector('input[name="customerName"]')?.focus(), 50);
+                                } else if (num === 3) {
+                                    setTimeout(() => document.querySelector('input[name="ipWhitelist"]')?.focus(), 50);
+                                }
+                            }}
+                            style={{
+                                flex: 1,
+                                padding: "4px 8px",
+                                borderRadius: "5px",
+                                fontSize: "12px",
+                                fontWeight: "bold",
+                                border: num === 1 ? "1px solid #15803d" : "1px solid currentColor",
+                                cursor: "pointer",
+                                backgroundColor: num === 1 ? "#15803d" : "transparent",
+                                color: num === 1 ? "#ffffff" : "inherit",
+                                textAlign: "center",
+                                transition: "all 0.2s",
+                                whiteSpace: "nowrap",
+                            }}
+                        >
+                            {titles[num - 1]}
+                        </button>
+                    );
+                })}
   </div>
 
   {/* BƯỚC 1: THÔNG TIN KHÁCH HÀNG */}
@@ -455,11 +455,11 @@ description: "Please complete the registration form below to request access to P
         <div className="col-span-1 sm:col-span-2" style={{ display: "flex", flexDirection: "column" }}>
           <label
             style={{
-                        fontWeight: "bold",
-                        display: "block",
-                        marginBottom: "4px",
-                        fontSize: "14px",
-                    }}
+                      fontWeight: "bold",
+                      display: "block",
+                      marginBottom: "4px",
+                      fontSize: "14px",
+                  }}
           >
             Client / Organization name
           </label>
@@ -471,23 +471,23 @@ description: "Please complete the registration form below to request access to P
             required
             minLength={2}
             style={{
-                        width: "100%",
-                        padding: "8px",
-                        borderRadius: "6px",
-                        border: "1px solid currentColor",
-                        boxSizing: "border-box",
-                    }}
+                      width: "100%",
+                      padding: "8px",
+                      borderRadius: "6px",
+                      border: "1px solid currentColor",
+                      boxSizing: "border-box",
+                  }}
           />
         </div>
 
         <div style={{ display: "flex", flexDirection: "column" }}>
           <label
             style={{
-                        fontWeight: "bold",
-                        display: "block",
-                        marginBottom: "4px",
-                        fontSize: "14px",
-                    }}
+                      fontWeight: "bold",
+                      display: "block",
+                      marginBottom: "4px",
+                      fontSize: "14px",
+                  }}
           >
             Identification / Business registration number
           </label>
@@ -496,23 +496,23 @@ description: "Please complete the registration form below to request access to P
             type="text"
             name="identityNumber"
             style={{
-                        width: "100%",
-                        padding: "8px",
-                        borderRadius: "6px",
-                        border: "1px solid currentColor",
-                        boxSizing: "border-box",
-                    }}
+                      width: "100%",
+                      padding: "8px",
+                      borderRadius: "6px",
+                      border: "1px solid currentColor",
+                      boxSizing: "border-box",
+                  }}
           />
         </div>
 
         <div style={{ display: "flex", flexDirection: "column" }}>
           <label
             style={{
-                        fontWeight: "bold",
-                        display: "block",
-                        marginBottom: "4px",
-                        fontSize: "14px",
-                    }}
+                      fontWeight: "bold",
+                      display: "block",
+                      marginBottom: "4px",
+                      fontSize: "14px",
+                  }}
           >
             Account number / Client code at PHS
           </label>
@@ -522,23 +522,23 @@ description: "Please complete the registration form below to request access to P
             name="phsCustCode"
             required
             style={{
-                        width: "100%",
-                        padding: "8px",
-                        borderRadius: "6px",
-                        border: "1px solid currentColor",
-                        boxSizing: "border-box",
-                    }}
+                      width: "100%",
+                      padding: "8px",
+                      borderRadius: "6px",
+                      border: "1px solid currentColor",
+                      boxSizing: "border-box",
+                  }}
           />
         </div>
 
         <div style={{ display: "flex", flexDirection: "column" }}>
           <label
             style={{
-                        fontWeight: "bold",
-                        display: "block",
-                        marginBottom: "4px",
-                        fontSize: "14px",
-                    }}
+                      fontWeight: "bold",
+                      display: "block",
+                      marginBottom: "4px",
+                      fontSize: "14px",
+                  }}
           >
             Underlying securities account/sub-account registered for API
           </label>
@@ -548,23 +548,23 @@ description: "Please complete the registration form below to request access to P
             name="accountBasic"
             required
             style={{
-                        width: "100%",
-                        padding: "8px",
-                        borderRadius: "6px",
-                        border: "1px solid currentColor",
-                        boxSizing: "border-box",
-                    }}
+                      width: "100%",
+                      padding: "8px",
+                      borderRadius: "6px",
+                      border: "1px solid currentColor",
+                      boxSizing: "border-box",
+                  }}
           />
         </div>
 
         <div style={{ display: "flex", flexDirection: "column" }}>
           <label
             style={{
-                        fontWeight: "bold",
-                        display: "block",
-                        marginBottom: "4px",
-                        fontSize: "14px",
-                    }}
+                      fontWeight: "bold",
+                      display: "block",
+                      marginBottom: "4px",
+                      fontSize: "14px",
+                  }}
           >
             Derivatives account/sub-account registered for API (if any)
           </label>
@@ -573,23 +573,23 @@ description: "Please complete the registration form below to request access to P
             type="text"
             name="accountDerivatives"
             style={{
-                        width: "100%",
-                        padding: "8px",
-                        borderRadius: "6px",
-                        border: "1px solid currentColor",
-                        boxSizing: "border-box",
-                    }}
+                      width: "100%",
+                      padding: "8px",
+                      borderRadius: "6px",
+                      border: "1px solid currentColor",
+                      boxSizing: "border-box",
+                  }}
           />
         </div>
 
         <div className="col-span-1 sm:col-span-2" style={{ display: "flex", flexDirection: "column" }}>
           <label
             style={{
-                        fontWeight: "bold",
-                        display: "block",
-                        marginBottom: "4px",
-                        fontSize: "14px",
-                    }}
+                      fontWeight: "bold",
+                      display: "block",
+                      marginBottom: "4px",
+                      fontSize: "14px",
+                  }}
           >
             Applicable margin documents (if any)
           </label>
@@ -598,23 +598,23 @@ description: "Please complete the registration form below to request access to P
             type="text"
             name="marginProfile"
             style={{
-                        width: "100%",
-                        padding: "8px",
-                        borderRadius: "6px",
-                        border: "1px solid currentColor",
-                        boxSizing: "border-box",
-                    }}
+                      width: "100%",
+                      padding: "8px",
+                      borderRadius: "6px",
+                      border: "1px solid currentColor",
+                      boxSizing: "border-box",
+                  }}
           />
         </div>
 
         <div style={{ display: "flex", flexDirection: "column" }}>
           <label
             style={{
-                        fontWeight: "bold",
-                        display: "block",
-                        marginBottom: "4px",
-                        fontSize: "14px",
-                    }}
+                      fontWeight: "bold",
+                      display: "block",
+                      marginBottom: "4px",
+                      fontSize: "14px",
+                  }}
           >
             Email for API notices
           </label>
@@ -625,23 +625,23 @@ description: "Please complete the registration form below to request access to P
             required
             placeholder="example@email.com"
             style={{
-                        width: "100%",
-                        padding: "8px",
-                        borderRadius: "6px",
-                        border: "1px solid currentColor",
-                        boxSizing: "border-box",
-                    }}
+                      width: "100%",
+                      padding: "8px",
+                      borderRadius: "6px",
+                      border: "1px solid currentColor",
+                      boxSizing: "border-box",
+                  }}
           />
         </div>
 
         <div style={{ display: "flex", flexDirection: "column" }}>
           <label
             style={{
-                        fontWeight: "bold",
-                        display: "block",
-                        marginBottom: "4px",
-                        fontSize: "14px",
-                    }}
+                      fontWeight: "bold",
+                      display: "block",
+                      marginBottom: "4px",
+                      fontSize: "14px",
+                  }}
           >
             Phone for OTP/alerts
           </label>
@@ -654,26 +654,26 @@ description: "Please complete the registration form below to request access to P
             pattern="\d{9,15}"
             title="Digits only, 9 to 15 digits."
             onInput={(e) => {
-                        e.currentTarget.value = e.currentTarget.value.replace(/\D/g, "");
-                    }}
+                      e.currentTarget.value = e.currentTarget.value.replace(/\D/g, "");
+                  }}
             style={{
-                        width: "100%",
-                        padding: "8px",
-                        borderRadius: "6px",
-                        border: "1px solid currentColor",
-                        boxSizing: "border-box",
-                    }}
+                      width: "100%",
+                      padding: "8px",
+                      borderRadius: "6px",
+                      border: "1px solid currentColor",
+                      boxSizing: "border-box",
+                  }}
           />
         </div>
 
         <div style={{ display: "flex", flexDirection: "column" }}>
           <label
             style={{
-                        fontWeight: "bold",
-                        display: "block",
-                        marginBottom: "4px",
-                        fontSize: "14px",
-                    }}
+                      fontWeight: "bold",
+                      display: "block",
+                      marginBottom: "4px",
+                      fontSize: "14px",
+                  }}
           >
             Technical contact / title
           </label>
@@ -682,23 +682,23 @@ description: "Please complete the registration form below to request access to P
             type="text"
             name="technicalContactName"
             style={{
-                        width: "100%",
-                        padding: "8px",
-                        borderRadius: "6px",
-                        border: "1px solid currentColor",
-                        boxSizing: "border-box",
-                    }}
+                      width: "100%",
+                      padding: "8px",
+                      borderRadius: "6px",
+                      border: "1px solid currentColor",
+                      boxSizing: "border-box",
+                  }}
           />
         </div>
 
         <div style={{ display: "flex", flexDirection: "column" }}>
           <label
             style={{
-                        fontWeight: "bold",
-                        display: "block",
-                        marginBottom: "4px",
-                        fontSize: "14px",
-                    }}
+                      fontWeight: "bold",
+                      display: "block",
+                      marginBottom: "4px",
+                      fontSize: "14px",
+                  }}
           >
             Email/phone of technical contact
           </label>
@@ -708,12 +708,12 @@ description: "Please complete the registration form below to request access to P
             name="technicalContactInfo"
             placeholder="example@email.com or 0912345678"
             style={{
-                        width: "100%",
-                        padding: "8px",
-                        borderRadius: "6px",
-                        border: "1px solid currentColor",
-                        boxSizing: "border-box",
-                    }}
+                      width: "100%",
+                      padding: "8px",
+                      borderRadius: "6px",
+                      border: "1px solid currentColor",
+                      boxSizing: "border-box",
+                  }}
           />
         </div>
       </div>
@@ -723,85 +723,85 @@ description: "Please complete the registration form below to request access to P
       <button
         type="button"
         onClick={() => {
-                const form = document.getElementById("oapi-registration-form");
-                const getValue = (name) => (form[name]?.value ?? "").trim();
-                const isValidEmail = (value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
-                const isValidPhone = (value) => /^\d{9,15}$/.test(value);
+              const form = document.getElementById("oapi-registration-form");
+              const getValue = (name) => (form[name]?.value ?? "").trim();
+              const isValidEmail = (value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+              const isValidPhone = (value) => /^\d{9,15}$/.test(value);
 
-                const showError = (message, fieldName) => {
-                    const banner = document.getElementById("form-error-banner");
-                    const bannerText = document.getElementById("form-error-banner-text");
-                    if (banner && bannerText) {
-                        bannerText.innerText = message;
-                        banner.style.display = "flex";
-                        document.getElementById("oapi-registration-form")?.scrollIntoView({ behavior: "smooth", block: "nearest" });
-                    }
-                    if (fieldName) {
-                        setTimeout(() => {
-                            const input = form[fieldName];
-                            if (input) {
-                                const scrollBox = input.closest('.step-scroll-box');
-                                if (scrollBox) {
-                                    const scrollBoxRect = scrollBox.getBoundingClientRect();
-                                    const inputRect = input.getBoundingClientRect();
-                                    if (inputRect.top < scrollBoxRect.top || inputRect.bottom > scrollBoxRect.bottom) {
-                                        scrollBox.scrollBy({ top: inputRect.top - scrollBoxRect.top - 20, behavior: "smooth" });
-                                    }
-                                }
-                                input.focus({ preventScroll: true });
-                            }
-                        }, 100);
-                    }
-                };
+              const showError = (message, fieldName) => {
+                  const banner = document.getElementById("form-error-banner");
+                  const bannerText = document.getElementById("form-error-banner-text");
+                  if (banner && bannerText) {
+                      bannerText.innerText = message;
+                      banner.style.display = "flex";
+                      document.getElementById("oapi-registration-form")?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+                  }
+                  if (fieldName) {
+                      setTimeout(() => {
+                          const input = form[fieldName];
+                          if (input) {
+                              const scrollBox = input.closest('.step-scroll-box');
+                              if (scrollBox) {
+                                  const scrollBoxRect = scrollBox.getBoundingClientRect();
+                                  const inputRect = input.getBoundingClientRect();
+                                  if (inputRect.top < scrollBoxRect.top || inputRect.bottom > scrollBoxRect.bottom) {
+                                      scrollBox.scrollBy({ top: inputRect.top - scrollBoxRect.top - 20, behavior: "smooth" });
+                                  }
+                              }
+                              input.focus({ preventScroll: true });
+                          }
+                      }, 100);
+                  }
+              };
 
-                const errorBanner = document.getElementById("form-error-banner");
-                if (errorBanner) errorBanner.style.display = "none";
+              const errorBanner = document.getElementById("form-error-banner");
+              if (errorBanner) errorBanner.style.display = "none";
 
-                const customerName = getValue("customerName");
-                const identityNumber = getValue("identityNumber");
-                const phsCustCode = getValue("phsCustCode");
-                const accountBasic = getValue("accountBasic");
-                const notificationEmail = getValue("notificationEmail");
-                const alertPhoneNumber = getValue("alertPhoneNumber");
-                const technicalContactName = getValue("technicalContactName");
-                const technicalContactInfo = getValue("technicalContactInfo");
+              const customerName = getValue("customerName");
+              const identityNumber = getValue("identityNumber");
+              const phsCustCode = getValue("phsCustCode");
+              const accountBasic = getValue("accountBasic");
+              const notificationEmail = getValue("notificationEmail");
+              const alertPhoneNumber = getValue("alertPhoneNumber");
+              const technicalContactName = getValue("technicalContactName");
+              const technicalContactInfo = getValue("technicalContactInfo");
 
-                if (customerName.length < 2) {
-                    showError("Client / Organization name must be at least 2 characters.", "customerName");
-                    return;
-                }
-                if (!phsCustCode) {
-                    showError("Account number / Client code at PHS is required.", "phsCustCode");
-                    return;
-                }
-                if (!accountBasic) {
-                    showError("Underlying securities account/sub-account is required.", "accountBasic");
-                    return;
-                }
-                if (!isValidEmail(notificationEmail)) {
-                    showError("Email for API notices must be a valid email address (must contain @, e.g. name@example.com).", "notificationEmail");
-                    return;
-                }
-                if (!isValidPhone(alertPhoneNumber)) {
-                    showError("Phone for OTP/alerts must contain digits only and be 9–15 digits long.", "alertPhoneNumber");
-                    return;
-                }
+              if (customerName.length < 2) {
+                  showError("Client / Organization name must be at least 2 characters.", "customerName");
+                  return;
+              }
+              if (!phsCustCode) {
+                  showError("Account number / Client code at PHS is required.", "phsCustCode");
+                  return;
+              }
+              if (!accountBasic) {
+                  showError("Underlying securities account/sub-account is required.", "accountBasic");
+                  return;
+              }
+              if (!isValidEmail(notificationEmail)) {
+                  showError("Email for API notices must be a valid email address (must contain @, e.g. name@example.com).", "notificationEmail");
+                  return;
+              }
+              if (!isValidPhone(alertPhoneNumber)) {
+                  showError("Phone for OTP/alerts must contain digits only and be 9–15 digits long.", "alertPhoneNumber");
+                  return;
+              }
 
-                const btn =
-                    document.getElementById("desktop-tab-btn-2") ||
-                    document.getElementById("mobile-tab-btn-2");
-                if (btn) btn.click();
-            }}
+              const btn =
+                  document.getElementById("desktop-tab-btn-2") ||
+                  document.getElementById("mobile-tab-btn-2");
+              if (btn) btn.click();
+          }}
         className="w-full sm:w-auto"
         style={{
-                padding: "10px 20px",
-                backgroundColor: "#15803d",
-                color: "#fff",
-                border: "none",
-                borderRadius: "6px",
-                fontWeight: "bold",
-                cursor: "pointer",
-            }}
+              padding: "10px 20px",
+              backgroundColor: "#15803d",
+              color: "#fff",
+              border: "none",
+              borderRadius: "6px",
+              fontWeight: "bold",
+              cursor: "pointer",
+          }}
       >
         Next: Requested API scope ➔
       </button>
@@ -822,81 +822,81 @@ description: "Please complete the registration form below to request access to P
 
       <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
         {[
-                                  {
-                                      val: "auth_security",
-                                      title: "Authentication & Security",
-                                      sub: "Authentication & Security / issue API Key, Secret Key, Access Token",
-                                      checked: true,
-                                  },
-                                  {
-                                      val: "trading_equity",
-                                      title: "Trading API – underlying securities",
-                                      sub: "place/amend/cancel orders, order inquiry",
-                                  },
-                                  {
-                                      val: "trading_derivatives",
-                                      title: "Trading API – derivatives",
-                                      sub: "place/amend/cancel orders, OTP, order, inquiry",
-                                  },
-                                  {
-                                      val: "account_api",
-                                      title: "Account API",
-                                      sub: "balances, portfolio, buying power, margin obligations",
-                                  },
-                                  {
-                                      val: "market_data",
-                                      title: "Market Data API / Historical Candles",
-                                      sub: "Retrieve market data and historical candlesticks.",
-                                  },
-                                  {
-                                      val: "websocket_streaming",
-                                      title: "Streaming / WebSocket",
-                                      sub: "account / instrument / trade",
-                                  },
-                                  {
-                                      val: "developer_portal",
-                                      title: "API Playground / Developer Portal",
-                                      sub: "API sandbox access",
-                                  },
-                              ].map((scope) => (
-                                  <label
-                                      key={scope.val}
-                                      style={{
-                                          display: "flex",
-                                          gap: "12px",
-                                          alignItems: "center",
-                                          padding: "12px 16px",
-                                          border: "1px solid currentColor",
-                                          borderRadius: "8px",
-                                          cursor: "pointer",
-                                      }}
-                                  >
-                                      <input
-                                          type="checkbox"
-                                          name="apiScope"
-                                          value={scope.val}
-                                          defaultChecked={scope.checked}
-                                          style={{
-                                              width: "18px",
-                                              height: "18px",
-                                              cursor: "pointer",
-                                              accentColor: "#15803d",
-                                          }}
-                                      />
-                                      <div style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
-                                          <strong style={{ fontSize: "14px" }}>{scope.title}</strong>
-                                          <span style={{ fontSize: "13px", opacity: 0.7 }}>{scope.sub}</span>
-                                      </div>
-                                  </label>
-                              ))}
+                                        {
+                                            val: "auth_security",
+                                            title: "Authentication & Security",
+                                            sub: "Authentication & Security / issue API Key, Secret Key, Access Token",
+                                            checked: true,
+                                        },
+                                        {
+                                            val: "trading_equity",
+                                            title: "Trading API – underlying securities",
+                                            sub: "place/amend/cancel orders, order inquiry",
+                                        },
+                                        {
+                                            val: "trading_derivatives",
+                                            title: "Trading API – derivatives",
+                                            sub: "place/amend/cancel orders, OTP, order, inquiry",
+                                        },
+                                        {
+                                            val: "account_api",
+                                            title: "Account API",
+                                            sub: "balances, portfolio, buying power, margin obligations",
+                                        },
+                                        {
+                                            val: "market_data",
+                                            title: "Market Data API / Historical Candles",
+                                            sub: "Retrieve market data and historical candlesticks.",
+                                        },
+                                        {
+                                            val: "websocket_streaming",
+                                            title: "Streaming / WebSocket",
+                                            sub: "account / instrument / trade",
+                                        },
+                                        {
+                                            val: "developer_portal",
+                                            title: "API Playground / Developer Portal",
+                                            sub: "API sandbox access",
+                                        },
+                                    ].map((scope) => (
+                                        <label
+                                            key={scope.val}
+                                            style={{
+                                                display: "flex",
+                                                gap: "12px",
+                                                alignItems: "center",
+                                                padding: "12px 16px",
+                                                border: "1px solid currentColor",
+                                                borderRadius: "8px",
+                                                cursor: "pointer",
+                                            }}
+                                        >
+                                            <input
+                                                type="checkbox"
+                                                name="apiScope"
+                                                value={scope.val}
+                                                defaultChecked={scope.checked}
+                                                style={{
+                                                    width: "18px",
+                                                    height: "18px",
+                                                    cursor: "pointer",
+                                                    accentColor: "#15803d",
+                                                }}
+                                            />
+                                            <div style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
+                                                <strong style={{ fontSize: "14px" }}>{scope.title}</strong>
+                                                <span style={{ fontSize: "13px", opacity: 0.7 }}>{scope.sub}</span>
+                                            </div>
+                                        </label>
+                                    ))}
 
         <div
           style={{
-                    marginTop: "8px",
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: "6px",
-                }}
+                  marginTop: "8px",
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "6px",
+              }}
         >
           <label style={{ fontWeight: "bold", display: "block", fontSize: "14px" }}>
             Note / account scope
@@ -907,15 +907,15 @@ description: "Please complete the registration form below to request access to P
             name="apiScopeNote"
             placeholder="Additional notes on the scope of API-enabled accounts..."
             style={{
-                        width: "100%",
-                        padding: "10px 12px",
-                        borderRadius: "6px",
-                        border: "1px solid currentColor",
-                        backgroundColor: "transparent",
-                        color: "inherit",
-                        fontSize: "14px",
-                        boxSizing: "border-box",
-                    }}
+                      width: "100%",
+                      padding: "10px 12px",
+                      borderRadius: "6px",
+                      border: "1px solid currentColor",
+                      backgroundColor: "transparent",
+                      color: "inherit",
+                      fontSize: "14px",
+                      boxSizing: "border-box",
+                  }}
           />
         </div>
       </div>
@@ -925,20 +925,20 @@ description: "Please complete the registration form below to request access to P
       <button
         type="button"
         onClick={() => {
-                const btn =
-                    document.getElementById("desktop-tab-btn-1") ||
-                    document.getElementById("mobile-tab-btn-1");
-                if (btn) btn.click();
-            }}
+              const btn =
+                  document.getElementById("desktop-tab-btn-1") ||
+                  document.getElementById("mobile-tab-btn-1");
+              if (btn) btn.click();
+          }}
         className="w-full sm:w-auto"
         style={{
-                padding: "10px 20px",
-                border: "1px solid currentColor",
-                borderRadius: "6px",
-                fontWeight: "bold",
-                cursor: "pointer",
-                backgroundColor: "transparent",
-            }}
+              padding: "10px 20px",
+              border: "1px solid currentColor",
+              borderRadius: "6px",
+              fontWeight: "bold",
+              cursor: "pointer",
+              backgroundColor: "transparent",
+          }}
       >
         Back to Step 1
       </button>
@@ -946,40 +946,40 @@ description: "Please complete the registration form below to request access to P
       <button
         type="button"
         onClick={(e) => {
-                const showError = (message) => {
-                    const banner = document.getElementById("form-error-banner");
-                    const bannerText = document.getElementById("form-error-banner-text");
-                    if (banner && bannerText) {
-                        bannerText.innerText = message;
-                        banner.style.display = "flex";
-                        banner.scrollIntoView({ behavior: "smooth", block: "center" });
-                    }
-                };
+              const showError = (message) => {
+                  const banner = document.getElementById("form-error-banner");
+                  const bannerText = document.getElementById("form-error-banner-text");
+                  if (banner && bannerText) {
+                      bannerText.innerText = message;
+                      banner.style.display = "flex";
+                      banner.scrollIntoView({ behavior: "smooth", block: "center" });
+                  }
+              };
 
-                const errorBanner = document.getElementById("form-error-banner");
-                if (errorBanner) errorBanner.style.display = "none";
+              const errorBanner = document.getElementById("form-error-banner");
+              if (errorBanner) errorBanner.style.display = "none";
 
-                const checkedScopes = document.querySelectorAll('input[name="apiScope"]:checked');
-                if (checkedScopes.length < 1) {
-                    showError("Please select at least one API scope before continuing.");
-                    return;
-                }
+              const checkedScopes = document.querySelectorAll('input[name="apiScope"]:checked');
+              if (checkedScopes.length < 1) {
+                  showError("Please select at least one API scope before continuing.");
+                  return;
+              }
 
-                const btn =
-                    document.getElementById("desktop-tab-btn-3") ||
-                    document.getElementById("mobile-tab-btn-3");
-                if (btn) btn.click();
-            }}
+              const btn =
+                  document.getElementById("desktop-tab-btn-3") ||
+                  document.getElementById("mobile-tab-btn-3");
+              if (btn) btn.click();
+          }}
         className="w-full sm:w-auto"
         style={{
-                padding: "10px 20px",
-                backgroundColor: "#15803d",
-                color: "#fff",
-                border: "none",
-                borderRadius: "6px",
-                fontWeight: "bold",
-                cursor: "pointer",
-            }}
+              padding: "10px 20px",
+              backgroundColor: "#15803d",
+              color: "#fff",
+              border: "none",
+              borderRadius: "6px",
+              fontWeight: "bold",
+              cursor: "pointer",
+          }}
       >
         Next: Registered technical information ➔
       </button>
@@ -998,11 +998,11 @@ description: "Please complete the registration form below to request access to P
         <div>
           <label
             style={{
-                        fontWeight: "bold",
-                        display: "block",
-                        marginBottom: "4px",
-                        fontSize: "14px",
-                    }}
+                      fontWeight: "bold",
+                      display: "block",
+                      marginBottom: "4px",
+                      fontSize: "14px",
+                  }}
           >
             Registered WAN IP / IP whitelist
           </label>
@@ -1013,23 +1013,23 @@ description: "Please complete the registration form below to request access to P
             required
             placeholder="Example: 1.2.3.4"
             style={{
-                        width: "100%",
-                        padding: "8px",
-                        borderRadius: "6px",
-                        border: "1px solid currentColor",
-                        boxSizing: "border-box",
-                    }}
+                      width: "100%",
+                      padding: "8px",
+                      borderRadius: "6px",
+                      border: "1px solid currentColor",
+                      boxSizing: "border-box",
+                  }}
           />
         </div>
 
         <div>
           <label
             style={{
-                        fontWeight: "bold",
-                        display: "block",
-                        marginBottom: "4px",
-                        fontSize: "14px",
-                    }}
+                      fontWeight: "bold",
+                      display: "block",
+                      marginBottom: "4px",
+                      fontSize: "14px",
+                  }}
           >
             Name of API-integrated system/application
           </label>
@@ -1038,34 +1038,34 @@ description: "Please complete the registration form below to request access to P
             type="text"
             name="appName"
             style={{
-                        width: "100%",
-                        padding: "8px",
-                        borderRadius: "6px",
-                        border: "1px solid currentColor",
-                        boxSizing: "border-box",
-                    }}
+                      width: "100%",
+                      padding: "8px",
+                      borderRadius: "6px",
+                      border: "1px solid currentColor",
+                      boxSizing: "border-box",
+                  }}
           />
         </div>
 
         <div>
           <label
             style={{
-                        fontWeight: "bold",
-                        display: "block",
-                        marginBottom: "4px",
-                        fontSize: "14px",
-                    }}
+                      fontWeight: "bold",
+                      display: "block",
+                      marginBottom: "4px",
+                      fontSize: "14px",
+                  }}
           >
             Application developer/operator
           </label>
 
           <div
             style={{
-                        display: "flex",
-                        gap: "20px",
-                        alignItems: "center",
-                        marginTop: "6px",
-                    }}
+                      display: "flex",
+                      gap: "20px",
+                      alignItems: "center",
+                      marginTop: "6px",
+                  }}
           >
             <label className="cursor-pointer flex items-center gap-1.5">
               <input type="radio" name="devUnit" value="self" defaultChecked style={{ accentColor: "#15803d" }} />
@@ -1089,24 +1089,24 @@ description: "Please complete the registration form below to request access to P
             name="thirdPartyName"
             placeholder="Name of third-party entity (if contracted)..."
             style={{
-                        width: "100%",
-                        padding: "8px",
-                        borderRadius: "6px",
-                        border: "1px solid currentColor",
-                        marginTop: "6px",
-                        boxSizing: "border-box",
-                    }}
+                      width: "100%",
+                      padding: "8px",
+                      borderRadius: "6px",
+                      border: "1px solid currentColor",
+                      marginTop: "6px",
+                      boxSizing: "border-box",
+                  }}
           />
         </div>
 
         <div>
           <label
             style={{
-                        fontWeight: "bold",
-                        display: "block",
-                        marginBottom: "4px",
-                        fontSize: "14px",
-                    }}
+                      fontWeight: "bold",
+                      display: "block",
+                      marginBottom: "4px",
+                      fontSize: "14px",
+                  }}
           >
             Main technical language/platform
           </label>
@@ -1115,23 +1115,23 @@ description: "Please complete the registration form below to request access to P
             type="text"
             name="techStack"
             style={{
-                        width: "100%",
-                        padding: "8px",
-                        borderRadius: "6px",
-                        border: "1px solid currentColor",
-                        boxSizing: "border-box",
-                    }}
+                      width: "100%",
+                      padding: "8px",
+                      borderRadius: "6px",
+                      border: "1px solid currentColor",
+                      boxSizing: "border-box",
+                  }}
           />
         </div>
 
         <div>
           <label
             style={{
-                        fontWeight: "bold",
-                        display: "block",
-                        marginBottom: "4px",
-                        fontSize: "14px",
-                    }}
+                      fontWeight: "bold",
+                      display: "block",
+                      marginBottom: "4px",
+                      fontSize: "14px",
+                  }}
           >
             Storage and protection mechanism for API Key/Secret Key
           </label>
@@ -1140,23 +1140,23 @@ description: "Please complete the registration form below to request access to P
             type="text"
             name="keySecurityMechanism"
             style={{
-                        width: "100%",
-                        padding: "8px",
-                        borderRadius: "6px",
-                        border: "1px solid currentColor",
-                        boxSizing: "border-box",
-                    }}
+                      width: "100%",
+                      padding: "8px",
+                      borderRadius: "6px",
+                      border: "1px solid currentColor",
+                      boxSizing: "border-box",
+                  }}
           />
         </div>
 
         <div>
           <label
             style={{
-                        fontWeight: "bold",
-                        display: "block",
-                        marginBottom: "4px",
-                        fontSize: "14px",
-                    }}
+                      fontWeight: "bold",
+                      display: "block",
+                      marginBottom: "4px",
+                      fontSize: "14px",
+                  }}
           >
             Client’s internal kill switch/rate limit mechanism
           </label>
@@ -1165,23 +1165,23 @@ description: "Please complete the registration form below to request access to P
             type="text"
             name="rateLimitMechanism"
             style={{
-                        width: "100%",
-                        padding: "8px",
-                        borderRadius: "6px",
-                        border: "1px solid currentColor",
-                        boxSizing: "border-box",
-                    }}
+                      width: "100%",
+                      padding: "8px",
+                      borderRadius: "6px",
+                      border: "1px solid currentColor",
+                      boxSizing: "border-box",
+                  }}
           />
         </div>
 
         <div>
           <label
             style={{
-                        fontWeight: "bold",
-                        display: "block",
-                        marginBottom: "4px",
-                        fontSize: "14px",
-                    }}
+                      fontWeight: "bold",
+                      display: "block",
+                      marginBottom: "4px",
+                      fontSize: "14px",
+                  }}
           >
             Testing plan before go-live
           </label>
@@ -1190,23 +1190,23 @@ description: "Please complete the registration form below to request access to P
             type="text"
             name="testingPlan"
             style={{
-                        width: "100%",
-                        padding: "8px",
-                        borderRadius: "6px",
-                        border: "1px solid currentColor",
-                        boxSizing: "border-box",
-                    }}
+                      width: "100%",
+                      padding: "8px",
+                      borderRadius: "6px",
+                      border: "1px solid currentColor",
+                      boxSizing: "border-box",
+                  }}
           />
         </div>
 
         <div>
           <label
             style={{
-                        fontWeight: "bold",
-                        display: "block",
-                        marginBottom: "4px",
-                        fontSize: "14px",
-                    }}
+                      fontWeight: "bold",
+                      display: "block",
+                      marginBottom: "4px",
+                      fontSize: "14px",
+                  }}
           >
             Expected production go-live date
           </label>
@@ -1215,12 +1215,12 @@ description: "Please complete the registration form below to request access to P
             type="date"
             name="goLiveDate"
             style={{
-                        width: "100%",
-                        padding: "8px",
-                        borderRadius: "6px",
-                        border: "1px solid currentColor",
-                        boxSizing: "border-box",
-                    }}
+                      width: "100%",
+                      padding: "8px",
+                      borderRadius: "6px",
+                      border: "1px solid currentColor",
+                      boxSizing: "border-box",
+                  }}
           />
         </div>
       </div>
@@ -1230,20 +1230,20 @@ description: "Please complete the registration form below to request access to P
       <button
         type="button"
         onClick={() => {
-                const btn =
-                    document.getElementById("desktop-tab-btn-2") ||
-                    document.getElementById("mobile-tab-btn-2");
-                if (btn) btn.click();
-            }}
+              const btn =
+                  document.getElementById("desktop-tab-btn-2") ||
+                  document.getElementById("mobile-tab-btn-2");
+              if (btn) btn.click();
+          }}
         className="w-full sm:w-auto"
         style={{
-                padding: "10px 20px",
-                border: "1px solid currentColor",
-                borderRadius: "6px",
-                fontWeight: "bold",
-                cursor: "pointer",
-                backgroundColor: "transparent",
-            }}
+              padding: "10px 20px",
+              border: "1px solid currentColor",
+              borderRadius: "6px",
+              fontWeight: "bold",
+              cursor: "pointer",
+              backgroundColor: "transparent",
+          }}
       >
         Back to Step 2
       </button>
@@ -1251,69 +1251,69 @@ description: "Please complete the registration form below to request access to P
       <button
         type="button"
         onClick={() => {
-                const form = document.getElementById("oapi-registration-form");
-                const getValue = (name) => (form[name]?.value ?? "").trim();
+              const form = document.getElementById("oapi-registration-form");
+              const getValue = (name) => (form[name]?.value ?? "").trim();
 
 
-                const showError = (message, fieldName) => {
-                    const banner = document.getElementById("form-error-banner");
-                    const bannerText = document.getElementById("form-error-banner-text");
-                    if (banner && bannerText) {
-                        bannerText.innerText = message;
-                        banner.style.display = "flex";
-                        document.getElementById("oapi-registration-form")?.scrollIntoView({ behavior: "smooth", block: "nearest" });
-                    }
-                    if (fieldName) {
-                        setTimeout(() => {
-                            const input = form[fieldName];
-                            if (input) {
-                                const scrollBox = input.closest('.step-scroll-box');
-                                if (scrollBox) {
-                                    const scrollBoxRect = scrollBox.getBoundingClientRect();
-                                    const inputRect = input.getBoundingClientRect();
-                                    if (inputRect.top < scrollBoxRect.top || inputRect.bottom > scrollBoxRect.bottom) {
-                                        scrollBox.scrollBy({ top: inputRect.top - scrollBoxRect.top - 20, behavior: "smooth" });
-                                    }
-                                }
-                                input.focus({ preventScroll: true });
-                            }
-                        }, 100);
-                    }
-                };
+              const showError = (message, fieldName) => {
+                  const banner = document.getElementById("form-error-banner");
+                  const bannerText = document.getElementById("form-error-banner-text");
+                  if (banner && bannerText) {
+                      bannerText.innerText = message;
+                      banner.style.display = "flex";
+                      document.getElementById("oapi-registration-form")?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+                  }
+                  if (fieldName) {
+                      setTimeout(() => {
+                          const input = form[fieldName];
+                          if (input) {
+                              const scrollBox = input.closest('.step-scroll-box');
+                              if (scrollBox) {
+                                  const scrollBoxRect = scrollBox.getBoundingClientRect();
+                                  const inputRect = input.getBoundingClientRect();
+                                  if (inputRect.top < scrollBoxRect.top || inputRect.bottom > scrollBoxRect.bottom) {
+                                      scrollBox.scrollBy({ top: inputRect.top - scrollBoxRect.top - 20, behavior: "smooth" });
+                                  }
+                              }
+                              input.focus({ preventScroll: true });
+                          }
+                      }, 100);
+                  }
+              };
 
-                const errorBanner = document.getElementById("form-error-banner");
-                if (errorBanner) errorBanner.style.display = "none";
+              const errorBanner = document.getElementById("form-error-banner");
+              if (errorBanner) errorBanner.style.display = "none";
 
-                const ipWhitelist = getValue("ipWhitelist");
-                const appName = getValue("appName");
-                const techStack = getValue("techStack");
-                const keySecurityMechanism = getValue("keySecurityMechanism");
-                const rateLimitMechanism = getValue("rateLimitMechanism");
-                const testingPlan = getValue("testingPlan");
-                const goLiveDate = getValue("goLiveDate");
-                const devUnit = getValue("devUnit");
-                const thirdPartyName = getValue("thirdPartyName");
+              const ipWhitelist = getValue("ipWhitelist");
+              const appName = getValue("appName");
+              const techStack = getValue("techStack");
+              const keySecurityMechanism = getValue("keySecurityMechanism");
+              const rateLimitMechanism = getValue("rateLimitMechanism");
+              const testingPlan = getValue("testingPlan");
+              const goLiveDate = getValue("goLiveDate");
+              const devUnit = getValue("devUnit");
+              const thirdPartyName = getValue("thirdPartyName");
 
-                if (!ipWhitelist) {
-                    showError("Registered WAN IP / IP whitelist is required.", "ipWhitelist");
-                    return;
-                }
+              if (!ipWhitelist) {
+                  showError("Registered WAN IP / IP whitelist is required.", "ipWhitelist");
+                  return;
+              }
 
-                const btn =
-                    document.getElementById("desktop-tab-btn-4") ||
-                    document.getElementById("mobile-tab-btn-4");
-                if (btn) btn.click();
-            }}
+              const btn =
+                  document.getElementById("desktop-tab-btn-4") ||
+                  document.getElementById("mobile-tab-btn-4");
+              if (btn) btn.click();
+          }}
         className="w-full sm:w-auto"
         style={{
-                padding: "10px 20px",
-                backgroundColor: "#15803d",
-                color: "#fff",
-                border: "none",
-                borderRadius: "6px",
-                fontWeight: "bold",
-                cursor: "pointer",
-            }}
+              padding: "10px 20px",
+              backgroundColor: "#15803d",
+              color: "#fff",
+              border: "none",
+              borderRadius: "6px",
+              fontWeight: "bold",
+              cursor: "pointer",
+          }}
       >
         Next: Client undertakings ➔
       </button>
@@ -1330,105 +1330,105 @@ description: "Please complete the registration form below to request access to P
     <div className="step-scroll-box" style={{ flex: 1, overflowY: "auto", paddingRight: "10px" }}>
       <p
         style={{
-                fontSize: "14px",
-                color: "#e53e3e",
-                fontWeight: "bold",
-                marginBottom: "12px",
-            }}
+              fontSize: "14px",
+              color: "#e53e3e",
+              fontWeight: "bold",
+              marginBottom: "12px",
+          }}
       >
         Please check the boxes to confirm acceptance of all the terms below:
       </p>
 
       <div
         style={{
-                display: "flex",
-                flexDirection: "column",
-                gap: "12px",
-                fontSize: "14px",
-            }}
+              display: "flex",
+              flexDirection: "column",
+              gap: "12px",
+              fontSize: "14px",
+          }}
       >
         <label
           style={{
-                    display: "flex",
-                    gap: "10px",
-                    alignItems: "center",
-                    cursor: "pointer",
-                    paddingBottom: "8px",
-                    borderBottom: "1px solid currentColor",
-                    opacity: 0.9,
-                    fontWeight: "bold",
-                }}
+                  display: "flex",
+                  gap: "10px",
+                  alignItems: "center",
+                  cursor: "pointer",
+                  paddingBottom: "8px",
+                  borderBottom: "1px solid currentColor",
+                  opacity: 0.9,
+                  fontWeight: "bold",
+              }}
         >
           <input
             type="checkbox"
             id="toggle-all-commitments"
             onChange={(e) => {
-                        const isChecked = e.target.checked;
-                        const checkboxes = document.querySelectorAll('input[name="commitments"]');
-                        checkboxes.forEach((cb) => {
-                            cb.checked = isChecked;
-                        });
-                    }}
+                      const isChecked = e.target.checked;
+                      const checkboxes = document.querySelectorAll('input[name="commitments"]');
+                      checkboxes.forEach((cb) => {
+                          cb.checked = isChecked;
+                      });
+                  }}
             style={{
-                        width: "18px",
-                        height: "18px",
-                        flexShrink: 0,
-                        cursor: "pointer",
-                        accentColor: "#15803d",
-                    }}
+                      width: "18px",
+                      height: "18px",
+                      flexShrink: 0,
+                      cursor: "pointer",
+                      accentColor: "#15803d",
+                  }}
           />
 
           <span>Select all</span>
         </label>
 
         {[
-                                  "The Client has opened and maintains a securities trading account at PHS; for each API type, the Client has completed or will complete the corresponding product/account documents before production use.",
-                                  "The Client has read, understood and agreed to the PHS OpenAPI Terms and Conditions, the Risk Disclosure, the API Documentation, the online trading rules and the relevant account contracts/documents at PHS.",
-                                  "The Client is responsible for protecting the API Credentials, managing the API-Integrated Application and all requests/orders arising through the API.",
-                                  "The Client undertakes not to use the API to manipulate the market, abuse the market, submit disruptive orders, test vulnerabilities, exceed API limits, redistribute data without authorization or commit acts prohibited by law.",
-                                  "The Client agrees that PHS may monitor, log, apply limits, suspend or revoke API access when necessary to protect the system, the market, investors or to comply with law/competent authority requirements.",
-                              ].map((text, idx) => (
-                                  <label
-                                      key={idx}
-                                      style={{
-                                          display: "flex",
-                                          gap: "10px",
-                                          alignItems: "center",
-                                          cursor: "pointer",
-                                      }}
-                                  >
-                                      <input
-                                          type="checkbox"
-                                          name="commitments"
-                                          required
-                                          onChange={() => {
-                                              const all = document.querySelectorAll('input[name="commitments"]');
-                                              const checked = document.querySelectorAll('input[name="commitments"]:checked');
-                                              const toggleAll = document.getElementById("toggle-all-commitments");
-                                              if (toggleAll) toggleAll.checked = all.length === checked.length;
-                                          }}
-                                          style={{
-                                              width: "18px",
-                                              height: "18px",
-                                              flexShrink: 0,
-                                              cursor: "pointer",
-                                              accentColor: "#15803d",
-                                          }}
-                                      />
-                                      <span>{text}</span>
-                                  </label>
-                              ))}
+                                        "The Client has opened and maintains a securities trading account at PHS; for each API type, the Client has completed or will complete the corresponding product/account documents before production use.",
+                                        "The Client has read, understood and agreed to the PHS OpenAPI Terms and Conditions, the Risk Disclosure, the API Documentation, the online trading rules and the relevant account contracts/documents at PHS.",
+                                        "The Client is responsible for protecting the API Credentials, managing the API-Integrated Application and all requests/orders arising through the API.",
+                                        "The Client undertakes not to use the API to manipulate the market, abuse the market, submit disruptive orders, test vulnerabilities, exceed API limits, redistribute data without authorization or commit acts prohibited by law.",
+                                        "The Client agrees that PHS may monitor, log, apply limits, suspend or revoke API access when necessary to protect the system, the market, investors or to comply with law/competent authority requirements.",
+                                    ].map((text, idx) => (
+                                        <label
+                                            key={idx}
+                                            style={{
+                                                display: "flex",
+                                                gap: "10px",
+                                                alignItems: "center",
+                                                cursor: "pointer",
+                                            }}
+                                        >
+                                            <input
+                                                type="checkbox"
+                                                name="commitments"
+                                                required
+                                                onChange={() => {
+                                                    const all = document.querySelectorAll('input[name="commitments"]');
+                                                    const checked = document.querySelectorAll('input[name="commitments"]:checked');
+                                                    const toggleAll = document.getElementById("toggle-all-commitments");
+                                                    if (toggleAll) toggleAll.checked = all.length === checked.length;
+                                                }}
+                                                style={{
+                                                    width: "18px",
+                                                    height: "18px",
+                                                    flexShrink: 0,
+                                                    cursor: "pointer",
+                                                    accentColor: "#15803d",
+                                                }}
+                                            />
+                                            <span>{text}</span>
+                                        </label>
+                                    ))}
       </div>
 
       <div
         id="form-status-msg"
         style={{
-                display: "none",
-                padding: "12px",
-                borderRadius: "6px",
-                fontSize: "14px",
-                marginTop: "16px",
-            }}
+              display: "none",
+              padding: "12px",
+              borderRadius: "6px",
+              fontSize: "14px",
+              marginTop: "16px",
+          }}
       />
     </div>
 
@@ -1436,20 +1436,20 @@ description: "Please complete the registration form below to request access to P
       <button
         type="button"
         onClick={() => {
-                const btn =
-                    document.getElementById("desktop-tab-btn-3") ||
-                    document.getElementById("mobile-tab-btn-3");
-                if (btn) btn.click();
-            }}
+              const btn =
+                  document.getElementById("desktop-tab-btn-3") ||
+                  document.getElementById("mobile-tab-btn-3");
+              if (btn) btn.click();
+          }}
         className="w-full sm:w-auto"
         style={{
-                padding: "10px 20px",
-                border: "1px solid currentColor",
-                borderRadius: "6px",
-                fontWeight: "bold",
-                cursor: "pointer",
-                backgroundColor: "transparent",
-            }}
+              padding: "10px 20px",
+              border: "1px solid currentColor",
+              borderRadius: "6px",
+              fontWeight: "bold",
+              cursor: "pointer",
+              backgroundColor: "transparent",
+          }}
       >
         Back to Step 3
       </button>
@@ -1458,15 +1458,15 @@ description: "Please complete the registration form below to request access to P
         type="submit"
         className="w-full sm:w-auto"
         style={{
-                padding: "12px 24px",
-                backgroundColor: "#15803d",
-                color: "#fff",
-                border: "none",
-                borderRadius: "6px",
-                fontWeight: "bold",
-                cursor: "pointer",
-                fontSize: "15px",
-            }}
+              padding: "12px 24px",
+              backgroundColor: "#15803d",
+              color: "#fff",
+              border: "none",
+              borderRadius: "6px",
+              fontWeight: "bold",
+              cursor: "pointer",
+              fontSize: "15px",
+          }}
       >
         Submit Application
       </button>
