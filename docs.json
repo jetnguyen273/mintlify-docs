@@ -292,10 +292,10 @@
     "links": [
       {
         "label": "Support",
-        "href": "https://flashapi.phs.vn/chao-mung"
+        "href": "https://flashapi.phs.vn/docs/api-reference/faqs"
       },
       {
-        "href": "https://flashapi.phs.vn/docs/don-dang-ky",
+        "href": "https://flashapi.phs.vn/docs/registration-form",
         "label": "Register"
       }
     ],
