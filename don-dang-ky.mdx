@@ -8,233 +8,233 @@ sidebarTitle: "Đăng ký OAPI"
   noValidate
   id="oapi-registration-form"
   onSubmit={async (e) => {
-      e.preventDefault();
+    e.preventDefault();
 
-      const formElement = e.currentTarget;
-      const btn = e.currentTarget.querySelector('button[type="submit"]');
-      const msgBox = document.getElementById("form-status-msg");
+    const formElement = e.currentTarget;
+    const btn = e.currentTarget.querySelector('button[type="submit"]');
+    const msgBox = document.getElementById("form-status-msg");
 
-      const showError = (message, step = null, fieldName = null) => {
-          const banner = document.getElementById("form-error-banner");
-          const bannerText = document.getElementById("form-error-banner-text");
+    const showError = (message, step = null, fieldName = null) => {
+        const banner = document.getElementById("form-error-banner");
+        const bannerText = document.getElementById("form-error-banner-text");
 
-          if (banner && bannerText) {
-              bannerText.innerText = message;
-              banner.style.display = "flex";
-              document.getElementById("oapi-registration-form")?.scrollIntoView({ behavior: "smooth", block: "nearest" });
-          }
+        if (banner && bannerText) {
+            bannerText.innerText = message;
+            banner.style.display = "flex";
+            document.getElementById("oapi-registration-form")?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+        }
 
-          if (step) {
-              const tabBtn =
-                  document.getElementById(`desktop-tab-btn-${step}`) ||
-                  document.getElementById(`mobile-tab-btn-${step}`);
-              if (tabBtn) tabBtn.click();
-          }
+        if (step) {
+            const tabBtn =
+                document.getElementById(`desktop-tab-btn-${step}`) ||
+                document.getElementById(`mobile-tab-btn-${step}`);
+            if (tabBtn) tabBtn.click();
+        }
 
-          if (fieldName) {
-              setTimeout(() => {
-                  const input = formElement[fieldName];
-                  if (input) {
-                      const scrollBox = input.closest('.step-scroll-box');
-                      if (scrollBox) {
-                          const scrollBoxRect = scrollBox.getBoundingClientRect();
-                          const inputRect = input.getBoundingClientRect();
-                          if (inputRect.top < scrollBoxRect.top || inputRect.bottom > scrollBoxRect.bottom) {
-                              scrollBox.scrollBy({ top: inputRect.top - scrollBoxRect.top - 20, behavior: "smooth" });
-                          }
-                      }
-                      input.focus({ preventScroll: true });
-                  }
-              }, 100);
-          }
-      };
+        if (fieldName) {
+            setTimeout(() => {
+                const input = formElement[fieldName];
+                if (input) {
+                    const scrollBox = input.closest('.step-scroll-box');
+                    if (scrollBox) {
+                        const scrollBoxRect = scrollBox.getBoundingClientRect();
+                        const inputRect = input.getBoundingClientRect();
+                        if (inputRect.top < scrollBoxRect.top || inputRect.bottom > scrollBoxRect.bottom) {
+                            scrollBox.scrollBy({ top: inputRect.top - scrollBoxRect.top - 20, behavior: "smooth" });
+                        }
+                    }
+                    input.focus({ preventScroll: true });
+                }
+            }, 100);
+        }
+    };
 
-      const hideError = () => {
-          const errorBanner = document.getElementById("form-error-banner");
-          if (errorBanner) errorBanner.style.display = "none";
-      };
+    const hideError = () => {
+        const errorBanner = document.getElementById("form-error-banner");
+        if (errorBanner) errorBanner.style.display = "none";
+    };
 
-      const getValue = (name) => (formElement[name]?.value ?? "").trim();
+    const getValue = (name) => (formElement[name]?.value ?? "").trim();
 
-      const isValidEmail = (value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+    const isValidEmail = (value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
 
-      const isValidPhone = (value) => /^\d{9,15}$/.test(value);
-
-
-      hideError();
-
-      const customerName = getValue("customerName");
-      const identityNumber = getValue("identityNumber");
-      const phsCustCode = getValue("phsCustCode");
-      const accountBasic = getValue("accountBasic");
-      const notificationEmail = getValue("notificationEmail");
-      const alertPhoneNumber = getValue("alertPhoneNumber");
-      const technicalContactName = getValue("technicalContactName");
-      const technicalContactInfo = getValue("technicalContactInfo");
-
-      const ipWhitelist = getValue("ipWhitelist");
-      const appName = getValue("appName");
-      const techStack = getValue("techStack");
-      const keySecurityMechanism = getValue("keySecurityMechanism");
-      const rateLimitMechanism = getValue("rateLimitMechanism");
-      const testingPlan = getValue("testingPlan");
-      const goLiveDate = getValue("goLiveDate");
-      const devUnit = getValue("devUnit");
-      const thirdPartyName = getValue("thirdPartyName");
-
-      // STEP 1 validation
-      if (customerName.length < 2) {
-          showError("Tên khách hàng / tổ chức phải có ít nhất 2 ký tự.", 1, "customerName");
-          return;
-      }
+    const isValidPhone = (value) => /^\d{9,15}$/.test(value);
 
 
-      if (!phsCustCode) {
-          showError("Yêu cầu cung cấp số tài khoản / mã khách hàng tại PHS.", 1, "phsCustCode");
-          return;
-      }
+    hideError();
 
-      if (!accountBasic) {
-          showError("Vui lòng nhập số tài khoản/tiểu khoản chứng khoán cơ sở.", 1, "accountBasic");
-          return;
-      }
+    const customerName = getValue("customerName");
+    const identityNumber = getValue("identityNumber");
+    const phsCustCode = getValue("phsCustCode");
+    const accountBasic = getValue("accountBasic");
+    const notificationEmail = getValue("notificationEmail");
+    const alertPhoneNumber = getValue("alertPhoneNumber");
+    const technicalContactName = getValue("technicalContactName");
+    const technicalContactInfo = getValue("technicalContactInfo");
 
-      if (!isValidEmail(notificationEmail)) {
-          showError("Email nhận thông báo API không hợp lệ.", 1, "notificationEmail");
-          return;
-      }
+    const ipWhitelist = getValue("ipWhitelist");
+    const appName = getValue("appName");
+    const techStack = getValue("techStack");
+    const keySecurityMechanism = getValue("keySecurityMechanism");
+    const rateLimitMechanism = getValue("rateLimitMechanism");
+    const testingPlan = getValue("testingPlan");
+    const goLiveDate = getValue("goLiveDate");
+    const devUnit = getValue("devUnit");
+    const thirdPartyName = getValue("thirdPartyName");
 
-      if (!isValidPhone(alertPhoneNumber)) {
-          showError("Số điện thoại nhận OTP/cảnh báo phải chứa số và có độ dài từ 9–15 ký tự.", 1, "alertPhoneNumber");
-          return;
-      }
+    // STEP 1 validation
+    if (customerName.length < 2) {
+        showError("Tên khách hàng / tổ chức phải có ít nhất 2 ký tự.", 1, "customerName");
+        return;
+    }
 
 
-      // STEP 2 validation
-      const apiScopesCheck = e.currentTarget.querySelectorAll('input[name="apiScope"]:checked');
-      if (apiScopesCheck.length < 1) {
-          showError("Vui lòng chọn ít nhất 1 phạm vi API.", 2);
-          return;
-      }
+    if (!phsCustCode) {
+        showError("Yêu cầu cung cấp số tài khoản / mã khách hàng tại PHS.", 1, "phsCustCode");
+        return;
+    }
 
-      // STEP 3 validation
-      if (!ipWhitelist) {
-          showError("Vui lòng nhập IP WAN / danh sách IP whitelist.", 3, "ipWhitelist");
-          return;
-      }
+    if (!accountBasic) {
+        showError("Vui lòng nhập số tài khoản/tiểu khoản chứng khoán cơ sở.", 1, "accountBasic");
+        return;
+    }
 
-      // STEP 4 validation
-      const terms = e.currentTarget.querySelectorAll('input[name="commitments"]:checked');
-      if (terms.length < 5) {
-          showError("Vui lòng tích chọn đồng ý đầy đủ 5 điều khoản cam kết!", 4);
-          return;
-      }
+    if (!isValidEmail(notificationEmail)) {
+        showError("Email nhận thông báo API không hợp lệ.", 1, "notificationEmail");
+        return;
+    }
 
-      if (btn) {
-          btn.disabled = true;
-          btn.innerText = "Đang gửi hồ sơ đăng ký...";
-      }
+    if (!isValidPhone(alertPhoneNumber)) {
+        showError("Số điện thoại nhận OTP/cảnh báo phải chứa số và có độ dài từ 9–15 ký tự.", 1, "alertPhoneNumber");
+        return;
+    }
 
-      const apiScopes = Array.from(
-          e.currentTarget.querySelectorAll('input[name="apiScope"]:checked'),
-      ).map((cb) => cb.value);
 
-      const formData = {
-          customerName: getValue("customerName"),
-          identityNumber: getValue("identityNumber"),
-          phsCustCode: getValue("phsCustCode"),
-          accountBasic: getValue("accountBasic"),
-          accountDerivatives: getValue("accountDerivatives"),
-          marginProfile: getValue("marginProfile"),
-          notificationEmail: getValue("notificationEmail"),
-          alertPhoneNumber: getValue("alertPhoneNumber"),
-          technicalContactName: getValue("technicalContactName"),
-          technicalContactInfo: getValue("technicalContactInfo"),
-          apiScopes: apiScopes,
-          apiScopeNote: getValue("apiScopeNote"),
-          environment: "Production",
-          ipWhitelist: getValue("ipWhitelist"),
-          appName: getValue("appName"),
-          devUnit:
-              getValue("devUnit") === "third_party"
-                  ? `Thuê bên thứ ba: ${getValue("thirdPartyName")}`
-                  : "Tự phát triển",
-          techStack: getValue("techStack"),
-          keySecurityMechanism: getValue("keySecurityMechanism"),
-          rateLimitMechanism: getValue("rateLimitMechanism"),
-          testingPlan: getValue("testingPlan"),
-          goLiveDate: getValue("goLiveDate"),
-      };
+    // STEP 2 validation
+    const apiScopesCheck = e.currentTarget.querySelectorAll('input[name="apiScope"]:checked');
+    if (apiScopesCheck.length < 1) {
+        showError("Vui lòng chọn ít nhất 1 phạm vi API.", 2);
+        return;
+    }
 
-      try {
-          const response = await fetch('/api/api-onboarding', {
-              method: 'POST',
-              headers: {
-                  'Content-Type': 'application/json',
-                  'Authorization': 'Bearer LILQYb7bfKfF05auHyYEiCM9b9z-KtV4tcqrU0VzT_eqkX0aXMVV-J84q1Dw98Ot'
-              },
-              body: JSON.stringify(formData)
-          });
+    // STEP 3 validation
+    if (!ipWhitelist) {
+        showError("Vui lòng nhập IP WAN / danh sách IP whitelist.", 3, "ipWhitelist");
+        return;
+    }
 
-          if (response.ok) {
-              if (msgBox) {
-                  msgBox.style.display = "block";
-                  msgBox.style.backgroundColor = "#e6fffa";
-                  msgBox.style.color = "#234e52";
-                  msgBox.style.border = "1px solid #319795";
-                  msgBox.innerText =
-                      "Đăng ký thành công! PHS sẽ xem xét hồ sơ của bạn và liên hệ để kích hoạt API trong thời gian sớm nhất.";
-              }
-              formElement.reset();
-          } else {
-              throw new Error("Đã có lỗi xảy ra khi gửi hồ sơ đăng ký");
-          }
-      } catch (err) {
-          if (msgBox) {
-              msgBox.style.display = "block";
-              msgBox.style.backgroundColor = "#fff5f5";
-              msgBox.style.color = "#c53030";
-              msgBox.style.border = "1px solid #feb2b2";
-              msgBox.innerText =
-                  "Đã có lỗi xảy ra hoặc không thể kết nối tới máy chủ. Vui lòng thử lại!";
-          }
-      } finally {
-          if (btn) {
-              btn.disabled = false;
-              btn.innerText = "Gửi hồ sơ đăng ký";
-          }
-      }
-  }}
+    // STEP 4 validation
+    const terms = e.currentTarget.querySelectorAll('input[name="commitments"]:checked');
+    if (terms.length < 5) {
+        showError("Vui lòng tích chọn đồng ý đầy đủ 5 điều khoản cam kết!", 4);
+        return;
+    }
+
+    if (btn) {
+        btn.disabled = true;
+        btn.innerText = "Đang gửi hồ sơ đăng ký...";
+    }
+
+    const apiScopes = Array.from(
+        e.currentTarget.querySelectorAll('input[name="apiScope"]:checked'),
+    ).map((cb) => cb.value);
+
+    const formData = {
+        customerName: getValue("customerName"),
+        identityNumber: getValue("identityNumber"),
+        phsCustCode: getValue("phsCustCode"),
+        accountBasic: getValue("accountBasic"),
+        accountDerivatives: getValue("accountDerivatives"),
+        marginProfile: getValue("marginProfile"),
+        notificationEmail: getValue("notificationEmail"),
+        alertPhoneNumber: getValue("alertPhoneNumber"),
+        technicalContactName: getValue("technicalContactName"),
+        technicalContactInfo: getValue("technicalContactInfo"),
+        apiScopes: apiScopes,
+        apiScopeNote: getValue("apiScopeNote"),
+        environment: "Production",
+        ipWhitelist: getValue("ipWhitelist"),
+        appName: getValue("appName"),
+        devUnit:
+            getValue("devUnit") === "third_party"
+                ? `Thuê bên thứ ba: ${getValue("thirdPartyName")}`
+                : "Tự phát triển",
+        techStack: getValue("techStack"),
+        keySecurityMechanism: getValue("keySecurityMechanism"),
+        rateLimitMechanism: getValue("rateLimitMechanism"),
+        testingPlan: getValue("testingPlan"),
+        goLiveDate: getValue("goLiveDate"),
+    };
+
+    try {
+        const response = await fetch('/api/api-onboarding', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer LILQYb7bfKfF05auHyYEiCM9b9z-KtV4tcqrU0VzT_eqkX0aXMVV-J84q1Dw98Ot'
+            },
+            body: JSON.stringify(formData)
+        });
+
+        if (response.ok) {
+            if (msgBox) {
+                msgBox.style.display = "block";
+                msgBox.style.backgroundColor = "#e6fffa";
+                msgBox.style.color = "#234e52";
+                msgBox.style.border = "1px solid #319795";
+                msgBox.innerText =
+                    "Đăng ký thành công! PHS sẽ xem xét hồ sơ của bạn và liên hệ để kích hoạt API trong thời gian sớm nhất.";
+            }
+            formElement.reset();
+        } else {
+            throw new Error("Đã có lỗi xảy ra khi gửi hồ sơ đăng ký");
+        }
+    } catch (err) {
+        if (msgBox) {
+            msgBox.style.display = "block";
+            msgBox.style.backgroundColor = "#fff5f5";
+            msgBox.style.color = "#c53030";
+            msgBox.style.border = "1px solid #feb2b2";
+            msgBox.innerText =
+                "Đã có lỗi xảy ra hoặc không thể kết nối tới máy chủ. Vui lòng thử lại!";
+        }
+    } finally {
+        if (btn) {
+            btn.disabled = false;
+            btn.innerText = "Gửi hồ sơ đăng ký";
+        }
+    }
+}}
   style={{
-      display: "flex",
-      flexDirection: "column",
-      gap: "20px",
-      marginTop: "20px",
-      maxWidth: "750px",
-      width: "100%",
-      height: "65vh",
-      minHeight: "450px",
-      boxSizing: "border-box",
-      border: "1px solid rgba(0,0,0,0.1)",
-      borderRadius: "8px",
-      padding: "20px",
-      overflow: "hidden",
-  }}
+    display: "flex",
+    flexDirection: "column",
+    gap: "20px",
+    marginTop: "20px",
+    maxWidth: "750px",
+    width: "100%",
+    height: "65vh",
+    minHeight: "450px",
+    boxSizing: "border-box",
+    border: "1px solid rgba(0,0,0,0.1)",
+    borderRadius: "8px",
+    padding: "20px",
+    overflow: "hidden",
+}}
 >
   <div
     id="form-error-banner"
     style={{
-          display: 'none',
-          padding: '14px 18px',
-          borderRadius: '8px',
-          backgroundColor: 'rgba(239, 68, 68, 0.1)',
-          border: '1px solid #ef4444',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          gap: '12px',
-          boxSizing: 'border-box',
-          marginBottom: '16px'
-      }}
+        display: 'none',
+        padding: '14px 18px',
+        borderRadius: '8px',
+        backgroundColor: 'rgba(239, 68, 68, 0.1)',
+        border: '1px solid #ef4444',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        gap: '12px',
+        boxSizing: 'border-box',
+        marginBottom: '16px'
+    }}
   >
     <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
       <span style={{ fontSize: '18px', color: '#ef4444', flexShrink: 0 }}>⚠️</span>
@@ -247,18 +247,18 @@ sidebarTitle: "Đăng ký OAPI"
     <button
       type="button"
       onClick={() => {
-              const banner = document.getElementById('form-error-banner');
-              if (banner) banner.style.display = 'none';
-          }}
+            const banner = document.getElementById('form-error-banner');
+            if (banner) banner.style.display = 'none';
+        }}
       style={{
-              background: 'transparent',
-              border: 'none',
-              color: '#ef4444',
-              fontSize: '18px',
-              cursor: 'pointer',
-              padding: '0 4px',
-              lineHeight: 1
-          }}
+            background: 'transparent',
+            border: 'none',
+            color: '#ef4444',
+            fontSize: '18px',
+            cursor: 'pointer',
+            padding: '0 4px',
+            lineHeight: 1
+        }}
     >
       ✕
     </button>
@@ -269,89 +269,89 @@ sidebarTitle: "Đăng ký OAPI"
   <div className="block sm:hidden" style={{ marginBottom: "12px" }}>
     <div
       style={{
-              display: "flex",
-              flexWrap: "wrap",
-              gap: "8px",
-              width: "100%",
-              borderBottom: "1px solid currentColor",
-              opacity: 0.2,
-              paddingBottom: "12px",
-          }}
+            display: "flex",
+            flexWrap: "wrap",
+            gap: "8px",
+            width: "100%",
+            borderBottom: "1px solid currentColor",
+            opacity: 0.2,
+            paddingBottom: "12px",
+        }}
     >
       {[1, 2, 3, 4].map((num) => {
-                      const titles = [
-                          "1. Thông tin Khách Hàng",
-                          "2. Phạm vi API đề nghị cấp",
-                          "3. Thông tin kỹ thuật đăng ký",
-                          "4. Cam kết của Khách Hàng"
-                      ];
-                      return (
-                          <button
-                              key={`mobile-${num}`}
-                              type="button"
-                              id={`mobile-tab-btn-${num}`}
-                              onClick={() => {
-                                  [1, 2, 3, 4].forEach((n) => {
-                                      if (document.getElementById(`step-${n}`))
-                                          document.getElementById(`step-${n}`).style.display = "none";
-                                      const mBtn = document.getElementById(`mobile-tab-btn-${n}`);
-                                      const dBtn = document.getElementById(`desktop-tab-btn-${n}`);
-                                      if (mBtn) {
-                                          mBtn.style.backgroundColor = "transparent";
-                                          mBtn.style.color = "inherit";
-                                          mBtn.style.borderColor = "currentColor";
+                          const titles = [
+                              "1. Thông tin Khách Hàng",
+                              "2. Phạm vi API đề nghị cấp",
+                              "3. Thông tin kỹ thuật đăng ký",
+                              "4. Cam kết của Khách Hàng"
+                          ];
+                          return (
+                              <button
+                                  key={`mobile-${num}`}
+                                  type="button"
+                                  id={`mobile-tab-btn-${num}`}
+                                  onClick={() => {
+                                      [1, 2, 3, 4].forEach((n) => {
+                                          if (document.getElementById(`step-${n}`))
+                                              document.getElementById(`step-${n}`).style.display = "none";
+                                          const mBtn = document.getElementById(`mobile-tab-btn-${n}`);
+                                          const dBtn = document.getElementById(`desktop-tab-btn-${n}`);
+                                          if (mBtn) {
+                                              mBtn.style.backgroundColor = "transparent";
+                                              mBtn.style.color = "inherit";
+                                              mBtn.style.borderColor = "currentColor";
+                                          }
+                                          if (dBtn) {
+                                              dBtn.style.backgroundColor = "transparent";
+                                              dBtn.style.color = "inherit";
+                                              dBtn.style.borderColor = "currentColor";
+                                          }
+                                      });
+
+                                      document.getElementById(`step-${num}`).style.display = "flex";
+                                      const curM = document.getElementById(`mobile-tab-btn-${num}`);
+                                      const curD = document.getElementById(`desktop-tab-btn-${num}`);
+                                      if (curM) {
+                                          curM.style.backgroundColor = "#15803d";
+                                          curM.style.color = "#ffffff";
+                                          curM.style.borderColor = "#15803d";
                                       }
-                                      if (dBtn) {
-                                          dBtn.style.backgroundColor = "transparent";
-                                          dBtn.style.color = "inherit";
-                                          dBtn.style.borderColor = "currentColor";
+                                      if (curD) {
+                                          curD.style.backgroundColor = "#15803d";
+                                          curD.style.color = "#ffffff";
+                                          curD.style.borderColor = "#15803d";
                                       }
-                                  });
 
-                                  document.getElementById(`step-${num}`).style.display = "flex";
-                                  const curM = document.getElementById(`mobile-tab-btn-${num}`);
-                                  const curD = document.getElementById(`desktop-tab-btn-${num}`);
-                                  if (curM) {
-                                      curM.style.backgroundColor = "#15803d";
-                                      curM.style.color = "#ffffff";
-                                      curM.style.borderColor = "#15803d";
-                                  }
-                                  if (curD) {
-                                      curD.style.backgroundColor = "#15803d";
-                                      curD.style.color = "#ffffff";
-                                      curD.style.borderColor = "#15803d";
-                                  }
+                                      document.getElementById('oapi-registration-form')?.scrollIntoView({
+                                          behavior: 'smooth',
+                                          block: 'start'
+                                      });
 
-                                  document.getElementById('oapi-registration-form')?.scrollIntoView({
-                                      behavior: 'smooth',
-                                      block: 'start'
-                                  });
-
-                                  if (num === 1) {
-                                      setTimeout(() => document.querySelector('input[name="customerName"]')?.focus(), 50);
-                                  } else if (num === 3) {
-                                      setTimeout(() => document.querySelector('input[name="ipWhitelist"]')?.focus(), 50);
-                                  }
-                              }}
-                              style={{
-                                  flex: "1 1 45%",
-                                  minWidth: "140px",
-                                  padding: "10px 8px",
-                                  borderRadius: "6px",
-                                  fontSize: "13px",
-                                  fontWeight: "bold",
-                                  border: num === 1 ? "1px solid #15803d" : "1px solid currentColor",
-                                  cursor: "pointer",
-                                  backgroundColor: num === 1 ? "#15803d" : "transparent",
-                                  color: num === 1 ? "#ffffff" : "inherit",
-                                  textAlign: "center",
-                                  boxSizing: "border-box",
-                              }}
-                          >
-                              {titles[num - 1]}
-                          </button>
-                      );
-                  })}
+                                      if (num === 1) {
+                                          setTimeout(() => document.querySelector('input[name="customerName"]')?.focus(), 50);
+                                      } else if (num === 3) {
+                                          setTimeout(() => document.querySelector('input[name="ipWhitelist"]')?.focus(), 50);
+                                      }
+                                  }}
+                                  style={{
+                                      flex: "1 1 45%",
+                                      minWidth: "140px",
+                                      padding: "10px 8px",
+                                      borderRadius: "6px",
+                                      fontSize: "13px",
+                                      fontWeight: "bold",
+                                      border: num === 1 ? "1px solid #15803d" : "1px solid currentColor",
+                                      cursor: "pointer",
+                                      backgroundColor: num === 1 ? "#15803d" : "transparent",
+                                      color: num === 1 ? "#ffffff" : "inherit",
+                                      textAlign: "center",
+                                      boxSizing: "border-box",
+                                  }}
+                              >
+                                  {titles[num - 1]}
+                              </button>
+                          );
+                      })}
     </div>
   </div>
 
@@ -360,87 +360,87 @@ sidebarTitle: "Đăng ký OAPI"
   <div
     className="hidden sm:flex"
     style={{
-          borderBottom: "1px solid currentColor",
-          opacity: 0.8,
-          gap: "8px",
-          paddingBottom: "10px",
-          width: "100%",
-      }}
+        borderBottom: "1px solid currentColor",
+        opacity: 0.8,
+        gap: "8px",
+        paddingBottom: "10px",
+        width: "100%",
+    }}
   >
     {[1, 2, 3, 4].map((num) => {
-                const titles = [
-                    "1. Thông tin Khách Hàng",
-                    "2. Phạm vi API đề nghị cấp",
-                    "3. Thông tin kỹ thuật đăng ký",
-                    "4. Cam kết của Khách Hàng"
-                ];
-                return (
-                    <button
-                        key={`desktop-${num}`}
-                        type="button"
-                        id={`desktop-tab-btn-${num}`}
-                        onClick={() => {
-                            [1, 2, 3, 4].forEach((n) => {
-                                if (document.getElementById(`step-${n}`))
-                                    document.getElementById(`step-${n}`).style.display = "none";
-                                const mBtn = document.getElementById(`mobile-tab-btn-${n}`);
-                                const dBtn = document.getElementById(`desktop-tab-btn-${n}`);
-                                if (mBtn) {
-                                    mBtn.style.backgroundColor = "transparent";
-                                    mBtn.style.color = "inherit";
-                                    mBtn.style.borderColor = "currentColor";
-                                }
-                                if (dBtn) {
-                                    dBtn.style.backgroundColor = "transparent";
-                                    dBtn.style.color = "inherit";
-                                    dBtn.style.borderColor = "currentColor";
-                                }
-                            });
+                  const titles = [
+                      "1. Thông tin Khách Hàng",
+                      "2. Phạm vi API đề nghị cấp",
+                      "3. Thông tin kỹ thuật đăng ký",
+                      "4. Cam kết của Khách Hàng"
+                  ];
+                  return (
+                      <button
+                          key={`desktop-${num}`}
+                          type="button"
+                          id={`desktop-tab-btn-${num}`}
+                          onClick={() => {
+                              [1, 2, 3, 4].forEach((n) => {
+                                  if (document.getElementById(`step-${n}`))
+                                      document.getElementById(`step-${n}`).style.display = "none";
+                                  const mBtn = document.getElementById(`mobile-tab-btn-${n}`);
+                                  const dBtn = document.getElementById(`desktop-tab-btn-${n}`);
+                                  if (mBtn) {
+                                      mBtn.style.backgroundColor = "transparent";
+                                      mBtn.style.color = "inherit";
+                                      mBtn.style.borderColor = "currentColor";
+                                  }
+                                  if (dBtn) {
+                                      dBtn.style.backgroundColor = "transparent";
+                                      dBtn.style.color = "inherit";
+                                      dBtn.style.borderColor = "currentColor";
+                                  }
+                              });
 
-                            document.getElementById(`step-${num}`).style.display = "flex";
-                            const curM = document.getElementById(`mobile-tab-btn-${num}`);
-                            const curD = document.getElementById(`desktop-tab-btn-${num}`);
-                            if (curM) {
-                                curM.style.backgroundColor = "#15803d";
-                                curM.style.color = "#ffffff";
-                                curM.style.borderColor = "#15803d";
-                            }
-                            if (curD) {
-                                curD.style.backgroundColor = "#15803d";
-                                curD.style.color = "#ffffff";
-                                curD.style.borderColor = "#15803d";
-                            }
+                              document.getElementById(`step-${num}`).style.display = "flex";
+                              const curM = document.getElementById(`mobile-tab-btn-${num}`);
+                              const curD = document.getElementById(`desktop-tab-btn-${num}`);
+                              if (curM) {
+                                  curM.style.backgroundColor = "#15803d";
+                                  curM.style.color = "#ffffff";
+                                  curM.style.borderColor = "#15803d";
+                              }
+                              if (curD) {
+                                  curD.style.backgroundColor = "#15803d";
+                                  curD.style.color = "#ffffff";
+                                  curD.style.borderColor = "#15803d";
+                              }
 
-                            document.getElementById('oapi-registration-form')?.scrollIntoView({
-                                behavior: 'smooth',
-                                block: 'start'
-                            });
+                              document.getElementById('oapi-registration-form')?.scrollIntoView({
+                                  behavior: 'smooth',
+                                  block: 'start'
+                              });
 
-                            if (num === 1) {
-                                setTimeout(() => document.querySelector('input[name="customerName"]')?.focus(), 50);
-                            } else if (num === 3) {
-                                setTimeout(() => document.querySelector('input[name="ipWhitelist"]')?.focus(), 50);
-                            }
-                        }}
-                        style={{
-                            flex: 1,
-                            padding: "4px 8px",
-                            borderRadius: "5px",
-                            fontSize: "12px",
-                            fontWeight: "bold",
-                            border: num === 1 ? "1px solid #15803d" : "1px solid currentColor",
-                            cursor: "pointer",
-                            backgroundColor: num === 1 ? "#15803d" : "transparent",
-                            color: num === 1 ? "#ffffff" : "inherit",
-                            textAlign: "center",
-                            transition: "all 0.2s",
-                            whiteSpace: "nowrap",
-                        }}
-                    >
-                        {titles[num - 1]}
-                    </button>
-                );
-            })}
+                              if (num === 1) {
+                                  setTimeout(() => document.querySelector('input[name="customerName"]')?.focus(), 50);
+                              } else if (num === 3) {
+                                  setTimeout(() => document.querySelector('input[name="ipWhitelist"]')?.focus(), 50);
+                              }
+                          }}
+                          style={{
+                              flex: 1,
+                              padding: "4px 8px",
+                              borderRadius: "5px",
+                              fontSize: "12px",
+                              fontWeight: "bold",
+                              border: num === 1 ? "1px solid #15803d" : "1px solid currentColor",
+                              cursor: "pointer",
+                              backgroundColor: num === 1 ? "#15803d" : "transparent",
+                              color: num === 1 ? "#ffffff" : "inherit",
+                              textAlign: "center",
+                              transition: "all 0.2s",
+                              whiteSpace: "nowrap",
+                          }}
+                      >
+                          {titles[num - 1]}
+                      </button>
+                  );
+              })}
   </div>
 
   {/* BƯỚC 1: THÔNG TIN KHÁCH HÀNG */}
@@ -455,11 +455,11 @@ sidebarTitle: "Đăng ký OAPI"
         <div className="col-span-1 sm:col-span-2" style={{ display: "flex", flexDirection: "column" }}>
           <label
             style={{
-                          fontWeight: "bold",
-                          display: "block",
-                          marginBottom: "4px",
-                          fontSize: "14px",
-                      }}
+                        fontWeight: "bold",
+                        display: "block",
+                        marginBottom: "4px",
+                        fontSize: "14px",
+                    }}
           >
             Tên Khách Hàng / Tổ chức
           </label>
@@ -471,23 +471,23 @@ sidebarTitle: "Đăng ký OAPI"
             required
             minLength={2}
             style={{
-                          width: "100%",
-                          padding: "8px",
-                          borderRadius: "6px",
-                          border: "1px solid currentColor",
-                          boxSizing: "border-box",
-                      }}
+                        width: "100%",
+                        padding: "8px",
+                        borderRadius: "6px",
+                        border: "1px solid currentColor",
+                        boxSizing: "border-box",
+                    }}
           />
         </div>
 
         <div style={{ display: "flex", flexDirection: "column" }}>
           <label
             style={{
-                          fontWeight: "bold",
-                          display: "block",
-                          marginBottom: "4px",
-                          fontSize: "14px",
-                      }}
+                        fontWeight: "bold",
+                        display: "block",
+                        marginBottom: "4px",
+                        fontSize: "14px",
+                    }}
           >
             Số giấy tờ định danh / ĐKKD
           </label>
@@ -496,23 +496,23 @@ sidebarTitle: "Đăng ký OAPI"
             type="text"
             name="identityNumber"
             style={{
-                          width: "100%",
-                          padding: "8px",
-                          borderRadius: "6px",
-                          border: "1px solid currentColor",
-                          boxSizing: "border-box",
-                      }}
+                        width: "100%",
+                        padding: "8px",
+                        borderRadius: "6px",
+                        border: "1px solid currentColor",
+                        boxSizing: "border-box",
+                    }}
           />
         </div>
 
         <div style={{ display: "flex", flexDirection: "column" }}>
           <label
             style={{
-                          fontWeight: "bold",
-                          display: "block",
-                          marginBottom: "4px",
-                          fontSize: "14px",
-                      }}
+                        fontWeight: "bold",
+                        display: "block",
+                        marginBottom: "4px",
+                        fontSize: "14px",
+                    }}
           >
             Số lưu ký / Mã KH tại PHS
           </label>
@@ -522,23 +522,23 @@ sidebarTitle: "Đăng ký OAPI"
             name="phsCustCode"
             required
             style={{
-                          width: "100%",
-                          padding: "8px",
-                          borderRadius: "6px",
-                          border: "1px solid currentColor",
-                          boxSizing: "border-box",
-                      }}
+                        width: "100%",
+                        padding: "8px",
+                        borderRadius: "6px",
+                        border: "1px solid currentColor",
+                        boxSizing: "border-box",
+                    }}
           />
         </div>
 
         <div style={{ display: "flex", flexDirection: "column" }}>
           <label
             style={{
-                          fontWeight: "bold",
-                          display: "block",
-                          marginBottom: "4px",
-                          fontSize: "14px",
-                      }}
+                        fontWeight: "bold",
+                        display: "block",
+                        marginBottom: "4px",
+                        fontSize: "14px",
+                    }}
           >
             Tài khoản/tiểu khoản chứng khoán cơ sở đăng ký API
           </label>
@@ -548,23 +548,23 @@ sidebarTitle: "Đăng ký OAPI"
             name="accountBasic"
             required
             style={{
-                          width: "100%",
-                          padding: "8px",
-                          borderRadius: "6px",
-                          border: "1px solid currentColor",
-                          boxSizing: "border-box",
-                      }}
+                        width: "100%",
+                        padding: "8px",
+                        borderRadius: "6px",
+                        border: "1px solid currentColor",
+                        boxSizing: "border-box",
+                    }}
           />
         </div>
 
         <div style={{ display: "flex", flexDirection: "column" }}>
           <label
             style={{
-                          fontWeight: "bold",
-                          display: "block",
-                          marginBottom: "4px",
-                          fontSize: "14px",
-                      }}
+                        fontWeight: "bold",
+                        display: "block",
+                        marginBottom: "4px",
+                        fontSize: "14px",
+                    }}
           >
             Tài khoản/tiểu khoản phái sinh đăng ký API (nếu có)
           </label>
@@ -573,23 +573,23 @@ sidebarTitle: "Đăng ký OAPI"
             type="text"
             name="accountDerivatives"
             style={{
-                          width: "100%",
-                          padding: "8px",
-                          borderRadius: "6px",
-                          border: "1px solid currentColor",
-                          boxSizing: "border-box",
-                      }}
+                        width: "100%",
+                        padding: "8px",
+                        borderRadius: "6px",
+                        border: "1px solid currentColor",
+                        boxSizing: "border-box",
+                    }}
           />
         </div>
 
         <div className="col-span-1 sm:col-span-2" style={{ display: "flex", flexDirection: "column" }}>
           <label
             style={{
-                          fontWeight: "bold",
-                          display: "block",
-                          marginBottom: "4px",
-                          fontSize: "14px",
-                      }}
+                        fontWeight: "bold",
+                        display: "block",
+                        marginBottom: "4px",
+                        fontSize: "14px",
+                    }}
           >
             Hồ sơ ký quỹ áp dụng (nếu có)
           </label>
@@ -598,23 +598,23 @@ sidebarTitle: "Đăng ký OAPI"
             type="text"
             name="marginProfile"
             style={{
-                          width: "100%",
-                          padding: "8px",
-                          borderRadius: "6px",
-                          border: "1px solid currentColor",
-                          boxSizing: "border-box",
-                      }}
+                        width: "100%",
+                        padding: "8px",
+                        borderRadius: "6px",
+                        border: "1px solid currentColor",
+                        boxSizing: "border-box",
+                    }}
           />
         </div>
 
         <div style={{ display: "flex", flexDirection: "column" }}>
           <label
             style={{
-                          fontWeight: "bold",
-                          display: "block",
-                          marginBottom: "4px",
-                          fontSize: "14px",
-                      }}
+                        fontWeight: "bold",
+                        display: "block",
+                        marginBottom: "4px",
+                        fontSize: "14px",
+                    }}
           >
             Email nhận thông báo API
           </label>
@@ -625,23 +625,23 @@ sidebarTitle: "Đăng ký OAPI"
             required
             placeholder="example@email.com"
             style={{
-                          width: "100%",
-                          padding: "8px",
-                          borderRadius: "6px",
-                          border: "1px solid currentColor",
-                          boxSizing: "border-box",
-                      }}
+                        width: "100%",
+                        padding: "8px",
+                        borderRadius: "6px",
+                        border: "1px solid currentColor",
+                        boxSizing: "border-box",
+                    }}
           />
         </div>
 
         <div style={{ display: "flex", flexDirection: "column" }}>
           <label
             style={{
-                          fontWeight: "bold",
-                          display: "block",
-                          marginBottom: "4px",
-                          fontSize: "14px",
-                      }}
+                        fontWeight: "bold",
+                        display: "block",
+                        marginBottom: "4px",
+                        fontSize: "14px",
+                    }}
           >
             SĐT nhận OTP / Cảnh báo
           </label>
@@ -654,26 +654,26 @@ sidebarTitle: "Đăng ký OAPI"
             pattern="\d{9,15}"
             title="Digits only, 9 to 15 digits."
             onInput={(e) => {
-                          e.currentTarget.value = e.currentTarget.value.replace(/\D/g, "");
-                      }}
+                        e.currentTarget.value = e.currentTarget.value.replace(/\D/g, "");
+                    }}
             style={{
-                          width: "100%",
-                          padding: "8px",
-                          borderRadius: "6px",
-                          border: "1px solid currentColor",
-                          boxSizing: "border-box",
-                      }}
+                        width: "100%",
+                        padding: "8px",
+                        borderRadius: "6px",
+                        border: "1px solid currentColor",
+                        boxSizing: "border-box",
+                    }}
           />
         </div>
 
         <div style={{ display: "flex", flexDirection: "column" }}>
           <label
             style={{
-                          fontWeight: "bold",
-                          display: "block",
-                          marginBottom: "4px",
-                          fontSize: "14px",
-                      }}
+                        fontWeight: "bold",
+                        display: "block",
+                        marginBottom: "4px",
+                        fontSize: "14px",
+                    }}
           >
             Người phụ trách kỹ thuật / Chức vụ
           </label>
@@ -682,23 +682,23 @@ sidebarTitle: "Đăng ký OAPI"
             type="text"
             name="technicalContactName"
             style={{
-                          width: "100%",
-                          padding: "8px",
-                          borderRadius: "6px",
-                          border: "1px solid currentColor",
-                          boxSizing: "border-box",
-                      }}
+                        width: "100%",
+                        padding: "8px",
+                        borderRadius: "6px",
+                        border: "1px solid currentColor",
+                        boxSizing: "border-box",
+                    }}
           />
         </div>
 
         <div style={{ display: "flex", flexDirection: "column" }}>
           <label
             style={{
-                          fontWeight: "bold",
-                          display: "block",
-                          marginBottom: "4px",
-                          fontSize: "14px",
-                      }}
+                        fontWeight: "bold",
+                        display: "block",
+                        marginBottom: "4px",
+                        fontSize: "14px",
+                    }}
           >
             Email / SĐT người phụ trách kỹ thuật
           </label>
@@ -708,12 +708,12 @@ sidebarTitle: "Đăng ký OAPI"
             name="technicalContactInfo"
             placeholder="example@email.com or 0912345678"
             style={{
-                          width: "100%",
-                          padding: "8px",
-                          borderRadius: "6px",
-                          border: "1px solid currentColor",
-                          boxSizing: "border-box",
-                      }}
+                        width: "100%",
+                        padding: "8px",
+                        borderRadius: "6px",
+                        border: "1px solid currentColor",
+                        boxSizing: "border-box",
+                    }}
           />
         </div>
       </div>
@@ -723,85 +723,85 @@ sidebarTitle: "Đăng ký OAPI"
       <button
         type="button"
         onClick={() => {
-                  const form = document.getElementById("oapi-registration-form");
-                  const getValue = (name) => (form[name]?.value ?? "").trim();
-                  const isValidEmail = (value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
-                  const isValidPhone = (value) => /^\d{9,15}$/.test(value);
+                const form = document.getElementById("oapi-registration-form");
+                const getValue = (name) => (form[name]?.value ?? "").trim();
+                const isValidEmail = (value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+                const isValidPhone = (value) => /^\d{9,15}$/.test(value);
 
-                  const showError = (message, fieldName) => {
-                      const banner = document.getElementById("form-error-banner");
-                      const bannerText = document.getElementById("form-error-banner-text");
-                      if (banner && bannerText) {
-                          bannerText.innerText = message;
-                          banner.style.display = "flex";
-                          document.getElementById("oapi-registration-form")?.scrollIntoView({ behavior: "smooth", block: "nearest" });
-                      }
-                      if (fieldName) {
-                          setTimeout(() => {
-                              const input = form[fieldName];
-                              if (input) {
-                                  const scrollBox = input.closest('.step-scroll-box');
-                                  if (scrollBox) {
-                                      const scrollBoxRect = scrollBox.getBoundingClientRect();
-                                      const inputRect = input.getBoundingClientRect();
-                                      if (inputRect.top < scrollBoxRect.top || inputRect.bottom > scrollBoxRect.bottom) {
-                                          scrollBox.scrollBy({ top: inputRect.top - scrollBoxRect.top - 20, behavior: "smooth" });
-                                      }
-                                  }
-                                  input.focus({ preventScroll: true });
-                              }
-                          }, 100);
-                      }
-                  };
+                const showError = (message, fieldName) => {
+                    const banner = document.getElementById("form-error-banner");
+                    const bannerText = document.getElementById("form-error-banner-text");
+                    if (banner && bannerText) {
+                        bannerText.innerText = message;
+                        banner.style.display = "flex";
+                        document.getElementById("oapi-registration-form")?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+                    }
+                    if (fieldName) {
+                        setTimeout(() => {
+                            const input = form[fieldName];
+                            if (input) {
+                                const scrollBox = input.closest('.step-scroll-box');
+                                if (scrollBox) {
+                                    const scrollBoxRect = scrollBox.getBoundingClientRect();
+                                    const inputRect = input.getBoundingClientRect();
+                                    if (inputRect.top < scrollBoxRect.top || inputRect.bottom > scrollBoxRect.bottom) {
+                                        scrollBox.scrollBy({ top: inputRect.top - scrollBoxRect.top - 20, behavior: "smooth" });
+                                    }
+                                }
+                                input.focus({ preventScroll: true });
+                            }
+                        }, 100);
+                    }
+                };
 
-                  const errorBanner = document.getElementById("form-error-banner");
-                  if (errorBanner) errorBanner.style.display = "none";
+                const errorBanner = document.getElementById("form-error-banner");
+                if (errorBanner) errorBanner.style.display = "none";
 
-                  const customerName = getValue("customerName");
-                  const identityNumber = getValue("identityNumber");
-                  const phsCustCode = getValue("phsCustCode");
-                  const accountBasic = getValue("accountBasic");
-                  const notificationEmail = getValue("notificationEmail");
-                  const alertPhoneNumber = getValue("alertPhoneNumber");
-                  const technicalContactName = getValue("technicalContactName");
-                  const technicalContactInfo = getValue("technicalContactInfo");
+                const customerName = getValue("customerName");
+                const identityNumber = getValue("identityNumber");
+                const phsCustCode = getValue("phsCustCode");
+                const accountBasic = getValue("accountBasic");
+                const notificationEmail = getValue("notificationEmail");
+                const alertPhoneNumber = getValue("alertPhoneNumber");
+                const technicalContactName = getValue("technicalContactName");
+                const technicalContactInfo = getValue("technicalContactInfo");
 
-                  if (customerName.length < 2) {
-                      showError("Tên khách hàng / tổ chức phải có ít nhất 2 ký tự.", "customerName");
-                      return;
-                  }
-                  if (!phsCustCode) {
-                      showError("Số lưu ký / Mã KH tại PHS là bắt buộc.", "phsCustCode");
-                      return;
-                  }
-                  if (!accountBasic) {
-                      showError("Yêu cầu phải có account / sub-account chứng khoán cơ sở.", "accountBasic");
-                      return;
-                  }
-                  if (!isValidEmail(notificationEmail)) {
-                      showError("Email nhận thông báo về API phải là địa chỉ email hợp lệ (phải chứa ký tự @, ví dụ: name@example.com).", "notificationEmail");
-                      return;
-                  }
-                  if (!isValidPhone(alertPhoneNumber)) {
-                      showError("Số điện thoại nhận OTP và thông báo phải chỉ chứa các chữ số và có độ dài từ 9–15 ký tự.", "alertPhoneNumber");
-                      return;
-                  }
+                if (customerName.length < 2) {
+                    showError("Tên khách hàng / tổ chức phải có ít nhất 2 ký tự.", "customerName");
+                    return;
+                }
+                if (!phsCustCode) {
+                    showError("Số lưu ký / Mã KH tại PHS là bắt buộc.", "phsCustCode");
+                    return;
+                }
+                if (!accountBasic) {
+                    showError("Yêu cầu phải có account / sub-account chứng khoán cơ sở.", "accountBasic");
+                    return;
+                }
+                if (!isValidEmail(notificationEmail)) {
+                    showError("Email nhận thông báo về API phải là địa chỉ email hợp lệ (phải chứa ký tự @, ví dụ: name@example.com).", "notificationEmail");
+                    return;
+                }
+                if (!isValidPhone(alertPhoneNumber)) {
+                    showError("Số điện thoại nhận OTP và thông báo phải chỉ chứa các chữ số và có độ dài từ 9–15 ký tự.", "alertPhoneNumber");
+                    return;
+                }
 
-                  const btn =
-                      document.getElementById("desktop-tab-btn-2") ||
-                      document.getElementById("mobile-tab-btn-2");
-                  if (btn) btn.click();
-              }}
+                const btn =
+                    document.getElementById("desktop-tab-btn-2") ||
+                    document.getElementById("mobile-tab-btn-2");
+                if (btn) btn.click();
+            }}
         className="w-full sm:w-auto"
         style={{
-                  padding: "10px 20px",
-                  backgroundColor: "#15803d",
-                  color: "#fff",
-                  border: "none",
-                  borderRadius: "6px",
-                  fontWeight: "bold",
-                  cursor: "pointer",
-              }}
+                padding: "10px 20px",
+                backgroundColor: "#15803d",
+                color: "#fff",
+                border: "none",
+                borderRadius: "6px",
+                fontWeight: "bold",
+                cursor: "pointer",
+            }}
       >
         Tiếp theo: Phạm vi API đề nghị cấp ➔
       </button>
@@ -822,81 +822,81 @@ sidebarTitle: "Đăng ký OAPI"
 
       <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
         {[
-                            {
-                                val: "auth_security",
-                                title: "Authentication & Security",
-                                sub: "Cấp API Key, Secret Key, Access Token",
-                                checked: true,
-                            },
-                            {
-                                val: "trading_equity",
-                                title: "Trading API – underlying securities",
-                                sub: "Đặt, sửa, hủy lệnh, tra cứu lệnh cơ sở",
-                            },
-                            {
-                                val: "trading_derivatives",
-                                title: "Trading API – derivatives",
-                                sub: "Đặt, sửa, hủy lệnh, xác thực OTP, tra cứu lệnh phái sinh",
-                            },
-                            {
-                                val: "account_api",
-                                title: "Account API",
-                                sub: "Xem số dư, danh mục, sức mua, nghĩa vụ ký quỹ",
-                            },
-                            {
-                                val: "market_data",
-                                title: "Market Data API / Historical Candles",
-                                sub: "Truy xuất dữ liệu thị trường và nến lịch sử",
-                            },
-                            {
-                                val: "websocket_streaming",
-                                title: "Streaming / WebSocket",
-                                sub: "Đăng ký nhận stream realtime cho Account / Instrument / Trade",
-                            },
-                            {
-                                val: "developer_portal",
-                                title: "API Playground / Developer Portal",
-                                sub: "Quyền truy cập cổng thử nghiệm API",
-                            },
-                        ].map((scope) => (
-                            <label
-                                key={scope.val}
-                                style={{
-                                    display: "flex",
-                                    gap: "12px",
-                                    alignItems: "center",
-                                    padding: "12px 16px",
-                                    border: "1px solid currentColor",
-                                    borderRadius: "8px",
-                                    cursor: "pointer",
-                                }}
-                            >
-                                <input
-                                    type="checkbox"
-                                    name="apiScope"
-                                    value={scope.val}
-                                    defaultChecked={scope.checked}
-                                    style={{
-                                        width: "18px",
-                                        height: "18px",
-                                        cursor: "pointer",
-                                        accentColor: "#15803d",
-                                    }}
-                                />
-                                <div style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
-                                    <strong style={{ fontSize: "14px" }}>{scope.title}</strong>
-                                    <span style={{ fontSize: "13px", opacity: 0.7 }}>{scope.sub}</span>
-                                </div>
-                            </label>
-                        ))}
+                                  {
+                                      val: "auth_security",
+                                      title: "Authentication & Security",
+                                      sub: "Cấp API Key, Secret Key, Access Token",
+                                      checked: true,
+                                  },
+                                  {
+                                      val: "trading_equity",
+                                      title: "Trading API – underlying securities",
+                                      sub: "Đặt, sửa, hủy lệnh, tra cứu lệnh cơ sở",
+                                  },
+                                  {
+                                      val: "trading_derivatives",
+                                      title: "Trading API – derivatives",
+                                      sub: "Đặt, sửa, hủy lệnh, xác thực OTP, tra cứu lệnh phái sinh",
+                                  },
+                                  {
+                                      val: "account_api",
+                                      title: "Account API",
+                                      sub: "Xem số dư, danh mục, sức mua, nghĩa vụ ký quỹ",
+                                  },
+                                  {
+                                      val: "market_data",
+                                      title: "Market Data API / Historical Candles",
+                                      sub: "Truy xuất dữ liệu thị trường và nến lịch sử",
+                                  },
+                                  {
+                                      val: "websocket_streaming",
+                                      title: "Streaming / WebSocket",
+                                      sub: "Đăng ký nhận stream realtime cho Account / Instrument / Trade",
+                                  },
+                                  {
+                                      val: "developer_portal",
+                                      title: "API Playground / Developer Portal",
+                                      sub: "Quyền truy cập cổng thử nghiệm API",
+                                  },
+                              ].map((scope) => (
+                                  <label
+                                      key={scope.val}
+                                      style={{
+                                          display: "flex",
+                                          gap: "12px",
+                                          alignItems: "center",
+                                          padding: "12px 16px",
+                                          border: "1px solid currentColor",
+                                          borderRadius: "8px",
+                                          cursor: "pointer",
+                                      }}
+                                  >
+                                      <input
+                                          type="checkbox"
+                                          name="apiScope"
+                                          value={scope.val}
+                                          defaultChecked={scope.checked}
+                                          style={{
+                                              width: "18px",
+                                              height: "18px",
+                                              cursor: "pointer",
+                                              accentColor: "#15803d",
+                                          }}
+                                      />
+                                      <div style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
+                                          <strong style={{ fontSize: "14px" }}>{scope.title}</strong>
+                                          <span style={{ fontSize: "13px", opacity: 0.7 }}>{scope.sub}</span>
+                                      </div>
+                                  </label>
+                              ))}
 
         <div
           style={{
-                      marginTop: "8px",
-                      display: "flex",
-                      flexDirection: "column",
-                      gap: "6px",
-                  }}
+                    marginTop: "8px",
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "6px",
+                }}
         >
           <label style={{ fontWeight: "bold", display: "block", fontSize: "14px" }}>
             Ghi chú / Phạm vi tài khoản chi tiết
@@ -907,15 +907,15 @@ sidebarTitle: "Đăng ký OAPI"
             name="apiScopeNote"
             placeholder="Additional notes on the scope of API-enabled accounts..."
             style={{
-                          width: "100%",
-                          padding: "10px 12px",
-                          borderRadius: "6px",
-                          border: "1px solid currentColor",
-                          backgroundColor: "transparent",
-                          color: "inherit",
-                          fontSize: "14px",
-                          boxSizing: "border-box",
-                      }}
+                        width: "100%",
+                        padding: "10px 12px",
+                        borderRadius: "6px",
+                        border: "1px solid currentColor",
+                        backgroundColor: "transparent",
+                        color: "inherit",
+                        fontSize: "14px",
+                        boxSizing: "border-box",
+                    }}
           />
         </div>
       </div>
@@ -925,20 +925,20 @@ sidebarTitle: "Đăng ký OAPI"
       <button
         type="button"
         onClick={() => {
-                  const btn =
-                      document.getElementById("desktop-tab-btn-1") ||
-                      document.getElementById("mobile-tab-btn-1");
-                  if (btn) btn.click();
-              }}
+                const btn =
+                    document.getElementById("desktop-tab-btn-1") ||
+                    document.getElementById("mobile-tab-btn-1");
+                if (btn) btn.click();
+            }}
         className="w-full sm:w-auto"
         style={{
-                  padding: "10px 20px",
-                  border: "1px solid currentColor",
-                  borderRadius: "6px",
-                  fontWeight: "bold",
-                  cursor: "pointer",
-                  backgroundColor: "transparent",
-              }}
+                padding: "10px 20px",
+                border: "1px solid currentColor",
+                borderRadius: "6px",
+                fontWeight: "bold",
+                cursor: "pointer",
+                backgroundColor: "transparent",
+            }}
       >
         Quay lại Bước 1
       </button>
@@ -946,40 +946,40 @@ sidebarTitle: "Đăng ký OAPI"
       <button
         type="button"
         onClick={(e) => {
-                  const showError = (message) => {
-                      const banner = document.getElementById("form-error-banner");
-                      const bannerText = document.getElementById("form-error-banner-text");
-                      if (banner && bannerText) {
-                          bannerText.innerText = message;
-                          banner.style.display = "flex";
-                          banner.scrollIntoView({ behavior: "smooth", block: "center" });
-                      }
-                  };
+                const showError = (message) => {
+                    const banner = document.getElementById("form-error-banner");
+                    const bannerText = document.getElementById("form-error-banner-text");
+                    if (banner && bannerText) {
+                        bannerText.innerText = message;
+                        banner.style.display = "flex";
+                        banner.scrollIntoView({ behavior: "smooth", block: "center" });
+                    }
+                };
 
-                  const errorBanner = document.getElementById("form-error-banner");
-                  if (errorBanner) errorBanner.style.display = "none";
+                const errorBanner = document.getElementById("form-error-banner");
+                if (errorBanner) errorBanner.style.display = "none";
 
-                  const checkedScopes = document.querySelectorAll('input[name="apiScope"]:checked');
-                  if (checkedScopes.length < 1) {
-                      showError("Please select at least one API scope before continuing.");
-                      return;
-                  }
+                const checkedScopes = document.querySelectorAll('input[name="apiScope"]:checked');
+                if (checkedScopes.length < 1) {
+                    showError("Please select at least one API scope before continuing.");
+                    return;
+                }
 
-                  const btn =
-                      document.getElementById("desktop-tab-btn-3") ||
-                      document.getElementById("mobile-tab-btn-3");
-                  if (btn) btn.click();
-              }}
+                const btn =
+                    document.getElementById("desktop-tab-btn-3") ||
+                    document.getElementById("mobile-tab-btn-3");
+                if (btn) btn.click();
+            }}
         className="w-full sm:w-auto"
         style={{
-                  padding: "10px 20px",
-                  backgroundColor: "#15803d",
-                  color: "#fff",
-                  border: "none",
-                  borderRadius: "6px",
-                  fontWeight: "bold",
-                  cursor: "pointer",
-              }}
+                padding: "10px 20px",
+                backgroundColor: "#15803d",
+                color: "#fff",
+                border: "none",
+                borderRadius: "6px",
+                fontWeight: "bold",
+                cursor: "pointer",
+            }}
       >
         Tiếp theo: Thông tin kỹ thuật ➔
       </button>
@@ -998,11 +998,11 @@ sidebarTitle: "Đăng ký OAPI"
         <div>
           <label
             style={{
-                          fontWeight: "bold",
-                          display: "block",
-                          marginBottom: "4px",
-                          fontSize: "14px",
-                      }}
+                        fontWeight: "bold",
+                        display: "block",
+                        marginBottom: "4px",
+                        fontSize: "14px",
+                    }}
           >
             IP WAN / IP Whitelist đăng ký
           </label>
@@ -1013,23 +1013,23 @@ sidebarTitle: "Đăng ký OAPI"
             required
             placeholder="Example: 1.2.3.4"
             style={{
-                          width: "100%",
-                          padding: "8px",
-                          borderRadius: "6px",
-                          border: "1px solid currentColor",
-                          boxSizing: "border-box",
-                      }}
+                        width: "100%",
+                        padding: "8px",
+                        borderRadius: "6px",
+                        border: "1px solid currentColor",
+                        boxSizing: "border-box",
+                    }}
           />
         </div>
 
         <div>
           <label
             style={{
-                          fontWeight: "bold",
-                          display: "block",
-                          marginBottom: "4px",
-                          fontSize: "14px",
-                      }}
+                        fontWeight: "bold",
+                        display: "block",
+                        marginBottom: "4px",
+                        fontSize: "14px",
+                    }}
           >
             Tên hệ thống / Ứng dụng tích hợp API
           </label>
@@ -1038,34 +1038,34 @@ sidebarTitle: "Đăng ký OAPI"
             type="text"
             name="appName"
             style={{
-                          width: "100%",
-                          padding: "8px",
-                          borderRadius: "6px",
-                          border: "1px solid currentColor",
-                          boxSizing: "border-box",
-                      }}
+                        width: "100%",
+                        padding: "8px",
+                        borderRadius: "6px",
+                        border: "1px solid currentColor",
+                        boxSizing: "border-box",
+                    }}
           />
         </div>
 
         <div>
           <label
             style={{
-                          fontWeight: "bold",
-                          display: "block",
-                          marginBottom: "4px",
-                          fontSize: "14px",
-                      }}
+                        fontWeight: "bold",
+                        display: "block",
+                        marginBottom: "4px",
+                        fontSize: "14px",
+                    }}
           >
             Đơn vị phát triển / vận hành ứng dụng
           </label>
 
           <div
             style={{
-                          display: "flex",
-                          gap: "20px",
-                          alignItems: "center",
-                          marginTop: "6px",
-                      }}
+                        display: "flex",
+                        gap: "20px",
+                        alignItems: "center",
+                        marginTop: "6px",
+                    }}
           >
             <label className="cursor-pointer flex items-center gap-1.5">
               <input type="radio" name="devUnit" value="self" defaultChecked style={{ accentColor: "#15803d" }} />
@@ -1089,24 +1089,24 @@ sidebarTitle: "Đăng ký OAPI"
             name="thirdPartyName"
             placeholder="Name of third-party entity (if contracted)..."
             style={{
-                          width: "100%",
-                          padding: "8px",
-                          borderRadius: "6px",
-                          border: "1px solid currentColor",
-                          marginTop: "6px",
-                          boxSizing: "border-box",
-                      }}
+                        width: "100%",
+                        padding: "8px",
+                        borderRadius: "6px",
+                        border: "1px solid currentColor",
+                        marginTop: "6px",
+                        boxSizing: "border-box",
+                    }}
           />
         </div>
 
         <div>
           <label
             style={{
-                          fontWeight: "bold",
-                          display: "block",
-                          marginBottom: "4px",
-                          fontSize: "14px",
-                      }}
+                        fontWeight: "bold",
+                        display: "block",
+                        marginBottom: "4px",
+                        fontSize: "14px",
+                    }}
           >
             Ngôn ngữ / Nền tảng kỹ thuật chính
           </label>
@@ -1115,23 +1115,23 @@ sidebarTitle: "Đăng ký OAPI"
             type="text"
             name="techStack"
             style={{
-                          width: "100%",
-                          padding: "8px",
-                          borderRadius: "6px",
-                          border: "1px solid currentColor",
-                          boxSizing: "border-box",
-                      }}
+                        width: "100%",
+                        padding: "8px",
+                        borderRadius: "6px",
+                        border: "1px solid currentColor",
+                        boxSizing: "border-box",
+                    }}
           />
         </div>
 
         <div>
           <label
             style={{
-                          fontWeight: "bold",
-                          display: "block",
-                          marginBottom: "4px",
-                          fontSize: "14px",
-                      }}
+                        fontWeight: "bold",
+                        display: "block",
+                        marginBottom: "4px",
+                        fontSize: "14px",
+                    }}
           >
             Cơ chế lưu trữ và bảo vệ API Key / Secret Key
           </label>
@@ -1140,23 +1140,23 @@ sidebarTitle: "Đăng ký OAPI"
             type="text"
             name="keySecurityMechanism"
             style={{
-                          width: "100%",
-                          padding: "8px",
-                          borderRadius: "6px",
-                          border: "1px solid currentColor",
-                          boxSizing: "border-box",
-                      }}
+                        width: "100%",
+                        padding: "8px",
+                        borderRadius: "6px",
+                        border: "1px solid currentColor",
+                        boxSizing: "border-box",
+                    }}
           />
         </div>
 
         <div>
           <label
             style={{
-                          fontWeight: "bold",
-                          display: "block",
-                          marginBottom: "4px",
-                          fontSize: "14px",
-                      }}
+                        fontWeight: "bold",
+                        display: "block",
+                        marginBottom: "4px",
+                        fontSize: "14px",
+                    }}
           >
             Cơ chế Kill Switch / Rate Limit nội bộ của KH
           </label>
@@ -1165,23 +1165,23 @@ sidebarTitle: "Đăng ký OAPI"
             type="text"
             name="rateLimitMechanism"
             style={{
-                          width: "100%",
-                          padding: "8px",
-                          borderRadius: "6px",
-                          border: "1px solid currentColor",
-                          boxSizing: "border-box",
-                      }}
+                        width: "100%",
+                        padding: "8px",
+                        borderRadius: "6px",
+                        border: "1px solid currentColor",
+                        boxSizing: "border-box",
+                    }}
           />
         </div>
 
         <div>
           <label
             style={{
-                          fontWeight: "bold",
-                          display: "block",
-                          marginBottom: "4px",
-                          fontSize: "14px",
-                      }}
+                        fontWeight: "bold",
+                        display: "block",
+                        marginBottom: "4px",
+                        fontSize: "14px",
+                    }}
           >
             Kế hoạch kiểm thử trước khi go-live
           </label>
@@ -1190,23 +1190,23 @@ sidebarTitle: "Đăng ký OAPI"
             type="text"
             name="testingPlan"
             style={{
-                          width: "100%",
-                          padding: "8px",
-                          borderRadius: "6px",
-                          border: "1px solid currentColor",
-                          boxSizing: "border-box",
-                      }}
+                        width: "100%",
+                        padding: "8px",
+                        borderRadius: "6px",
+                        border: "1px solid currentColor",
+                        boxSizing: "border-box",
+                    }}
           />
         </div>
 
         <div>
           <label
             style={{
-                          fontWeight: "bold",
-                          display: "block",
-                          marginBottom: "4px",
-                          fontSize: "14px",
-                      }}
+                        fontWeight: "bold",
+                        display: "block",
+                        marginBottom: "4px",
+                        fontSize: "14px",
+                    }}
           >
             Ngày dự kiến Go-live Production
           </label>
@@ -1215,12 +1215,12 @@ sidebarTitle: "Đăng ký OAPI"
             type="date"
             name="goLiveDate"
             style={{
-                          width: "100%",
-                          padding: "8px",
-                          borderRadius: "6px",
-                          border: "1px solid currentColor",
-                          boxSizing: "border-box",
-                      }}
+                        width: "100%",
+                        padding: "8px",
+                        borderRadius: "6px",
+                        border: "1px solid currentColor",
+                        boxSizing: "border-box",
+                    }}
           />
         </div>
       </div>
@@ -1230,20 +1230,20 @@ sidebarTitle: "Đăng ký OAPI"
       <button
         type="button"
         onClick={() => {
-                  const btn =
-                      document.getElementById("desktop-tab-btn-2") ||
-                      document.getElementById("mobile-tab-btn-2");
-                  if (btn) btn.click();
-              }}
+                const btn =
+                    document.getElementById("desktop-tab-btn-2") ||
+                    document.getElementById("mobile-tab-btn-2");
+                if (btn) btn.click();
+            }}
         className="w-full sm:w-auto"
         style={{
-                  padding: "10px 20px",
-                  border: "1px solid currentColor",
-                  borderRadius: "6px",
-                  fontWeight: "bold",
-                  cursor: "pointer",
-                  backgroundColor: "transparent",
-              }}
+                padding: "10px 20px",
+                border: "1px solid currentColor",
+                borderRadius: "6px",
+                fontWeight: "bold",
+                cursor: "pointer",
+                backgroundColor: "transparent",
+            }}
       >
         Quay lại Bước 2
       </button>
@@ -1251,69 +1251,69 @@ sidebarTitle: "Đăng ký OAPI"
       <button
         type="button"
         onClick={() => {
-                  const form = document.getElementById("oapi-registration-form");
-                  const getValue = (name) => (form[name]?.value ?? "").trim();
+                const form = document.getElementById("oapi-registration-form");
+                const getValue = (name) => (form[name]?.value ?? "").trim();
 
 
-                  const showError = (message, fieldName) => {
-                      const banner = document.getElementById("form-error-banner");
-                      const bannerText = document.getElementById("form-error-banner-text");
-                      if (banner && bannerText) {
-                          bannerText.innerText = message;
-                          banner.style.display = "flex";
-                          document.getElementById("oapi-registration-form")?.scrollIntoView({ behavior: "smooth", block: "nearest" });
-                      }
-                      if (fieldName) {
-                          setTimeout(() => {
-                              const input = form[fieldName];
-                              if (input) {
-                                  const scrollBox = input.closest('.step-scroll-box');
-                                  if (scrollBox) {
-                                      const scrollBoxRect = scrollBox.getBoundingClientRect();
-                                      const inputRect = input.getBoundingClientRect();
-                                      if (inputRect.top < scrollBoxRect.top || inputRect.bottom > scrollBoxRect.bottom) {
-                                          scrollBox.scrollBy({ top: inputRect.top - scrollBoxRect.top - 20, behavior: "smooth" });
-                                      }
-                                  }
-                                  input.focus({ preventScroll: true });
-                              }
-                          }, 100);
-                      }
-                  };
+                const showError = (message, fieldName) => {
+                    const banner = document.getElementById("form-error-banner");
+                    const bannerText = document.getElementById("form-error-banner-text");
+                    if (banner && bannerText) {
+                        bannerText.innerText = message;
+                        banner.style.display = "flex";
+                        document.getElementById("oapi-registration-form")?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+                    }
+                    if (fieldName) {
+                        setTimeout(() => {
+                            const input = form[fieldName];
+                            if (input) {
+                                const scrollBox = input.closest('.step-scroll-box');
+                                if (scrollBox) {
+                                    const scrollBoxRect = scrollBox.getBoundingClientRect();
+                                    const inputRect = input.getBoundingClientRect();
+                                    if (inputRect.top < scrollBoxRect.top || inputRect.bottom > scrollBoxRect.bottom) {
+                                        scrollBox.scrollBy({ top: inputRect.top - scrollBoxRect.top - 20, behavior: "smooth" });
+                                    }
+                                }
+                                input.focus({ preventScroll: true });
+                            }
+                        }, 100);
+                    }
+                };
 
-                  const errorBanner = document.getElementById("form-error-banner");
-                  if (errorBanner) errorBanner.style.display = "none";
+                const errorBanner = document.getElementById("form-error-banner");
+                if (errorBanner) errorBanner.style.display = "none";
 
-                  const ipWhitelist = getValue("ipWhitelist");
-                  const appName = getValue("appName");
-                  const techStack = getValue("techStack");
-                  const keySecurityMechanism = getValue("keySecurityMechanism");
-                  const rateLimitMechanism = getValue("rateLimitMechanism");
-                  const testingPlan = getValue("testingPlan");
-                  const goLiveDate = getValue("goLiveDate");
-                  const devUnit = getValue("devUnit");
-                  const thirdPartyName = getValue("thirdPartyName");
+                const ipWhitelist = getValue("ipWhitelist");
+                const appName = getValue("appName");
+                const techStack = getValue("techStack");
+                const keySecurityMechanism = getValue("keySecurityMechanism");
+                const rateLimitMechanism = getValue("rateLimitMechanism");
+                const testingPlan = getValue("testingPlan");
+                const goLiveDate = getValue("goLiveDate");
+                const devUnit = getValue("devUnit");
+                const thirdPartyName = getValue("thirdPartyName");
 
-                  if (!ipWhitelist) {
-                      showError("Registered WAN IP / IP whitelist is required.", "ipWhitelist");
-                      return;
-                  }
+                if (!ipWhitelist) {
+                    showError("Registered WAN IP / IP whitelist is required.", "ipWhitelist");
+                    return;
+                }
 
-                  const btn =
-                      document.getElementById("desktop-tab-btn-4") ||
-                      document.getElementById("mobile-tab-btn-4");
-                  if (btn) btn.click();
-              }}
+                const btn =
+                    document.getElementById("desktop-tab-btn-4") ||
+                    document.getElementById("mobile-tab-btn-4");
+                if (btn) btn.click();
+            }}
         className="w-full sm:w-auto"
         style={{
-                  padding: "10px 20px",
-                  backgroundColor: "#15803d",
-                  color: "#fff",
-                  border: "none",
-                  borderRadius: "6px",
-                  fontWeight: "bold",
-                  cursor: "pointer",
-              }}
+                padding: "10px 20px",
+                backgroundColor: "#15803d",
+                color: "#fff",
+                border: "none",
+                borderRadius: "6px",
+                fontWeight: "bold",
+                cursor: "pointer",
+            }}
       >
         Tiếp theo: Cam kết của Khách Hàng ➔
       </button>
@@ -1330,105 +1330,105 @@ sidebarTitle: "Đăng ký OAPI"
     <div className="step-scroll-box" style={{ flex: 1, overflowY: "auto", paddingRight: "10px" }}>
       <p
         style={{
-                  fontSize: "14px",
-                  color: "#e53e3e",
-                  fontWeight: "bold",
-                  marginBottom: "12px",
-              }}
+                fontSize: "14px",
+                color: "#e53e3e",
+                fontWeight: "bold",
+                marginBottom: "12px",
+            }}
       >
         Vui lòng tích chọn xác nhận đủ tất cả các điều khoản bên dưới:
       </p>
 
       <div
         style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "12px",
-                  fontSize: "14px",
-              }}
+                display: "flex",
+                flexDirection: "column",
+                gap: "12px",
+                fontSize: "14px",
+            }}
       >
         <label
           style={{
-                      display: "flex",
-                      gap: "10px",
-                      alignItems: "center",
-                      cursor: "pointer",
-                      paddingBottom: "8px",
-                      borderBottom: "1px solid currentColor",
-                      opacity: 0.9,
-                      fontWeight: "bold",
-                  }}
+                    display: "flex",
+                    gap: "10px",
+                    alignItems: "center",
+                    cursor: "pointer",
+                    paddingBottom: "8px",
+                    borderBottom: "1px solid currentColor",
+                    opacity: 0.9,
+                    fontWeight: "bold",
+                }}
         >
           <input
             type="checkbox"
             id="toggle-all-commitments"
             onChange={(e) => {
-                          const isChecked = e.target.checked;
-                          const checkboxes = document.querySelectorAll('input[name="commitments"]');
-                          checkboxes.forEach((cb) => {
-                              cb.checked = isChecked;
-                          });
-                      }}
+                        const isChecked = e.target.checked;
+                        const checkboxes = document.querySelectorAll('input[name="commitments"]');
+                        checkboxes.forEach((cb) => {
+                            cb.checked = isChecked;
+                        });
+                    }}
             style={{
-                          width: "18px",
-                          height: "18px",
-                          flexShrink: 0,
-                          cursor: "pointer",
-                          accentColor: "#15803d",
-                      }}
+                        width: "18px",
+                        height: "18px",
+                        flexShrink: 0,
+                        cursor: "pointer",
+                        accentColor: "#15803d",
+                    }}
           />
 
           <span>Chọn tất cả</span>
         </label>
 
         {[
-                            "Khách Hàng đã mở và duy trì tài khoản giao dịch chứng khoán tại PHS; đối với từng loại API, Khách Hàng đã hoặc sẽ hoàn tất hồ sơ sản phẩm/tài khoản tương ứng trước khi sử dụng production.",
-                            "Khách Hàng đã đọc, hiểu và đồng ý với Điều khoản và Điều kiện sử dụng dịch vụ PHS OpenAPI, Bản công bố rủi ro, Tài Liệu API, quy định giao dịch trực tuyến và các hợp đồng/hồ sơ tài khoản có liên quan tại PHS.",
-                            "Khách Hàng chịu trách nhiệm bảo mật Thông Tin Xác Thực API, quản lý Ứng Dụng Tích Hợp API và mọi yêu cầu/lệnh phát sinh qua API.",
-                            "Khách Hàng cam kết không sử dụng API để thao túng thị trường, lạm dụng thị trường, gửi lệnh gây nhiễu, thử lỗ hổng, vượt giới hạn API, phân phối lại dữ liệu trái phép hoặc thực hiện hành vi bị cấm theo pháp luật.",
-                            "Khách Hàng đồng ý để PHS giám sát, ghi nhận log, áp dụng giới hạn, tạm ngừng hoặc thu hồi quyền truy cập API khi cần thiết để bảo vệ hệ thống, thị trường, nhà đầu tư hoặc để tuân thủ pháp luật/yêu cầu cơ quan có thẩm quyền."
-                        ].map((text, idx) => (
-                            <label
-                                key={idx}
-                                style={{
-                                    display: "flex",
-                                    gap: "10px",
-                                    alignItems: "center",
-                                    cursor: "pointer",
-                                }}
-                            >
-                                <input
-                                    type="checkbox"
-                                    name="commitments"
-                                    required
-                                    onChange={() => {
-                                        const all = document.querySelectorAll('input[name="commitments"]');
-                                        const checked = document.querySelectorAll('input[name="commitments"]:checked');
-                                        const toggleAll = document.getElementById("toggle-all-commitments");
-                                        if (toggleAll) toggleAll.checked = all.length === checked.length;
-                                    }}
-                                    style={{
-                                        width: "18px",
-                                        height: "18px",
-                                        flexShrink: 0,
-                                        cursor: "pointer",
-                                        accentColor: "#15803d",
-                                    }}
-                                />
-                                <span>{text}</span>
-                            </label>
-                        ))}
+                                  "Khách Hàng đã mở và duy trì tài khoản giao dịch chứng khoán tại PHS; đối với từng loại API, Khách Hàng đã hoặc sẽ hoàn tất hồ sơ sản phẩm/tài khoản tương ứng trước khi sử dụng production.",
+                                  "Khách Hàng đã đọc, hiểu và đồng ý với Điều khoản và Điều kiện sử dụng dịch vụ PHS OpenAPI, Bản công bố rủi ro, Tài Liệu API, quy định giao dịch trực tuyến và các hợp đồng/hồ sơ tài khoản có liên quan tại PHS.",
+                                  "Khách Hàng chịu trách nhiệm bảo mật Thông Tin Xác Thực API, quản lý Ứng Dụng Tích Hợp API và mọi yêu cầu/lệnh phát sinh qua API.",
+                                  "Khách Hàng cam kết không sử dụng API để thao túng thị trường, lạm dụng thị trường, gửi lệnh gây nhiễu, thử lỗ hổng, vượt giới hạn API, phân phối lại dữ liệu trái phép hoặc thực hiện hành vi bị cấm theo pháp luật.",
+                                  "Khách Hàng đồng ý để PHS giám sát, ghi nhận log, áp dụng giới hạn, tạm ngừng hoặc thu hồi quyền truy cập API khi cần thiết để bảo vệ hệ thống, thị trường, nhà đầu tư hoặc để tuân thủ pháp luật/yêu cầu cơ quan có thẩm quyền."
+                              ].map((text, idx) => (
+                                  <label
+                                      key={idx}
+                                      style={{
+                                          display: "flex",
+                                          gap: "10px",
+                                          alignItems: "center",
+                                          cursor: "pointer",
+                                      }}
+                                  >
+                                      <input
+                                          type="checkbox"
+                                          name="commitments"
+                                          required
+                                          onChange={() => {
+                                              const all = document.querySelectorAll('input[name="commitments"]');
+                                              const checked = document.querySelectorAll('input[name="commitments"]:checked');
+                                              const toggleAll = document.getElementById("toggle-all-commitments");
+                                              if (toggleAll) toggleAll.checked = all.length === checked.length;
+                                          }}
+                                          style={{
+                                              width: "18px",
+                                              height: "18px",
+                                              flexShrink: 0,
+                                              cursor: "pointer",
+                                              accentColor: "#15803d",
+                                          }}
+                                      />
+                                      <span>{text}</span>
+                                  </label>
+                              ))}
       </div>
 
       <div
         id="form-status-msg"
         style={{
-                  display: "none",
-                  padding: "12px",
-                  borderRadius: "6px",
-                  fontSize: "14px",
-                  marginTop: "16px",
-              }}
+                display: "none",
+                padding: "12px",
+                borderRadius: "6px",
+                fontSize: "14px",
+                marginTop: "16px",
+            }}
       />
     </div>
 
@@ -1436,20 +1436,20 @@ sidebarTitle: "Đăng ký OAPI"
       <button
         type="button"
         onClick={() => {
-                  const btn =
-                      document.getElementById("desktop-tab-btn-3") ||
-                      document.getElementById("mobile-tab-btn-3");
-                  if (btn) btn.click();
-              }}
+                const btn =
+                    document.getElementById("desktop-tab-btn-3") ||
+                    document.getElementById("mobile-tab-btn-3");
+                if (btn) btn.click();
+            }}
         className="w-full sm:w-auto"
         style={{
-                  padding: "10px 20px",
-                  border: "1px solid currentColor",
-                  borderRadius: "6px",
-                  fontWeight: "bold",
-                  cursor: "pointer",
-                  backgroundColor: "transparent",
-              }}
+                padding: "10px 20px",
+                border: "1px solid currentColor",
+                borderRadius: "6px",
+                fontWeight: "bold",
+                cursor: "pointer",
+                backgroundColor: "transparent",
+            }}
       >
         Quay lại Bước 3
       </button>
@@ -1458,15 +1458,15 @@ sidebarTitle: "Đăng ký OAPI"
         type="submit"
         className="w-full sm:w-auto"
         style={{
-                  padding: "12px 24px",
-                  backgroundColor: "#15803d",
-                  color: "#fff",
-                  border: "none",
-                  borderRadius: "6px",
-                  fontWeight: "bold",
-                  cursor: "pointer",
-                  fontSize: "15px",
-              }}
+                padding: "12px 24px",
+                backgroundColor: "#15803d",
+                color: "#fff",
+                border: "none",
+                borderRadius: "6px",
+                fontWeight: "bold",
+                cursor: "pointer",
+                fontSize: "15px",
+            }}
       >
         Gửi Đơn Đăng Ký
       </button>
