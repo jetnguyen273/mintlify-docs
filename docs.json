@@ -291,12 +291,12 @@
   "navbar": {
     "links": [
       {
-        "label": "Supportt",
+        "label": "Support",
         "href": "https://flashapi.phs.vn/docs/api-reference/faqs"
       },
       {
         "href": "https://flashapi.phs.vn/docs/registration-form",
-        "label": "Registert"
+        "label": "Register"
       }
     ],
     "primary": {
