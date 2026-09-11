@@ -1,0 +1,58 @@
+---
+title: "Rate limit"
+---
+
+# Rate Limits
+
+The API applies rate limits per APIKey and per Endpoint.
+
+Rate limits are defined by:
+
+- Rate: total number of requests per hour
+- Quota: total number of requests per 24 hours (per day)
+
+### Normal Rate Limits
+
+| API Name | Endpoint | Rate / hour | Quota / day |
+| --- | --- | --- | --- |
+| Authentication | <a href="https://developers.api.com/docs/auth/token">POST /auth/token</a> | 60 | 500 |
+| Authentication | <a href="https://developers.api.com/docs/auth/refresh">POST /auth/refresh</a> | 120 | 1,000 |
+| Place Order | <a href="https://developers.api.com/docs/orders/place">POST /orders</a> | 3,600 | 50,000 |
+| Modify Order | <a href="https://developers.api.com/docs/orders/modify">PUT /orders/{id}</a> | 3,600 | 50,000 |
+| Cancel Order | <a href="https://developers.api.com/docs/orders/cancel">DELETE /orders/{id}</a> | 3,600 | 50,000 |
+| Order Status | <a href="https://developers.api.com/docs/orders/status">GET /orders/{id}</a> | 7,200 | 100,000 |
+| Order List | <a href="https://developers.api.com/docs/orders/list">GET /orders</a> | 1,800 | 20,000 |
+| Account Information | <a href="https://developers.api.com/docs/account/info">GET /accounts/{id}</a> | 1,800 | 20,000 |
+| Account Balance | <a href="https://developers.api.com/docs/account/balance">GET /accounts/{id}/balance</a> | 3,600 | 40,000 |
+| Portfolio Information | <a href="https://developers.api.com/docs/portfolio/info">GET /portfolio/{id}</a> | 1,800 | 20,000 |
+| Portfolio Positions | <a href="https://developers.api.com/docs/portfolio/positions">GET /portfolio/{id}/positions</a> | 1,800 | 20,000 |
+| Latest Quote | <a href="https://developers.api.com/docs/marketdata/quote">GET /marketdata/quote/{symbol}</a> | 18,000 | 200,000 |
+| Order Book | <a href="https://developers.api.com/docs/marketdata/orderbook">GET /marketdata/orderbook/{symbol}</a> | 10,000 | 100,000 |
+| Price History | <a href="https://developers.api.com/docs/marketdata/history">GET /marketdata/history/{symbol}</a> | 3,600 | 30,000 |
+| Instruments List | <a href="https://developers.api.com/docs/reference/instruments">GET /instruments</a> | 3,600 | 20,000 |
+| Symbols List | <a href="https://developers.api.com/docs/reference/symbols">GET /symbols</a> | 3,600 | 20,000 |
+| WebSocket - Market Data | <a href="https://developers.api.com/docs/websocket/marketdata">WS /ws/marketdata</a> | 60 connections | 500 connections |
+| WebSocket - Orders | <a href="https://developers.api.com/docs/websocket/orders">WS /ws/orders</a> | 60 connections | 500 connections |
+
+### Notes
+
+When the rate limit is exceeded, the system returns **HTTP 429 (Too Many Requests)**
+
+```json lines
+429
+Too Many Requests
+{
+    "error": "Rate Limit Exceeded",
+    "message": "Too Many Requests"
+}
+```
+
+### Recommendations
+
+- Distribute API calls evenly across time intervals to avoid exceeding rate limits
+- Cache infrequently changing data on the client side to reduce unnecessary requests
+- Prioritize using APIs that support bulk data processing in a single call when available
+- Use WebSocket connections for real-time data to reduce the number of HTTP requests
+- Implement exponential backoff strategy when receiving a 429 response
+- Consider aggregating requests during peak usage times
+- Set up monitoring and alerting for rate limit violations

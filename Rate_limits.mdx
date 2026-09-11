@@ -1,0 +1,58 @@
+---
+title: "Rate limit"
+---
+
+# Giới Hạn Tần Suất (Rate Limits)
+
+API áp dụng giới hạn tần suất theo từng APIKey và từng Endpoint.
+
+Giới hạn tần suất được định nghĩa bởi:
+
+- Rate: tổng số request trong 1 giờ
+- Quota: tổng số request trong 24 giờ (1 ngày)
+
+### Giới Hạn Tần Suất Tiêu Chuẩn
+
+| Tên API | Endpoint | Rate / giờ | Quota / ngày |
+| --- | --- | --- | --- |
+| Xác thực | <a href="https://developers.api.com/docs/auth/token">POST /auth/token</a> | 60 | 500 |
+| Xác thực | <a href="https://developers.api.com/docs/auth/refresh">POST /auth/refresh</a> | 120 | 1,000 |
+| Đặt lệnh | <a href="https://developers.api.com/docs/orders/place">POST /orders</a> | 3,600 | 50,000 |
+| Sửa lệnh | <a href="https://developers.api.com/docs/orders/modify">PUT /orders/{id}</a> | 3,600 | 50,000 |
+| Hủy lệnh | <a href="https://developers.api.com/docs/orders/cancel">DELETE /orders/{id}</a> | 3,600 | 50,000 |
+| Trạng thái lệnh | <a href="https://developers.api.com/docs/orders/status">GET /orders/{id}</a> | 7,200 | 100,000 |
+| Danh sách lệnh | <a href="https://developers.api.com/docs/orders/list">GET /orders</a> | 1,800 | 20,000 |
+| Thông tin tài khoản | <a href="https://developers.api.com/docs/account/info">GET /accounts/{id}</a> | 1,800 | 20,000 |
+| Số dư tài khoản | <a href="https://developers.api.com/docs/account/balance">GET /accounts/{id}/balance</a> | 3,600 | 40,000 |
+| Thông tin danh mục | <a href="https://developers.api.com/docs/portfolio/info">GET /portfolio/{id}</a> | 1,800 | 20,000 |
+| Vị thế nắm giữ | <a href="https://developers.api.com/docs/portfolio/positions">GET /portfolio/{id}/positions</a> | 1,800 | 20,000 |
+| Giá cổ phiếu gần nhất | <a href="https://developers.api.com/docs/marketdata/quote">GET /marketdata/quote/{symbol}</a> | 18,000 | 200,000 |
+| Sổ lệnh giao dịch | <a href="https://developers.api.com/docs/marketdata/orderbook">GET /marketdata/orderbook/{symbol}</a> | 10,000 | 100,000 |
+| Lịch sử giá | <a href="https://developers.api.com/docs/marketdata/history">GET /marketdata/history/{symbol}</a> | 3,600 | 30,000 |
+| Danh sách chứng khoán | <a href="https://developers.api.com/docs/reference/instruments">GET /instruments</a> | 3,600 | 20,000 |
+| Danh sách ký hiệu | <a href="https://developers.api.com/docs/reference/symbols">GET /symbols</a> | 3,600 | 20,000 |
+| WebSocket - Dữ liệu thị trường | <a href="https://developers.api.com/docs/websocket/marketdata">WS /ws/marketdata</a> | 60 kết nối | 500 kết nối |
+| WebSocket - Thông báo lệnh | <a href="https://developers.api.com/docs/websocket/orders">WS /ws/orders</a> | 60 kết nối | 500 kết nối |
+
+### Lưu Ý
+
+Khi vượt quá giới hạn, hệ thống sẽ trả về **HTTP 429 (Too Many Requests)**
+
+```json lines
+429
+Too Many Requests
+{
+    "error": "Rate Limit Exceeded",
+    "message": "Too many request"
+}
+```
+
+### Khuyến Nghị
+
+- Phân bổ các cuộc gọi API một cách đều đặn trong các khoảng thời gian để tránh vượt quá giới hạn tần suất
+- Lưu trữ dữ liệu ít thay đổi trong cache phía client để giảm các request không cần thiết
+- Ưu tiên sử dụng các API hỗ trợ xử lý dữ liệu hàng loạt trong một lần gọi khi có sẵn
+- Sử dụng kết nối WebSocket cho dữ liệu real-time để giảm số lượng HTTP request
+- Triển khai chiến lược exponential backoff khi nhận được response 429
+- Cân nhắc hợp nhất các request trong những thời gian cao điểm
+- Thiết lập giám sát và cảnh báo cho các vi phạm giới hạn tần suất

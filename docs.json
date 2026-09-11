@@ -114,7 +114,8 @@
                       "error-codes",
                       "appendix"
                     ]
-                  }
+                  },
+                  "Rate-limits"
                 ]
               },
               {
@@ -263,7 +264,8 @@
                       "ma-trang-thai-lenh",
                       "phu-luc"
                     ]
-                  }
+                  },
+                  "Rate_limits"
                 ]
               },
               "faqs",
