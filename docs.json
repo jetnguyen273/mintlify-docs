@@ -115,7 +115,6 @@
                       "appendix"
                     ]
                   },
-                  "Rate-limits",
                   "rate-limits"
                 ]
               },
@@ -251,6 +250,7 @@
                     "hidden": true
                   },
                   "ma-error",
+                  "Rate_limits",
                   {
                     "group": "Sandbox_ Thử nghiệm & mô phỏng API",
                     "pages": [
@@ -265,8 +265,7 @@
                       "ma-trang-thai-lenh",
                       "phu-luc"
                     ]
-                  },
-                  "Rate_limits"
+                  }
                 ]
               },
               "faqs",
