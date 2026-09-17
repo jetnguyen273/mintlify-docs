@@ -304,7 +304,7 @@
     "primary": {
       "type": "button",
       "label": "Dashboard",
-      "href": "https://dashboard.mintlify.com"
+      "href": "https://flashapi.phs.vn/docs/chao-mung"
     }
   },
   "contextual": {
