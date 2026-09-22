@@ -69,14 +69,14 @@
                       {
                         "group": "Underlying",
                         "pages": [
-                          "trading/Daily-order",
+                          "trading/underlying-daily-order",
                           "trading/oderhistory/underlying/order-report"
                         ]
                       },
                       {
                         "group": "Derivative",
                         "pages": [
-                          "trading/daily-order",
+                          "trading/derivative-daily-order",
                           "trading/order-report"
                         ]
                       }
@@ -153,131 +153,125 @@
               {
                 "group": "Tài liệu API",
                 "pages": [
-                  "chao-mung",
+                  "vi/api-reference/welcome",
                   {
-                    "group": "Thông tin thị trường",
+                    "group": "Priceboard",
+                    "expanded": true,
                     "pages": [
-                      "lay-du-lieu-moi-nhat-cua-ma-chung-khoan",
-                      "lay-du-lieu-thong-ke-cua-ma-chung-khoan",
-                      "du-lieu-khop-lenh-theo-ma",
-                      "lay-toan-bo-thong-tin-cua-ma-chung-khoan",
-                      "du-lieu-nen-cua-ma-chung-khoan",
-                      "ket-noi-socket.io"
+                      "vi/priceboard/get-symbol-latest-data",
+                      "vi/priceboard/get-symbol-statics-data",
+                      "vi/priceboard/get-symbol-matching-data",
+                      "vi/priceboard/get_all_stocks",
+                      "vi/priceboard/Get_candlestick_data"
                     ]
                   },
                   {
-                    "group": "Xác thực",
+                    "group": "Authentication",
                     "pages": [
-                      "xac-thuc-co-so",
-                      "xac-thuc-phai-sinh"
+                      "vi/authentication/underlying",
+                      "vi/authentication/derivate"
                     ]
                   },
                   {
-                    "group": "Đặt lệnh ",
+                    "group": "Placing Order ",
                     "pages": [
-                      "dat-lenh-co-so",
-                      "dat-lenh-phai-sinh",
-                      "trang-thai-order"
+                      "vi/trading/Underlying",
+                      "vi/trading/Derivative",
+                      "vi/api-reference/error-status"
                     ]
                   },
                   {
-                    "group": "Lịch sử giao dịch",
+                    "group": "Portfolio",
                     "pages": [
                       {
-                        "group": "Cơ sở",
+                        "group": "Underlying",
                         "pages": [
-                          "lenh-trong-ngay",
-                          "bao-cao-lenh"
+                          "vi/inquiry/porfolio"
                         ]
                       },
                       {
-                        "group": "Phái sinh",
+                        "group": "Derivative",
                         "pages": [
-                          "lenh-trong-ngay-1",
-                          "bao-cao-lenh-1"
+                          "vi/derivative/open-position",
+                          "vi/derivative/close-positions"
                         ]
                       }
                     ]
                   },
                   {
-                    "group": "Tài sản",
-                    "pages": [
-                      "tai-san-co-so",
-                      "tai-san-phai-sinh"
-                    ]
-                  },
-                  {
-                    "group": "Danh mục đầu tư",
+                    "group": "Order History",
                     "pages": [
                       {
-                        "group": "Cơ sở",
+                        "group": "Underlying",
                         "pages": [
-                          "danh-muc-dau-tu"
+                          "vi/trading/underlying-daily-order",
+                          "vi/trading/oderhistory/underlying/order-report"
                         ]
                       },
                       {
-                        "group": "Phái sinh",
+                        "group": "Derivative",
                         "pages": [
-                          "vi-the-mo",
-                          "vi-the-dong"
+                          "vi/trading/derivative-daily-order",
+                          "vi/trading/order-report"
                         ]
                       }
                     ]
                   },
                   {
-                    "group": "Kết nối WebSocket",
+                    "group": "Asset",
                     "pages": [
-                      "websocket/du-lieu-thi-truong",
-                      "websocket/du-lieu-giao-dich"
+                      "vi/balance/underlying-1",
+                      "vi/balance/derivative"
                     ]
                   },
                   {
-                    "group": "Môi trường giả lập",
+                    "group": "Socket",
                     "pages": [
-                      "gioi-thieu",
-                      "cach-hoat-dong-cua-url-sandbox",
-                      "xac-thuc-tai-khoan",
-                      "bang-gia",
-                      "api-trading-co-so",
-                      "api-trading-phai-sinh",
-                      "xac-thuc-tai-khoan-phai-sinh",
-                      "xac-thuc-tai-khoan-co-so",
-                      "account-infor",
-                      "untitled-page-24",
-                      "untitled-page-25",
-                      "phu-luc-sandbox",
-                      "market-1"
-                    ],
-                    "hidden": true
-                  },
-                  "ma-error",
-                  "Rate_limits",
-                  {
-                    "group": "Sandbox_ Thử nghiệm & mô phỏng API",
-                    "pages": [
-                      "gioi-thieu-sandbox",
-                      "cach-hoat-dong-url-sandbox",
-                      "luong-xac-thuc",
-                      "du_lieu_thi_truong",
-                      "xac-thuc",
-                      "giao-dich-co-so",
-                      "nhom-tai-khoan-danh-muc-so-du-co-so",
-                      "nhom-tai-khoan-danh-muc-so-du-phai-sinh",
-                      "ma-trang-thai-lenh",
-                      "phu-luc"
+                      "vi/Socket-connection",
+                      "vi/websocket/market-data",
+                      "vi/websocket/trading-data"
                     ]
-                  }
+                  },
+                  "vi/api-reference/error-code",
+                  {
+                    "group": "Sandbox",
+                    "pages": [
+                      "vi/Introduction",
+                      "vi/how-sandbox-urls-work",
+                      "vi/authentication-account",
+                      "vi/market",
+                      "vi/authen-account-underlying",
+                      "vi/authen-account-derivative",
+                      "vi/trading-underlying",
+                      "vi/trading-derivative",
+                      "vi/account-portfolio-balance-underlying",
+                      "vi/ref-order-status-codes",
+                      "vi/error-codes",
+                      "vi/appendix"
+                    ]
+                  },
+                  "vi/rate-limits"
                 ]
               },
-              "faqs",
+              {
+                "group": "Endpoint examples",
+                "hidden": true,
+                "pages": [
+                  "vi/api-reference/endpoint/get",
+                  "vi/api-reference/endpoint/create",
+                  "vi/api-reference/endpoint/delete",
+                  "vi/api-reference/endpoint/webhook"
+                ]
+              },
+              "vi/api-reference/faqs",
               {
                 "group": "Các điều khoản & thỏa thuận",
                 "pages": [
-                  "dieu-khoan-va-dieu-kien",
-                  "huong-dan-dang-ki",
-                  "cong-bo-rui-ro",
-                  "phu-luc-pham-vi-ki-thuat",
-                  "don-dang-ky"
+                  "vi/registration-guide",
+                  "vi/risk-disclosure",
+                  "vi/service-scope-technical-apendix",
+                  "vi/terms-and-conditions",
+                  "vi/registration-form"
                 ]
               }
             ]
@@ -289,7 +283,7 @@
   "logo": {
     "light": "/images/logo4-2-20nam-01.png",
     "dark": "/images/logo4-2-20nam-01.png",
-    "href": "https://flashapi.phs.vn/chao-mung"
+    "href": "https://flashapi.phs.vn/docs/vi/api-reference/welcome"
   },
   "navbar": {
     "links": [
@@ -305,20 +299,20 @@
     "primary": {
       "type": "button",
       "label": "Dashboard",
-      "href": "https://flashapi.phs.vn/docs/chao-mung"
+      "href": "https://flashapi.phs.vn/docs/vi/api-reference/welcome"
     }
   },
   "contextual": {
     "options": [
-     "copy",
-     "view",
-     "chatgpt",
-     "claude",
-     "perplexity",
-     "mcp",
-     "cursor",
-     "vscode"
-   ]
+      "copy",
+      "view",
+      "chatgpt",
+      "claude",
+      "perplexity",
+      "mcp",
+      "cursor",
+      "vscode"
+    ]
   },
   "description": "Comprehensive API documentation for Flash API, providing secure access to trading, account management, portfolio, balances, market data, and reporting services.",
   "favicon": {
