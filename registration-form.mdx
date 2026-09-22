@@ -64,20 +64,12 @@ const isValidPhone = (value) => /^\d{9,15}$/.test(value);
 hideError();
 
 const customerName = getValue("customerName");
-const identityNumber = getValue("identityNumber");
 const phsCustCode = getValue("phsCustCode");
 const accountBasic = getValue("accountBasic");
 const notificationEmail = getValue("notificationEmail");
 const alertPhoneNumber = getValue("alertPhoneNumber");
-const technicalContactName = getValue("technicalContactName");
-const technicalContactInfo = getValue("technicalContactInfo");
 
 const ipWhitelist = getValue("ipWhitelist");
-const appName = getValue("appName");
-const techStack = getValue("techStack");
-const keySecurityMechanism = getValue("keySecurityMechanism");
-const rateLimitMechanism = getValue("rateLimitMechanism");
-const testingPlan = getValue("testingPlan");
 const goLiveDate = getValue("goLiveDate");
 const devUnit = getValue("devUnit");
 const thirdPartyName = getValue("thirdPartyName");
@@ -90,17 +82,17 @@ return;
 
 
 if (!phsCustCode) {
-showError("Account number / Client code at PHS is required.", 1, "phsCustCode");
+showError("Depository number / Account at PHS is required.", 1, "phsCustCode");
 return;
 }
 
 if (!isValidEmail(notificationEmail)) {
-showError("Email for API notices must be a valid email address (e.g. name@example.com).", 1, "notificationEmail");
+showError("Email must be a valid email address (e.g. name@example.com).", 1, "notificationEmail");
 return;
 }
 
 if (!isValidPhone(alertPhoneNumber)) {
-showError("Phone for OTP/alerts must contain only digits and be 9–15 digits long.", 1, "alertPhoneNumber");
+showError("Phone must contain only digits and be 9–15 digits long.", 1, "alertPhoneNumber");
 return;
 }
 
@@ -136,28 +128,19 @@ e.currentTarget.querySelectorAll('input[name="apiScope"]:checked'),
 
 const formData = {
 customerName: getValue("customerName"),
-identityNumber: getValue("identityNumber"),
 phsCustCode: getValue("phsCustCode"),
 accountBasic: getValue("accountBasic"),
 accountDerivatives: getValue("accountDerivatives"),
-marginProfile: getValue("marginProfile"),
 notificationEmail: getValue("notificationEmail"),
 alertPhoneNumber: getValue("alertPhoneNumber"),
-technicalContactName: getValue("technicalContactName"),
-technicalContactInfo: getValue("technicalContactInfo"),
 apiScopes: apiScopes,
 apiScopeNote: getValue("apiScopeNote"),
 environment: "Production",
 ipWhitelist: getValue("ipWhitelist"),
-appName: getValue("appName"),
 devUnit:
 getValue("devUnit") === "third_party"
-  ? `Thuê bên thứ ba: ${getValue("thirdPartyName")}`
-  : "Tự phát triển",
-techStack: getValue("techStack"),
-keySecurityMechanism: getValue("keySecurityMechanism"),
-rateLimitMechanism: getValue("rateLimitMechanism"),
-testingPlan: getValue("testingPlan"),
+  ? `Third party: ${getValue("thirdPartyName")}`
+  : "In-house",
 goLiveDate: getValue("goLiveDate"),
 };
 
@@ -259,7 +242,7 @@ lineHeight: 1
     </button>
   </div>
 
-  {/* KHỐI MOBILE TAB */}
+  {/* MOBILE TABS */}
 
   <div className="block sm:hidden" style={{ marginBottom: "12px" }}>
     <div
@@ -276,8 +259,8 @@ paddingBottom: "12px",
       {[1, 2, 3, 4].map((num) => {
                                                             const titles = [
                                                                 "1. Client information",
-                                                                "2. Requested API scope",
-                                                                "3. Registered technical information",
+                                                                "2. API scope",
+                                                                "3. Technical information",
                                                                 "4. Client undertakings",
                                                             ];
                                                             return (
@@ -321,12 +304,6 @@ paddingBottom: "12px",
                                                                             behavior: 'smooth',
                                                                             block: 'start'
                                                                         });
-
-                                                                        if (num === 1) {
-                                                                            setTimeout(() => document.querySelector('input[name="customerName"]')?.focus(), 50);
-                                                                        } else if (num === 3) {
-                                                                            setTimeout(() => document.querySelector('input[name="ipWhitelist"]')?.focus(), 50);
-                                                                        }
                                                                     }}
                                                                     style={{
                                                                         flex: "1 1 45%",
@@ -350,7 +327,7 @@ paddingBottom: "12px",
     </div>
   </div>
 
-  {/* KHỐI DESKTOP TAB */}
+  {/* DESKTOP TABS */}
 
   <div
     className="hidden sm:flex"
@@ -365,8 +342,8 @@ width: "100%",
     {[1, 2, 3, 4].map((num) => {
                                       const titles = [
                                           "1. Client information",
-                                          "2. Requested API scope",
-                                          "3. Registered technical information",
+                                          "2. API scope",
+                                          "3. Technical information",
                                           "4. Client undertakings",
                                       ];
                                       return (
@@ -410,12 +387,6 @@ width: "100%",
                                                       behavior: 'smooth',
                                                       block: 'start'
                                                   });
-
-                                                  if (num === 1) {
-                                                      setTimeout(() => document.querySelector('input[name="customerName"]')?.focus(), 50);
-                                                  } else if (num === 3) {
-                                                      setTimeout(() => document.querySelector('input[name="ipWhitelist"]')?.focus(), 50);
-                                                  }
                                               }}
                                               style={{
                                                   flex: 1,
@@ -438,7 +409,7 @@ width: "100%",
                                   })}
   </div>
 
-  {/* BƯỚC 1: THÔNG TIN KHÁCH HÀNG */}
+  {/* STEP 1: CLIENT INFORMATION */}
 
   <div id="step-1" style={{ display: "flex", flexDirection: "column", flex: 1, overflow: "hidden" }}>
     <div style={{ fontSize: "20px", fontWeight: "bold", marginBottom: "16px", flexShrink: 0 }}>
@@ -446,171 +417,152 @@ width: "100%",
     </div>
 
     <div className="step-scroll-box" style={{ flex: 1, overflowY: "auto", paddingRight: "10px" }}>
-      <div className="grid grid-cols-1 sm:grid-cols-2" style={{ gap: "16px", alignItems: "end" }}>
-        <div className="col-span-1 sm:col-span-2" style={{ display: "flex", flexDirection: "column" }}>
-          <label
-            style={{
+      <div style={{ display: "flex", flexDirection: "column", gap: "6px", marginBottom: "18px" }}>
+        <label
+          style={{
+            fontWeight: "bold",
+            display: "block",
+            marginBottom: "4px",
+            fontSize: "14px",
+        }}
+        >
+          Client / Organization name <span style={{ color: "#e53e3e" }}>\*</span>
+        </label>
+
+        <input
+          type="text"
+          name="customerName"
+          required
+          minLength={2}
+          placeholder="Full name or organization name"
+          style={{
+            width: "100%",
+            padding: "9px 10px",
+            borderRadius: "6px",
+            border: "1px solid currentColor",
+            boxSizing: "border-box",
+        }}
+        />
+      </div>
+
+      <div style={{ display: "flex", flexDirection: "column", gap: "6px", marginBottom: "20px" }}>
+        <label
+          style={{
+            fontWeight: "bold",
+            display: "block",
+            marginBottom: "4px",
+            fontSize: "14px",
+        }}
+        >
+          Depository number / Account at PHS <span style={{ color: "#e53e3e" }}>\*</span>
+        </label>
+
+        <input
+          type="text"
+          name="phsCustCode"
+          required
+          placeholder="e.g. 069Cxxxxxx"
+          style={{
+            width: "100%",
+            padding: "9px 10px",
+            borderRadius: "6px",
+            border: "1px solid currentColor",
+            boxSizing: "border-box",
+        }}
+        />
+      </div>
+
+      <div
+        style={{
+          fontSize: "12px",
           fontWeight: "bold",
-          display: "block",
-          marginBottom: "4px",
-          fontSize: "14px",
+          textTransform: "uppercase",
+          letterSpacing: "0.04em",
+          color: "#15803d",
+          marginBottom: "10px",
       }}
-          >
-            Client / Organization name
-          </label>
+      >
+        API Sub-accounts
+      </div>
 
-          <input
-            autoFocus
-            type="text"
-            name="customerName"
-            required
-            minLength={2}
-            style={{
-          width: "100%",
-          padding: "8px",
-          borderRadius: "6px",
-          border: "1px solid currentColor",
-          boxSizing: "border-box",
-      }}
-          />
-        </div>
-
+      <div className="grid grid-cols-1 sm:grid-cols-2" style={{ gap: "16px", marginBottom: "20px" }}>
         <div style={{ display: "flex", flexDirection: "column" }}>
           <label
             style={{
-          fontWeight: "bold",
-          display: "block",
-          marginBottom: "4px",
-          fontSize: "14px",
-      }}
+              fontWeight: "bold",
+              display: "block",
+              marginBottom: "4px",
+              fontSize: "14px",
+          }}
           >
-            Identification / Business registration number
-          </label>
-
-          <input
-            type="text"
-            name="identityNumber"
-            style={{
-          width: "100%",
-          padding: "8px",
-          borderRadius: "6px",
-          border: "1px solid currentColor",
-          boxSizing: "border-box",
-      }}
-          />
-        </div>
-
-        <div style={{ display: "flex", flexDirection: "column" }}>
-          <label
-            style={{
-          fontWeight: "bold",
-          display: "block",
-          marginBottom: "4px",
-          fontSize: "14px",
-      }}
-          >
-            Account number / Client code at PHS
-          </label>
-
-          <input
-            type="text"
-            name="phsCustCode"
-            required
-            style={{
-          width: "100%",
-          padding: "8px",
-          borderRadius: "6px",
-          border: "1px solid currentColor",
-          boxSizing: "border-box",
-      }}
-          />
-        </div>
-
-        <div style={{ display: "flex", flexDirection: "column" }}>
-          <label
-            style={{
-          fontWeight: "bold",
-          display: "block",
-          marginBottom: "4px",
-          fontSize: "14px",
-      }}
-          >
-            Underlying securities account/sub-account registered for API
+            Underlying sub-account
           </label>
 
           <input
             type="text"
             name="accountBasic"
+            placeholder="Optional"
             style={{
-          width: "100%",
-          padding: "8px",
-          borderRadius: "6px",
-          border: "1px solid currentColor",
-          boxSizing: "border-box",
-      }}
+              width: "100%",
+              padding: "9px 10px",
+              borderRadius: "6px",
+              border: "1px solid currentColor",
+              boxSizing: "border-box",
+          }}
           />
         </div>
 
         <div style={{ display: "flex", flexDirection: "column" }}>
           <label
             style={{
-          fontWeight: "bold",
-          display: "block",
-          marginBottom: "4px",
-          fontSize: "14px",
-      }}
+              fontWeight: "bold",
+              display: "block",
+              marginBottom: "4px",
+              fontSize: "14px",
+          }}
           >
-            Derivatives account/sub-account registered for API (if any)
+            Derivatives sub-account
           </label>
 
           <input
             type="text"
             name="accountDerivatives"
+            placeholder="Optional"
             style={{
-          width: "100%",
-          padding: "8px",
-          borderRadius: "6px",
-          border: "1px solid currentColor",
-          boxSizing: "border-box",
-      }}
+              width: "100%",
+              padding: "9px 10px",
+              borderRadius: "6px",
+              border: "1px solid currentColor",
+              boxSizing: "border-box",
+          }}
           />
         </div>
+      </div>
 
-        <div className="col-span-1 sm:col-span-2" style={{ display: "flex", flexDirection: "column" }}>
-          <label
-            style={{
+      <div
+        style={{
+          fontSize: "12px",
           fontWeight: "bold",
-          display: "block",
-          marginBottom: "4px",
-          fontSize: "14px",
+          textTransform: "uppercase",
+          letterSpacing: "0.04em",
+          color: "#15803d",
+          marginBottom: "10px",
       }}
-          >
-            Applicable margin documents (if any)
-          </label>
+      >
+        Contact Information
+      </div>
 
-          <input
-            type="text"
-            name="marginProfile"
-            style={{
-          width: "100%",
-          padding: "8px",
-          borderRadius: "6px",
-          border: "1px solid currentColor",
-          boxSizing: "border-box",
-      }}
-          />
-        </div>
-
+      <div className="grid grid-cols-1 sm:grid-cols-2" style={{ gap: "16px" }}>
         <div style={{ display: "flex", flexDirection: "column" }}>
           <label
             style={{
-          fontWeight: "bold",
-          display: "block",
-          marginBottom: "4px",
-          fontSize: "14px",
-      }}
+              fontWeight: "bold",
+              display: "block",
+              marginBottom: "4px",
+              fontSize: "14px",
+          }}
           >
-            Email for API notices
+            Email (email registered with PHS) <span style={{ color: "#e53e3e" }}>\*</span>
           </label>
 
           <input
@@ -619,25 +571,25 @@ width: "100%",
             required
             placeholder="example@email.com"
             style={{
-          width: "100%",
-          padding: "8px",
-          borderRadius: "6px",
-          border: "1px solid currentColor",
-          boxSizing: "border-box",
-      }}
+              width: "100%",
+              padding: "9px 10px",
+              borderRadius: "6px",
+              border: "1px solid currentColor",
+              boxSizing: "border-box",
+          }}
           />
         </div>
 
         <div style={{ display: "flex", flexDirection: "column" }}>
           <label
             style={{
-          fontWeight: "bold",
-          display: "block",
-          marginBottom: "4px",
-          fontSize: "14px",
-      }}
+              fontWeight: "bold",
+              display: "block",
+              marginBottom: "4px",
+              fontSize: "14px",
+          }}
           >
-            Phone for OTP/alerts
+            Phone <span style={{ color: "#e53e3e" }}>\*</span>
           </label>
 
           <input
@@ -647,67 +599,17 @@ width: "100%",
             inputMode="numeric"
             pattern="\d{9,15}"
             title="Digits only, 9 to 15 digits."
+            placeholder="09xxxxxxxx"
             onInput={(e) => {
-          e.currentTarget.value = e.currentTarget.value.replace(/\D/g, "");
-      }}
+              e.currentTarget.value = e.currentTarget.value.replace(/\D/g, "");
+          }}
             style={{
-          width: "100%",
-          padding: "8px",
-          borderRadius: "6px",
-          border: "1px solid currentColor",
-          boxSizing: "border-box",
-      }}
-          />
-        </div>
-
-        <div style={{ display: "flex", flexDirection: "column" }}>
-          <label
-            style={{
-          fontWeight: "bold",
-          display: "block",
-          marginBottom: "4px",
-          fontSize: "14px",
-      }}
-          >
-            Technical contact / title
-          </label>
-
-          <input
-            type="text"
-            name="technicalContactName"
-            style={{
-          width: "100%",
-          padding: "8px",
-          borderRadius: "6px",
-          border: "1px solid currentColor",
-          boxSizing: "border-box",
-      }}
-          />
-        </div>
-
-        <div style={{ display: "flex", flexDirection: "column" }}>
-          <label
-            style={{
-          fontWeight: "bold",
-          display: "block",
-          marginBottom: "4px",
-          fontSize: "14px",
-      }}
-          >
-            Email/phone of technical contact
-          </label>
-
-          <input
-            type="text"
-            name="technicalContactInfo"
-            placeholder="example@email.com or 0912345678"
-            style={{
-          width: "100%",
-          padding: "8px",
-          borderRadius: "6px",
-          border: "1px solid currentColor",
-          boxSizing: "border-box",
-      }}
+              width: "100%",
+              padding: "9px 10px",
+              borderRadius: "6px",
+              border: "1px solid currentColor",
+              boxSizing: "border-box",
+          }}
           />
         </div>
       </div>
@@ -752,28 +654,24 @@ width: "100%",
   if (errorBanner) errorBanner.style.display = "none";
 
   const customerName = getValue("customerName");
-  const identityNumber = getValue("identityNumber");
   const phsCustCode = getValue("phsCustCode");
-  const accountBasic = getValue("accountBasic");
   const notificationEmail = getValue("notificationEmail");
   const alertPhoneNumber = getValue("alertPhoneNumber");
-  const technicalContactName = getValue("technicalContactName");
-  const technicalContactInfo = getValue("technicalContactInfo");
 
   if (customerName.length < 2) {
       showError("Client / Organization name must be at least 2 characters.", "customerName");
       return;
   }
   if (!phsCustCode) {
-      showError("Account number / Client code at PHS is required.", "phsCustCode");
+      showError("Depository number / Account at PHS is required.", "phsCustCode");
       return;
   }
   if (!isValidEmail(notificationEmail)) {
-      showError("Email for API notices must be a valid email address (must contain @, e.g. name@example.com).", "notificationEmail");
+      showError("Email must be a valid email address (must contain @, e.g. name@example.com).", "notificationEmail");
       return;
   }
   if (!isValidPhone(alertPhoneNumber)) {
-      showError("Phone for OTP/alerts must contain digits only and be 9–15 digits long.", "alertPhoneNumber");
+      showError("Phone must contain digits only and be 9–15 digits long.", "alertPhoneNumber");
       return;
   }
 
@@ -793,12 +691,12 @@ width: "100%",
   cursor: "pointer",
 }}
       >
-        Next: Requested API scope ➔
+        Next: API scope ➔
       </button>
     </div>
   </div>
 
-  {/* BƯỚC 2: PHẠM VI API ĐỀ NGHỊ CẤP */}
+  {/* STEP 2: API SCOPE */}
 
   <div id="step-2" style={{ display: "none", flexDirection: "column", flex: 1, overflow: "hidden" }}>
     <div style={{ fontSize: "20px", fontWeight: "bold", marginBottom: "6px", flexShrink: 0 }}>
@@ -971,12 +869,12 @@ width: "100%",
   cursor: "pointer",
 }}
       >
-        Next: Registered technical information ➔
+        Next: Technical information ➔
       </button>
     </div>
   </div>
 
-  {/* BƯỚC 3: THÔNG TIN KỸ THUẬT ĐĂNG KÝ */}
+  {/* STEP 3: TECHNICAL INFORMATION */}
 
   <div id="step-3" style={{ display: "none", flexDirection: "column", flex: 1, overflow: "hidden" }}>
     <div style={{ fontSize: "20px", fontWeight: "bold", marginBottom: "16px", flexShrink: 0 }}>
@@ -994,7 +892,7 @@ width: "100%",
           fontSize: "14px",
       }}
           >
-            Registered WAN IP / IP whitelist
+            Registered WAN IP / IP whitelist <span style={{ color: "#e53e3e" }}>\*</span>
           </label>
 
           <input
@@ -1002,31 +900,6 @@ width: "100%",
             name="ipWhitelist"
             required
             placeholder="Example: 1.2.3.4"
-            style={{
-          width: "100%",
-          padding: "8px",
-          borderRadius: "6px",
-          border: "1px solid currentColor",
-          boxSizing: "border-box",
-      }}
-          />
-        </div>
-
-        <div>
-          <label
-            style={{
-          fontWeight: "bold",
-          display: "block",
-          marginBottom: "4px",
-          fontSize: "14px",
-      }}
-          >
-            Name of API-integrated system/application
-          </label>
-
-          <input
-            type="text"
-            name="appName"
             style={{
           width: "100%",
           padding: "8px",
@@ -1084,106 +957,6 @@ width: "100%",
           borderRadius: "6px",
           border: "1px solid currentColor",
           marginTop: "6px",
-          boxSizing: "border-box",
-      }}
-          />
-        </div>
-
-        <div>
-          <label
-            style={{
-          fontWeight: "bold",
-          display: "block",
-          marginBottom: "4px",
-          fontSize: "14px",
-      }}
-          >
-            Main technical language/platform
-          </label>
-
-          <input
-            type="text"
-            name="techStack"
-            style={{
-          width: "100%",
-          padding: "8px",
-          borderRadius: "6px",
-          border: "1px solid currentColor",
-          boxSizing: "border-box",
-      }}
-          />
-        </div>
-
-        <div>
-          <label
-            style={{
-          fontWeight: "bold",
-          display: "block",
-          marginBottom: "4px",
-          fontSize: "14px",
-      }}
-          >
-            Storage and protection mechanism for API Key/Secret Key
-          </label>
-
-          <input
-            type="text"
-            name="keySecurityMechanism"
-            style={{
-          width: "100%",
-          padding: "8px",
-          borderRadius: "6px",
-          border: "1px solid currentColor",
-          boxSizing: "border-box",
-      }}
-          />
-        </div>
-
-        <div>
-          <label
-            style={{
-          fontWeight: "bold",
-          display: "block",
-          marginBottom: "4px",
-          fontSize: "14px",
-      }}
-          >
-            Client’s internal kill switch/rate limit mechanism
-          </label>
-
-          <input
-            type="text"
-            name="rateLimitMechanism"
-            style={{
-          width: "100%",
-          padding: "8px",
-          borderRadius: "6px",
-          border: "1px solid currentColor",
-          boxSizing: "border-box",
-      }}
-          />
-        </div>
-
-        <div>
-          <label
-            style={{
-          fontWeight: "bold",
-          display: "block",
-          marginBottom: "4px",
-          fontSize: "14px",
-      }}
-          >
-            Testing plan before go-live
-          </label>
-
-          <input
-            type="text"
-            name="testingPlan"
-            style={{
-          width: "100%",
-          padding: "8px",
-          borderRadius: "6px",
-          border: "1px solid currentColor",
           boxSizing: "border-box",
       }}
           />
@@ -1275,14 +1048,6 @@ width: "100%",
   if (errorBanner) errorBanner.style.display = "none";
 
   const ipWhitelist = getValue("ipWhitelist");
-  const appName = getValue("appName");
-  const techStack = getValue("techStack");
-  const keySecurityMechanism = getValue("keySecurityMechanism");
-  const rateLimitMechanism = getValue("rateLimitMechanism");
-  const testingPlan = getValue("testingPlan");
-  const goLiveDate = getValue("goLiveDate");
-  const devUnit = getValue("devUnit");
-  const thirdPartyName = getValue("thirdPartyName");
 
   if (!ipWhitelist) {
       showError("Registered WAN IP / IP whitelist is required.", "ipWhitelist");
@@ -1310,7 +1075,7 @@ width: "100%",
     </div>
   </div>
 
-  {/* BƯỚC 4: CAM KẾT CỦA KHÁCH HÀNG */}
+  {/* STEP 4: CLIENT UNDERTAKINGS */}
 
   <div id="step-4" style={{ display: "none", flexDirection: "column", flex: 1, overflow: "hidden" }}>
     <div style={{ fontSize: "20px", fontWeight: "bold", marginBottom: "6px", flexShrink: 0 }}>
@@ -1321,7 +1086,7 @@ width: "100%",
       <p
         style={{
   fontSize: "14px",
-  color: "#e53e3e",
+  color: "#15803d",
   fontWeight: "bold",
   marginBottom: "12px",
 }}
