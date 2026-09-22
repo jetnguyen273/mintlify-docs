@@ -321,5 +321,8 @@
   },
   "appearance": {
     "default": "light"
+  },
+  "redirects": {
+    "$ref": "./redirects.json"
   }
 }
