@@ -141,7 +141,8 @@
               }
             ]
           }
-        ]
+        ],
+        "default": true
       },
       {
         "language": "vi",
