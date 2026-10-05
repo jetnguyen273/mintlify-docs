@@ -885,29 +885,96 @@ width: "100%",
     <div className="step-scroll-box" style={{ flex: 1, overflowY: "auto", paddingRight: "10px" }}>
       <div style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
         <div>
-          <label
+          <div
             style={{
-              fontWeight: "bold",
-              display: "block",
+              display: "flex",
+              alignItems: "center",
+              gap: "6px",
               marginBottom: "4px",
-              fontSize: "14px",
-          }}
+              position: "relative",
+              overflow: "visible",
+            }}
           >
-            IP WAN / IP Whitelist đăng ký <span style={{ color: "#e53e3e" }}>\*</span>
-          </label>
-
+            <label style={{ fontWeight: "bold", fontSize: "14px", margin: 0 }}>
+              IP WAN / IP Whitelist đăng ký <span style={{ color: "#e53e3e" }}>*</span>
+            </label>
+        
+            <button
+              type="button"
+              aria-label="Hướng dẫn lấy IP WAN"
+              onMouseEnter={() => {
+                const t = document.getElementById("ip-wan-tooltip");
+                if (t) t.style.display = "block";
+              }}
+              onMouseLeave={() => {
+                const t = document.getElementById("ip-wan-tooltip");
+                if (t && t.dataset.pinned !== "1") t.style.display = "none";
+              }}
+              onClick={() => {
+                const t = document.getElementById("ip-wan-tooltip");
+                if (!t) return;
+                const pinned = t.dataset.pinned === "1";
+                t.dataset.pinned = pinned ? "0" : "1";
+                t.style.display = pinned ? "none" : "block";
+              }}
+              style={{
+                width: "18px",
+                height: "18px",
+                borderRadius: "50%",
+                border: "1px solid #15803d",
+                backgroundColor: "transparent",
+                color: "#15803d",
+                fontSize: "12px",
+                fontWeight: "bold",
+                lineHeight: "16px",
+                padding: 0,
+                cursor: "pointer",
+                flexShrink: 0,
+              }}
+            >
+              ?
+            </button>
+        
+            <div
+              id="ip-wan-tooltip"
+              style={{
+                display: "none",
+                position: "absolute",
+                top: "calc(100% + 6px)",
+                left: 0,
+                zIndex: 20,
+                maxWidth: "380px",
+                padding: "12px 14px",
+                borderRadius: "8px",
+                backgroundColor: "#f0fdf4",
+                border: "1px solid #15803d",
+                color: "#14532d",
+                fontSize: "13px",
+                lineHeight: 1.5,
+                boxShadow: "0 4px 12px rgba(0,0,0,0.12)",
+              }}
+            >
+              <div style={{ fontWeight: "bold", marginBottom: "6px" }}>Cách lấy IP WAN</div>
+              <ol style={{ margin: 0, paddingLeft: "18px" }}>
+                <li>Kết nối máy tính với mạng Internet dùng để truy cập OpenAPI.</li>
+                <li>Mở Google và tìm “What is my IP”.</li>
+                <li>Cung cấp địa chỉ IPv4 công khai hiển thị trên màn hình.</li>
+              </ol>
+            </div>
+          </div>
+        
           <input
             type="text"
             name="ipWhitelist"
             required
-            placeholder="Example: 1.2.3.4"
+            placeholder="Ví dụ: 1.2.3.4"
             style={{
               width: "100%",
               padding: "8px",
               borderRadius: "6px",
               border: "1px solid currentColor",
               boxSizing: "border-box",
-          }}
+            }}
           />
         </div>
 
