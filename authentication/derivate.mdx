@@ -12,7 +12,7 @@ POST /oapi/auth/gen-secret-key/derivative
 
 ### Required body parameters
 
-- `username` — Account username. Example: `022C099995`
+- `username` — Account username. Example: `022C000000`
 - `password` — Account password. Example: `123456aA@`
 
 ### Response fields
@@ -29,7 +29,7 @@ POST /oapi/auth/gen-secret-key/derivative
 curl -X POST "$BASE_URL/oapi/auth/gen-secret-key/derivative" \
   -H "Content-Type: application/json" \
   -d '{
-    "username": "022C099995",
+    "username": "022C000000",
     "password": "123456aA@"
   }'
 ```
@@ -42,7 +42,7 @@ import requests
 BASE_URL = "https://api.example.com"
 
 payload = {
-    "username": "022C099995",
+    "username": "022C000000",
     "password": "123456aA@",
 }
 
@@ -59,8 +59,8 @@ print(response.json())
 
 ```json
 {
-    "access_token": "022C099995||KRYRTHUYUI||D5yF4ZPShG5lPNmS1hmO2JqZvj33Ht4qDDuhkhl1usufCEuYQC61BBCAb8iGNg6iGjCSzQInG7iHGPqYv505cgFuf0QcfZt4NPzgqGM1BRyCwvrvKI04gfOghRFFPZslfVaOf1ebwp408NVK9jlVJwa7ocUnmreHt6VHGHl6N3Lna6iwaM4YvXkDnPDbtMSLgmmiIGiOj6pZwyBw85KkrFRXf6jzONK3mK3P0n0r00OlSxZeRgh8L6Xd9jUt7WY",
-    "refresh_token": "022C099995||KRYRTHUYUI||qe4rGLdBcb1b2ywraANFDbXSNNF8L8v0WPuAeGPd83u14CKCv57brGyZ9tvXGFACCjinBGuyQClOPTlkdzMIcBZR4PRE3ZOhceU3kywZ6VoqPC5aDrs38DqCUmPWALHP7iJIHV8pDinC0UQvAMGAZb1O2YHt0qT3tZH2vBkowzv1MAsWfO54xY6IUnQCgy3od5rF4A90AwwdscfWYhOVSKqIr4hoO6vEWQihxlDiCEhBIciuZ52Y7i2mEiq2IdU0",
+    "access_token": "022C000000||KRYRTHUYUI||D5yF4ZPShG5lPNmS1hmO2JqZvj33Ht4qDDuhkhl1usufCEuYQC61BBCAb8iGNg6iGjCSzQInG7iHGPqYv505cgFuf0QcfZt4NPzgqGM1BRyCwvrvKI04gfOghRFFPZslfVaOf1ebwp408NVK9jlVJwa7ocUnmreHt6VHGHl6N3Lna6iwaM4YvXkDnPDbtMSLgmmiIGiOj6pZwyBw85KkrFRXf6jzONK3mK3P0n0r00OlSxZeRgh8L6Xd9jUt7WY",
+    "refresh_token": "022C000000||KRYRTHUYUI||qe4rGLdBcb1b2ywraANFDbXSNNF8L8v0WPuAeGPd83u14CKCv57brGyZ9tvXGFACCjinBGuyQClOPTlkdzMIcBZR4PRE3ZOhceU3kywZ6VoqPC5aDrs38DqCUmPWALHP7iJIHV8pDinC0UQvAMGAZb1O2YHt0qT3tZH2vBkowzv1MAsWfO54xY6IUnQCgy3od5rF4A90AwwdscfWYhOVSKqIr4hoO6vEWQihxlDiCEhBIciuZ52Y7i2mEiq2IdU0",
     "expires_in": 28800,
     "otp_token": "2c897da51e69cd6f3a0701884ed706ac",
     "token_type": "Bearer"

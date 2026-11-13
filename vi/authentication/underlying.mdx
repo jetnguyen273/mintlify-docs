@@ -12,7 +12,7 @@ POST /oapi/auth/gen-secret-key/underlying
 
 ### Các trường bắt buộc
 
-- `username` — Tên đăng nhập của tài khoản. Ví dụ: `022C099995`
+- `username` — Tên đăng nhập của tài khoản. Ví dụ: `022C000000`
 - `password` — Mật khẩu của tài khoản. Ví dụ: `123456aA@`
 
 ### Trường phản hồi
@@ -29,7 +29,7 @@ POST /oapi/auth/gen-secret-key/underlying
 curl -X POST "$BASE_URL/oapi/auth/gen-secret-key/underlying" \
   -H "Content-Type: application/json" \
   -d '{
-    "username": "022C099995",
+    "username": "022C000000",
     "password": "123456aA@"
   }'
 ```
@@ -42,7 +42,7 @@ import requests
 BASE_URL = "https://api.example.com"
 
 payload = {
-    "username": "022C099995",
+    "username": "022C000000",
     "password": "123456aA@",
 }
 
@@ -59,8 +59,8 @@ print(response.json())
 
 ```json
 {
-    "access_token": "022C099995||KRYRTHUYUI||EIfMSnb0jB9MxpGEmVHV4Ghhiq6Tf9iKknzM02IYfYsLTpfTk3pDFPcR6WJqFepDFWXkQeLEpy9ifffm9NEhT9mDdjfHZDGwR7qwifvY1xUI00qe1pwLg9EY2ADJaBfqtsiEP7o6tDVae9lu2vrlq8GsZAKxLgloI8gibxqgPx0mitckPgNH7zjbyIoGKKNOzgErMP777bAWNIta0fnYmqLW7CleiXHtfJLIlXUruAMX5wxX7Gts7Tk4SiGpC9L",
-    "refresh_token": "022C099995||KRYRTHUYUI||WSSb0xaoaWbcmCnqxGcJa5MfjElhnQo6G31b6Ay1yavoIgwLOVxm9nUWQIjix0XfYYaxFLJshAS6foc535ai2r1Mzh7OnEGoCKg3bMh32Y0ds5PRT3ySWck2XCuOZYffYOwgIvqIEjA49vCBa0UPuUOwwnPtdp3yK3E49CkPzn2CgyxFgRJxpZ4oezzgyA5fPqcm9h7jSaKIHWcG7vTc9aTDdhmt0SOkdEDc5sAx4nEWEeFxfdbPtXGKR0tx0mLh",
+    "access_token": "022C000000||KRYRTHUYUI||EIfMSnb0jB9MxpGEmVHV4Ghhiq6Tf9iKknzM02IYfYsLTpfTk3pDFPcR6WJqFepDFWXkQeLEpy9ifffm9NEhT9mDdjfHZDGwR7qwifvY1xUI00qe1pwLg9EY2ADJaBfqtsiEP7o6tDVae9lu2vrlq8GsZAKxLgloI8gibxqgPx0mitckPgNH7zjbyIoGKKNOzgErMP777bAWNIta0fnYmqLW7CleiXHtfJLIlXUruAMX5wxX7Gts7Tk4SiGpC9L",
+    "refresh_token": "022C000000||KRYRTHUYUI||WSSb0xaoaWbcmCnqxGcJa5MfjElhnQo6G31b6Ay1yavoIgwLOVxm9nUWQIjix0XfYYaxFLJshAS6foc535ai2r1Mzh7OnEGoCKg3bMh32Y0ds5PRT3ySWck2XCuOZYffYOwgIvqIEjA49vCBa0UPuUOwwnPtdp3yK3E49CkPzn2CgyxFgRJxpZ4oezzgyA5fPqcm9h7jSaKIHWcG7vTc9aTDdhmt0SOkdEDc5sAx4nEWEeFxfdbPtXGKR0tx0mLh",
     "expires_in": 28800,
     "otp_token": "552066a35eb30a9815afc952b14287a8",
     "token_type": "Bearer"
